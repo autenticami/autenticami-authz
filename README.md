@@ -1,4 +1,4 @@
-# Autenticami
+# Autenticami AuthZ
 
 [![Documentation](https://img.shields.io/website?label=Docs&url=https%3A%2F%2Fdocs.autenticami.com%2F)](https://docs.autenticami.com/)
 [![AutenticamiCI](https://github.com/autenticami/autenticami-authz/actions/workflows/autenticami-ci.yml/badge.svg)](https://github.com/autenticami/autenticami-authz/actions/workflows/autenticami-ci.yml)
