@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+  build:
+    cmds:
+        - go mod download
+        - go build -o autenticami ./cmd/api
+    silent: true
+  test:
+    cmds:
+        - make coverage
+    silent: true

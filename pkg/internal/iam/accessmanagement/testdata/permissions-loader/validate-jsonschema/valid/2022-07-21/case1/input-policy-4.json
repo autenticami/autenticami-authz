@@ -1,0 +1,29 @@
+{
+    "Version": "2022-07-21",
+    "Label": "PeopleBaseReader",
+    "Description": "This policy enable List and Read access to employee and timesheet of the domain people.",
+    "Type": "ACL",
+    "Permit": [
+        {
+            "Actions": [
+                "people:ListEmployee",
+                "people:ReadEmployee"
+            ],
+            "Resources": [
+                "uur:581616507495:default:hr-app:organisation:people/*"
+            ]
+        },
+        {
+            "Actions": [
+                "people:ReadTimesheet",
+                "people:CreateTimesheet",
+                "people:UpdateTimesheet",
+                "people:DeleteTimesheet"
+            ],
+            "Resources": [
+                "uur:581616507495:default:hr-app:time-management:people/*"
+            ]
+        }
+    ],
+    "Forbid": []
+}

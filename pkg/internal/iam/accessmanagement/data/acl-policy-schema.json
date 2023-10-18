@@ -1,0 +1,102 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "Version": {
+      "type": "string"
+    },
+    "Label": {
+      "type": "string"
+    },
+    "Description": {
+      "type": "string"
+    },
+    "Type": {
+      "type": "string"
+    },
+    "Permit": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "Label": {
+              "type": "string"
+            },
+            "Actions": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "Resources": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "required": [
+            "Actions",
+            "Resources"
+          ]
+        }
+      ]
+    },
+    "Forbid": {
+      "type": "array",
+      "items": [
+        {
+          "type": "object",
+          "properties": {
+            "Label": {
+              "type": "string"
+            },
+            "Actions": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            },
+            "Resources": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          "required": [
+            "Actions",
+            "Resources"
+          ]
+        }
+      ]
+    }
+  },
+  "required": [
+    "Version",
+    "Type",
+    "Permit",
+    "Forbid"
+  ]
+}

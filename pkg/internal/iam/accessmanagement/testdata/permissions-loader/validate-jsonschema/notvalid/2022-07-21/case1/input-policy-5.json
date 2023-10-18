@@ -1,0 +1,8 @@
+{
+    "Version": "2022-07-21",
+    "Label": "PeopleBaseReader",
+    "Description": "This policy enable List and Read access to employee and timesheet of the domain people.",
+    "Type": "ACL",
+    "Permit": "Not a valid type",
+    "Forbid": []
+}

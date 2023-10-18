@@ -1,0 +1,90 @@
+.DEFAULT_GOAL := build
+
+brew:
+	brew install golangci-lint
+	brew install staticcheck
+	brew install gofumpt
+
+clean:
+	rm -rf dist/
+	rm -rf tmp/
+	rm -f coverage.out 
+	rm -f result.json
+
+
+init-dependency:
+	go get -u github.com/antonfisher/nested-logrus-formatter
+	go get -u github.com/gin-gonic/gin
+	go get -u golang.org/x/crypto
+	go get -u gorm.io/gorm
+	go get -u gorm.io/driver/postgres
+	go get -u github.com/sirupsen/logrus
+	go get -u github.com/joho/godotenv
+	go get -u github.com/go-playground/validator/v10 v10.15.1
+	go get -u github.com/stretchr/testify v1.8.4
+	go get -u github.com/google/uuid v1.3.1
+	go get -u github.com/davecgh/go-spew/spew v1.1.1
+	go get -u github.com/xeipuuv/gojsonschema v1.2.0
+
+
+mod:
+	go mod download
+	go mod tidy
+
+check:
+	staticcheck  ./...
+
+lint:
+	go vet ./...
+	gofmt -s -w **/**.go
+	gofumpt -l -w .
+	golangci-lint run --disable-all --enable staticcheck
+
+
+lint-fix:
+	gofmt -s -w **/**.go       
+	go vet ./...
+	gofumpt -l -w .
+	golangci-lint run ./... --fix
+
+test:
+	go test ./...
+
+coverage:
+	go test -coverprofile=coverage.out ./...
+	go tool cover -func=coverage.out
+	go tool cover -html=coverage.out
+	rm coverage.out
+
+converage-%:
+	go test -coverprofile=coverage.out ./...
+
+converage-json:
+	go test -json -coverprofile=coverage.out ./... > result.json
+
+build-release:
+	mkdir -p dist
+	go build -o dist/autenticami ./cmd/api
+
+build-docker:
+	docker stop autenticami || true && docker rm autenticami || true
+	docker build -t autenticami .
+
+run-release:
+	go run ./cmd/api
+
+run-docker:
+	docker run --name autenticami autenticami
+
+build:  clean mod build-release
+
+run:  clean mod lint-fix run-release
+
+docker:  clean mod lint-fix run-docker
+
+# disallow any parallelism (-j) for Make. This is necessary since some
+# commands during the build process create temporary files that collide
+# under parallel conditions.
+.NOTPARALLEL:
+
+.PHONY: clean mod lint lint-fix release alll
