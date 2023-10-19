@@ -1,0 +1,22 @@
+syntax="proto3";
+
+package policydecisionpoint;
+
+option go_package = "github.com/autenticami/autenticami-authz/cmd/api/v1";
+
+message PermissionsSateRequest {
+  string identityUUR= 1;
+}
+
+message PermissionsSate {
+  string id = 1;
+}
+
+message PermissionsSateResponse {
+  string identityUUR= 1;
+  optional PermissionsSate permissionsSate = 2;
+}
+
+service PermissionsService {
+  rpc GetPermissionsState (PermissionsSateRequest) returns (PermissionsSateResponse);
+}

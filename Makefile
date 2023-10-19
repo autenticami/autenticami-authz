@@ -4,6 +4,11 @@ brew:
 	brew install golangci-lint
 	brew install staticcheck
 	brew install gofumpt
+	brew install protobuf
+
+install:
+	go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
+	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
 
 clean:
 	rm -rf dist/
@@ -20,11 +25,12 @@ init-dependency:
 	go get -u gorm.io/driver/postgres
 	go get -u github.com/sirupsen/logrus
 	go get -u github.com/joho/godotenv
-	go get -u github.com/go-playground/validator/v10 v10.15.1
-	go get -u github.com/stretchr/testify v1.8.4
-	go get -u github.com/google/uuid v1.3.1
-	go get -u github.com/davecgh/go-spew/spew v1.1.1
-	go get -u github.com/xeipuuv/gojsonschema v1.2.0
+	go get -u github.com/go-playground/validator/v10@v10.15.1
+	go get -u github.com/stretchr/testify@v1.8.4
+	go get -u github.com/google/uuid@v1.3.1
+	go get -u github.com/davecgh/go-spew/spew@v1.1.1
+	go get -u github.com/xeipuuv/gojsonschema@v1.2.0
+	go get google.golang.org/grpc@v1.59.0
 
 
 mod:
