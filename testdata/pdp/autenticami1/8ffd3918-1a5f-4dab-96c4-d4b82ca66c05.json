@@ -1,5 +1,5 @@
 {
-  "users": [
+  "identities": [
     {
       "user_id": "75c4d382-d752-41ca-aa71-9ddd70f994af",
       "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com ",
