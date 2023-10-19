@@ -1,0 +1,27 @@
+{
+    "Syntax": "autenticami1",
+    "Label": "PeopleBaseReader",
+    "Type": "ACL",
+    "Permit": [
+        {
+            "Label": "permit-hr/person/reader/any",
+            "Actions": [
+                "people:ListEmployee",
+                "people:ReadEmployee"
+            ]
+        },
+        {
+            "Label": "permit-hr/timesheet/writer/any",
+            "Actions": [
+                "people:ReadTimesheet",
+                "people:CreateTimesheet",
+                "people:UpdateTimesheet",
+                "people:DeleteTimesheet"
+            ],
+            "Resources": [
+                "uur:581616507495:default:hr-app:time-management:people/*"
+            ]
+        }
+    ],
+    "Forbid": []
+}

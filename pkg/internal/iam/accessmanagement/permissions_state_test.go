@@ -18,7 +18,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 		Path       string
 		InputFiles func() []string
 	}{
-		string(PolicyV20220721): {
+		string(PolicyV1): {
 			"./testdata/permissions-states/creation",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}

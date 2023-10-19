@@ -2,13 +2,10 @@
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
   "properties": {
-    "Version": {
+    "Syntax": {
       "type": "string"
     },
     "Label": {
-      "type": "string"
-    },
-    "Description": {
       "type": "string"
     },
     "Type": {
@@ -94,7 +91,7 @@
     }
   },
   "required": [
-    "Version",
+    "Syntax",
     "Type",
     "Permit",
     "Forbid"

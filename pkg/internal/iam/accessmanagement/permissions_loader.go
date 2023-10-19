@@ -49,7 +49,7 @@ func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 	if err != nil {
 		return false, errors.Join(ErrAccessManagementInvalidDataType, err)
 	}
-	if !policy.Version.IsValid() {
+	if !policy.Syntax.IsValid() {
 		return false, errors.Join(ErrAccessManagementUnsupportedVersion, err)
 	}
 	switch policy.Type {

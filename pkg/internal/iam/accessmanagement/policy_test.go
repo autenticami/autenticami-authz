@@ -21,13 +21,13 @@ func TestJSONUnmarshaling(t *testing.T) {
 		InputFiles func() []string
 		Validate   func(policy *ACLPolicy) bool
 	}{
-		string(PolicyV20220721): {
+		string(PolicyV1): {
 			"./testdata/policies/marshaling",
 			func() []string {
 				return []string{"input-policy-1.json"}
 			},
 			func(policy *ACLPolicy) bool {
-				return policy.Version == PolicyV20220721
+				return policy.Syntax == PolicyV1
 			},
 		},
 	}
@@ -57,7 +57,7 @@ func TestJSONUnmarshaling(t *testing.T) {
 }
 
 func TestARNNotValid(t *testing.T) {
-	versions := []PolicyVersionString{PolicyV20220721}
+	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
@@ -150,7 +150,7 @@ func TestARNNotValid(t *testing.T) {
 }
 
 func TestARNValid(t *testing.T) {
-	versions := []PolicyVersionString{PolicyV20220721}
+	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
@@ -263,7 +263,7 @@ func TestARNValid(t *testing.T) {
 }
 
 func TestActionsNotValid(t *testing.T) {
-	versions := []PolicyVersionString{PolicyV20220721}
+	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
@@ -317,7 +317,7 @@ func TestActionsNotValid(t *testing.T) {
 }
 
 func TestActionsValid(t *testing.T) {
-	versions := []PolicyVersionString{PolicyV20220721}
+	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
@@ -385,7 +385,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Version = PolicyV20220721
+		policy.Syntax = PolicyV1
 		policy.Type = PolicyTypeString("X")
 		isValid, err = validateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
@@ -399,7 +399,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Version = PolicyV20220721
+		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Label = "PeopleBaseReader"
 		policy.Permit = []PolicyStatement{
@@ -413,7 +413,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Version = PolicyV20220721
+		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Label = "PeopleBaseReader"
 		policy.Permit = []PolicyStatement{
@@ -462,7 +462,7 @@ func TestPolicyNotValid(t *testing.T) {
 				"uur:581616507495:default:hr-app:organisation:people/*",
 			},
 		}
-		isValid, err = validatePolicyStatement(PolicyV20220721, &policyStatement)
+		isValid, err = validatePolicyStatement(PolicyV1, &policyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
@@ -477,7 +477,7 @@ func TestPolicyNotValid(t *testing.T) {
 				"not a valid uur",
 			},
 		}
-		isValid, err = validatePolicyStatement(PolicyV20220721, &policyStatement)
+		isValid, err = validatePolicyStatement(PolicyV1, &policyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
@@ -510,7 +510,7 @@ func TestMiscellaneousPolicies(t *testing.T) {
 	}
 	{
 		policyType := PolicyACLType
-		isValid, _ := policyType.IsValid(PolicyV20220721)
+		isValid, _ := policyType.IsValid(PolicyV1)
 		assert.True(isValid, "wrong result\ngot: %should be a valid uur", spew.Sdump(isValid))
 	}
 	{

@@ -50,7 +50,7 @@ type (
 )
 
 const (
-	PolicyV20220721 PolicyVersionString = "2022-07-21"
+	PolicyV1 PolicyVersionString = "autenticami1"
 
 	PolicyACLType PolicyTypeString = "ACL"
 
@@ -61,8 +61,8 @@ const (
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type Policy struct {
-	Version PolicyVersionString `json:"Version"`
-	Type    PolicyTypeString    `json:"Type"`
+	Syntax PolicyVersionString `json:"Syntax"`
+	Type   PolicyTypeString    `json:"Type"`
 }
 
 // An Access Control List Policy (ACL) lists the actions that can/cannot be performed and the resourcers those actions can affect.
@@ -71,7 +71,6 @@ type Policy struct {
 type ACLPolicy struct {
 	Policy
 	Label       PolicyLabelString `json:"Label,omitempty"`
-	Description string            `json:"Description,omitempty"`
 	Permit      []PolicyStatement `json:"Permit,omitempty"`
 	Forbid      []PolicyStatement `json:"Forbid,omitempty"`
 }
@@ -119,7 +118,7 @@ func sanitizeTokenName(value string) string {
 
 func (a ARNString) getRegex(version PolicyVersionString) (string, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
 		cSlashHyphenName := fmt.Sprintf(`%s+(\/%s)*`, cHyphenName, cHyphenName)
 		cNumber := `\d{10,14}`
@@ -133,7 +132,7 @@ func (a ARNString) getRegex(version PolicyVersionString) (string, error) {
 
 func (a ARNString) IsValid(version PolicyVersionString) (bool, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		pattern, err := a.getRegex(version)
 		if err != nil {
 			return false, err
@@ -169,7 +168,7 @@ func (a ARNString) Parse(version PolicyVersionString) (*UUR, error) {
 
 func (a ActionString) getRegex(version PolicyVersionString) (string, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
 		regex := fmt.Sprintf("^(?P<resource>(%s)?):(?P<action>(%s)?)$", cHyphenName, cHyphenName)
 		return regex, nil
@@ -180,7 +179,7 @@ func (a ActionString) getRegex(version PolicyVersionString) (string, error) {
 
 func (a ActionString) IsValid(version PolicyVersionString) (bool, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		pattern, err := a.getRegex(version)
 		if err != nil {
 			return false, err
@@ -211,12 +210,12 @@ func (a ActionString) Parse(version PolicyVersionString) (*Action, error) {
 }
 
 func (p PolicyVersionString) IsValid() bool {
-	return p == PolicyV20220721
+	return p == PolicyV1
 }
 
 func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		return p == PolicyACLType || p == PolicyTrustIdentityType, nil
 	default:
 		return false, ErrAccessManagementUnsupportedVersion
@@ -225,7 +224,7 @@ func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 
 func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
 		cSlashHyphenName := fmt.Sprintf(`%s+(\/%s)*`, cHyphenName, cHyphenName)
 		regex := fmt.Sprintf("^((%s)?)$", cSlashHyphenName)
@@ -237,7 +236,7 @@ func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error)
 
 func (p PolicyLabelString) IsValid(version PolicyVersionString) (bool, error) {
 	switch version {
-	case PolicyV20220721:
+	case PolicyV1:
 		pattern, err := p.getRegex(version)
 		if err != nil {
 			return false, err
@@ -283,12 +282,12 @@ func validatePolicyStatement(version PolicyVersionString, policyStatement *Polic
 }
 
 func validateACLPolicy(policy *ACLPolicy) (bool, error) {
-	if policy == nil || !policy.Version.IsValid() || policy.Type != PolicyACLType {
+	if policy == nil || !policy.Syntax.IsValid() || policy.Type != PolicyACLType {
 		return false, nil
 	}
 	var isValid bool
 	var err error
-	isValid, err = policy.Label.IsValid(policy.Version)
+	isValid, err = policy.Label.IsValid(policy.Syntax)
 	if err != nil {
 		return false, err
 	}
@@ -298,7 +297,7 @@ func validateACLPolicy(policy *ACLPolicy) (bool, error) {
 	lists := [][]PolicyStatement{policy.Permit, policy.Forbid}
 	for _, list := range lists {
 		for _, policyStatement := range list {
-			isValid, err = validatePolicyStatement(policy.Version, &policyStatement)
+			isValid, err = validatePolicyStatement(policy.Syntax, &policyStatement)
 			if err != nil {
 				return false, err
 			}

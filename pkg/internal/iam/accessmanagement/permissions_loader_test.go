@@ -17,7 +17,7 @@ func TestJsonSchemaValidationForValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV20220721): {
+		string(PolicyV1): {
 			"./testdata/permissions-loader/validate-jsonschema/valid",
 		},
 	}
@@ -48,7 +48,7 @@ func TestJsonSchemaValidationForNotValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV20220721): {
+		string(PolicyV1): {
 			"./testdata/permissions-loader/validate-jsonschema/notvalid",
 		},
 	}
@@ -79,7 +79,7 @@ func TestPermissionsLoaderRegisterPolicyValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV20220721): {
+		string(PolicyV1): {
 			"./testdata/permissions-loader/register-policy/valid",
 		},
 	}
