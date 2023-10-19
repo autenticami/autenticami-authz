@@ -1,10 +1,10 @@
 {
     "Syntax": "autenticami1",
-    "Label": "PeopleBaseDenySpecificDataEntry",
+    "Name": "PeopleBaseDenySpecificDataEntry",
     "Permit": [],
     "Forbid": [
         {
-            "Label": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+            "Name": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
             "Actions": [
                 "people:CreateTimesheet",
                 "people:UpdateTimesheet",
@@ -15,7 +15,7 @@
             ]
         },
         {
-            "Label": "forbid-write-hr/timesheet/writer/67ea5a2c-decf-4fdf-992c-a8ffe6adf9d3",
+            "Name": "forbid-write-hr/timesheet/writer/67ea5a2c-decf-4fdf-992c-a8ffe6adf9d3",
             "Actions": [
                 "people:Read"
             ],

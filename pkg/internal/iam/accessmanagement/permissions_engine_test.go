@@ -39,7 +39,7 @@ func TestPermissionsEngineBuildPermissions(t *testing.T) {
 	// }
 	// {
 	// 	engine, _ := NewPermissionsEngine()
-	// 	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Label": "12 3465 "}`
+	// 	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "12 3465 "}`
 	// 	_, err := engine.BuildPermissions([]byte(jsonStr))
 	// 	assert.NotNil(t, err, "Err shouldn't be nil")
 	// }

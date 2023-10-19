@@ -1,9 +1,9 @@
 {
     "Syntax": "autenticami1",
-    "Label": "PeopleBaseReader",
+    "Name": "PeopleBaseReader",
     "Permit": [
         {
-            "Label": "permit-hr/person/reader/any",
+            "Name": "permit-hr/person/reader/any",
             "Actions": [
                 "people:ListEmployee",
                 "people:ReadEmployee"
@@ -13,7 +13,7 @@
             ]
         },
         {
-            "Label": "permit-hr/timesheet/writer/any",
+            "Name": "permit-hr/timesheet/writer/any",
             "Actions": [
                 "people:ReadTimesheet",
                 "people:CreateTimesheet",

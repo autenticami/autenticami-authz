@@ -1,16 +1,16 @@
 {
     "Syntax": "autenticami1",
-    "Label": "PeopleBaseReader",
+    "Name": "PeopleBaseReader",
     "Type": "ACL",
     "Permit": [
         {
-            "Label": "permit-hr/person/reader/any",
+            "Name": "permit-hr/person/reader/any",
             "Resources": [
                 "uur:581616507495:default:hr-app:organisation:people/*"
             ]
         },
         {
-            "Label": "permit-hr/timesheet/writer/any",
+            "Name": "permit-hr/timesheet/writer/any",
             "Actions": [
                 "people:ReadTimesheet",
                 "people:CreateTimesheet",

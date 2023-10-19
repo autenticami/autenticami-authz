@@ -11,15 +11,15 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/internal/core"
 )
 
-// A resource is uniquely identified with an ARNString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:people/*.
+// A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:people/*.
 // REF: https://docs.autenticami.com/accounts/projects/resources/
 
 const (
-	arnFormatString    = "uur:%s:%s:%s:%s:%s"
+	uurFormatString    = "uur:%s:%s:%s:%s:%s"
 	actionFormatString = "%s:%s"
 )
 
-type ARNString core.WildcardString
+type UURString core.WildcardString
 
 type UUR struct {
 	account        core.WildcardString
@@ -70,9 +70,9 @@ type Policy struct {
 
 type ACLPolicy struct {
 	Policy
-	Label       PolicyLabelString `json:"Label,omitempty"`
-	Permit      []PolicyStatement `json:"Permit,omitempty"`
-	Forbid      []PolicyStatement `json:"Forbid,omitempty"`
+	Name   PolicyLabelString `json:"Name,omitempty"`
+	Permit []PolicyStatement `json:"Permit,omitempty"`
+	Forbid []PolicyStatement `json:"Forbid,omitempty"`
 }
 
 //go:embed data/acl-policy-schema.json
@@ -82,9 +82,9 @@ var aclPolicySchema []byte
 // REF: https://docs.autenticami.com/access-management/permissions-policies/#policy-statement
 
 type PolicyStatement struct {
-	Label     PolicyLabelString `json:"Label,omitempty"`
+	Name      PolicyLabelString `json:"Name,omitempty"`
 	Actions   []ActionString    `json:"Actions"`
-	Resources []ARNString       `json:"Resources"`
+	Resources []UURString       `json:"Resources"`
 }
 
 func isValidPattern(pattern string, s string) (bool, error) {
@@ -116,7 +116,7 @@ func sanitizeTokenName(value string) string {
 	return sanitizedValue
 }
 
-func (a ARNString) getRegex(version PolicyVersionString) (string, error) {
+func (a UURString) getRegex(version PolicyVersionString) (string, error) {
 	switch version {
 	case PolicyV1:
 		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
@@ -130,7 +130,7 @@ func (a ARNString) getRegex(version PolicyVersionString) (string, error) {
 	}
 }
 
-func (a ARNString) IsValid(version PolicyVersionString) (bool, error) {
+func (a UURString) IsValid(version PolicyVersionString) (bool, error) {
 	switch version {
 	case PolicyV1:
 		pattern, err := a.getRegex(version)
@@ -143,13 +143,13 @@ func (a ARNString) IsValid(version PolicyVersionString) (bool, error) {
 	}
 }
 
-func (a ARNString) Parse(version PolicyVersionString) (*UUR, error) {
+func (a UURString) Parse(version PolicyVersionString) (*UUR, error) {
 	isValied, err := a.IsValid(version)
 	if err != nil {
 		return nil, err
 	}
 	if !isValied {
-		return nil, ErrAccessManagementInvalidARN
+		return nil, ErrAccessManagementInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -196,7 +196,7 @@ func (a ActionString) Parse(version PolicyVersionString) (*Action, error) {
 		return nil, err
 	}
 	if !isValied {
-		return nil, ErrAccessManagementInvalidARN
+		return nil, ErrAccessManagementInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -253,7 +253,7 @@ func validatePolicyStatement(version PolicyVersionString, policyStatement *Polic
 	}
 	var isValid bool
 	var err error
-	isValid, err = policyStatement.Label.IsValid(version)
+	isValid, err = policyStatement.Name.IsValid(version)
 	if err != nil {
 		return false, err
 	}
@@ -287,7 +287,7 @@ func validateACLPolicy(policy *ACLPolicy) (bool, error) {
 	}
 	var isValid bool
 	var err error
-	isValid, err = policy.Label.IsValid(policy.Syntax)
+	isValid, err = policy.Name.IsValid(policy.Syntax)
 	if err != nil {
 		return false, err
 	}

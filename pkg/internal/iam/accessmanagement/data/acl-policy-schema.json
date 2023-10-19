@@ -5,7 +5,7 @@
     "Syntax": {
       "type": "string"
     },
-    "Label": {
+    "Name": {
       "type": "string"
     },
     "Type": {
@@ -17,7 +17,7 @@
         {
           "type": "object",
           "properties": {
-            "Label": {
+            "Name": {
               "type": "string"
             },
             "Actions": {
@@ -53,7 +53,7 @@
         {
           "type": "object",
           "properties": {
-            "Label": {
+            "Name": {
               "type": "string"
             },
             "Actions": {

@@ -28,10 +28,11 @@ Below is a sample policy document for granting access to the Employee and Timesh
 ```json linenums="1"
 {
   "Syntax": "autenticami1",
+  "Name": "PeopleBaseReader",
   "Type": "ACL",
   "Permit": [
     {
-      "Label": "permit-hr/person/reader/any",
+      "Name": "permit-hr/person/reader/any",
       "Actions": [
         "people:ListEmployee",
         "people:ReadEmployee"
@@ -41,7 +42,7 @@ Below is a sample policy document for granting access to the Employee and Timesh
       ]
     },
     {
-      "Label": "permit-hr/timesheet/writer/any",
+      "Name": "permit-hr/timesheet/writer/any",
       "Actions": [
         "people:ReadTimesheet",
         "people:CreateTimesheet",
@@ -55,7 +56,7 @@ Below is a sample policy document for granting access to the Employee and Timesh
   ],
   "Forbid": [
     {
-      "Label": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+      "Name": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
       "Actions": [
         "time-management/people:Read"
       ],

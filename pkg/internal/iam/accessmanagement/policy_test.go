@@ -56,17 +56,17 @@ func TestJSONUnmarshaling(t *testing.T) {
 	}
 }
 
-func TestARNNotValid(t *testing.T) {
+func TestUURNotValid(t *testing.T) {
 	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
-			var defaultvalidaccountnumber ARNString = "581616507495"
-			var defaultvalidtenantname ARNString = "my-tenant"
-			var defaultvalidprojectname ARNString = "my-app"
-			var defaultvaliddomainname ARNString = "my-domain"
-			var defaultvalidresource ARNString = "resource/latest"
-			notValidNames := []ARNString{
+			var defaultvalidaccountnumber UURString = "581616507495"
+			var defaultvalidtenantname UURString = "my-tenant"
+			var defaultvalidprojectname UURString = "my-app"
+			var defaultvaliddomainname UURString = "my-domain"
+			var defaultvalidresource UURString = "resource/latest"
+			notValidNames := []UURString{
 				"-n",
 				"n-",
 				"-n-",
@@ -80,7 +80,7 @@ func TestARNNotValid(t *testing.T) {
 				"nn9 a",
 				"nn9:a1",
 			}
-			notValidNumbers := []ARNString{
+			notValidNumbers := []UURString{
 				"581",
 				"5816 16507496",
 				"5816A16507496",
@@ -88,7 +88,7 @@ func TestARNNotValid(t *testing.T) {
 				"58161/6507497",
 				"58161-6507497",
 			}
-			notValidResources := []ARNString{
+			notValidResources := []UURString{
 				" r",
 				"r ",
 				"r r",
@@ -103,7 +103,7 @@ func TestARNNotValid(t *testing.T) {
 				"-r-r/r-r/r-r",
 			}
 			notValidDomains := notValidResources
-			arns := []ARNString{
+			uurs := []UURString{
 				"uur:581616507495:default:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 				"uur:581616507495:default:!!:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 				"uur:581616507495:default:hr-app:!!:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
@@ -112,54 +112,54 @@ func TestARNNotValid(t *testing.T) {
 			}
 			// Accounts combinations
 			for _, notValidNumber := range notValidNumbers {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, notValidNumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, notValidNumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Tenants combinations
 			for _, notValidTenant := range notValidNames {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, notValidTenant, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, notValidTenant, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Application combinations
 			for _, notValidApplicationName := range notValidNames {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, notValidApplicationName, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, notValidApplicationName, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Domain combinations
 			for _, notValidDomain := range notValidDomains {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, notValidDomain, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, notValidDomain, defaultvalidresource)))
 			}
 			// Resources combinations
 			for _, notValidResource := range notValidResources {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, notValidResource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, notValidResource)))
 			}
-			for _, uur := range arns {
+			for _, uur := range uurs {
 				got, _ := uur.IsValid(version)
 				assert.False(got, "wrong result\ngot: %sshouldn't be a valid uur", spew.Sdump(uur))
 			}
-			arnStrings := []ARNString{
+			uurStrings := []UURString{
 				"ar n:000111023455:default1:hr-app1:time-management1:people/1",
-				"aarn:000111023455:default1:hr-app1:time-management1:people/1",
+				"auur:000111023455:default1:hr-app1:time-management1:people/1",
 				"uur:000111023455:default1:!!:time-management1:people/1",
 				"uur:000111023455:default:hr-app1:time-management1:people/ 1",
 			}
-			for _, arnString := range arnStrings {
-				_, err := arnString.Parse(version)
+			for _, uurString := range uurStrings {
+				_, err := uurString.Parse(version)
 				assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
-				assert.True(errors.Is(err, ErrAccessManagementInvalidARN), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
+				assert.True(errors.Is(err, ErrAccessManagementInvalidUUR), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
 			}
 		})
 	}
 }
 
-func TestARNValid(t *testing.T) {
+func TestUURValid(t *testing.T) {
 	versions := []PolicyVersionString{PolicyV1}
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
-			var defaultvalidaccountnumber ARNString = "581616507495"
-			var defaultvalidtenantname ARNString = "my-tenant"
-			var defaultvalidprojectname ARNString = "my-app"
-			var defaultvaliddomainname ARNString = "my-domain"
-			var defaultvalidresource ARNString = "resource/latest"
-			validNames := []ARNString{
+			var defaultvalidaccountnumber UURString = "581616507495"
+			var defaultvalidtenantname UURString = "my-tenant"
+			var defaultvalidprojectname UURString = "my-app"
+			var defaultvaliddomainname UURString = "my-domain"
+			var defaultvalidresource UURString = "resource/latest"
+			validNames := []UURString{
 				"",
 				"n",
 				"nn",
@@ -172,12 +172,12 @@ func TestARNValid(t *testing.T) {
 				"nn9*a1*",
 				"*nn9*a1*",
 			}
-			validNumbers := []ARNString{
+			validNumbers := []UURString{
 				"",
 				"581616507496",
 				"581616507497",
 			}
-			validResources := []ARNString{
+			validResources := []UURString{
 				"",
 				"r",
 				"r-r",
@@ -196,7 +196,7 @@ func TestARNValid(t *testing.T) {
 				"r-r/r-r/r-r",
 			}
 			validDomains := validResources
-			arns := []ARNString{
+			uurs := []UURString{
 				"uur:::::",
 				"uur:581616507495:default:hr-app:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 				"uur:581616507495:de*ault:hr-ap*p:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
@@ -208,53 +208,53 @@ func TestARNValid(t *testing.T) {
 			}
 			// Accounts combinations
 			for _, validNumber := range validNumbers {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, validNumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, validNumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Tenants combinations
 			for _, validTenant := range validNames {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, validTenant, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, validTenant, defaultvalidprojectname, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Application combinations
 			for _, validApplicationName := range validNames {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, validApplicationName, defaultvaliddomainname, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, validApplicationName, defaultvaliddomainname, defaultvalidresource)))
 			}
 			// Domain combinations
 			for _, validDomain := range validDomains {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, validDomain, defaultvalidresource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, validDomain, defaultvalidresource)))
 			}
 			// Resources combinations
 			for _, validResource := range validResources {
-				arns = append(arns, ARNString(fmt.Sprintf(arnFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, validResource)))
+				uurs = append(uurs, UURString(fmt.Sprintf(uurFormatString, defaultvalidaccountnumber, defaultvalidtenantname, defaultvalidprojectname, defaultvaliddomainname, validResource)))
 			}
-			for _, uur := range arns {
+			for _, uur := range uurs {
 				got, _ := uur.IsValid(version)
 				assert.True(got, "wrong result\ngot: %should be a valid uur", spew.Sdump(uur))
 			}
-			arnStringItems := [][]string{
+			uurStringItems := [][]string{
 				{"uur:000111023455:default1:hr-app1:time-management1:people/1", "000111023455", "default1", "hr-app1", "time-management1", "people", "1"},
 				{"uur:000111023455:default1:hr-app1:time-management1:people/role/employee/1", "000111023455", "default1", "hr-app1", "time-management1", "people", "role/employee/1"},
 			}
-			for _, arnStringItem := range arnStringItems {
-				arnstring := ARNString(arnStringItem[0])
-				uur, err := arnstring.Parse(version)
+			for _, uurStringItem := range uurStringItems {
+				uurstring := UURString(uurStringItem[0])
+				uur, err := uurstring.Parse(version)
 				assert.Nil(err, "wrong result\ngot: should be nil")
 				var got, want string
-				want = arnStringItem[1]
+				want = uurStringItem[1]
 				got = string(uur.account)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-				want = arnStringItem[2]
+				want = uurStringItem[2]
 				got = string(uur.tenant)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-				want = arnStringItem[3]
+				want = uurStringItem[3]
 				got = string(uur.project)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-				want = arnStringItem[4]
+				want = uurStringItem[4]
 				got = string(uur.domain)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-				want = arnStringItem[5]
+				want = uurStringItem[5]
 				got = string(uur.resource)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-				want = arnStringItem[6]
+				want = uurStringItem[6]
 				got = string(uur.resourceFilter)
 				assert.Equal(want, got, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 			}
@@ -392,7 +392,7 @@ func TestPolicyNotValid(t *testing.T) {
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 
 		policy.Type = PolicyACLType
-		policy.Label = "This is not valid as there are spaces"
+		policy.Name = "This is not valid as there are spaces"
 		isValid, err = validateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
@@ -401,10 +401,10 @@ func TestPolicyNotValid(t *testing.T) {
 		policy := ACLPolicy{}
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
-		policy.Label = "PeopleBaseReader"
+		policy.Name = "PeopleBaseReader"
 		policy.Permit = []PolicyStatement{
 			{
-				Label: "People Base Reader",
+				Name: "People Base Reader",
 			},
 		}
 		isValid, err = validateACLPolicy(&policy)
@@ -415,15 +415,15 @@ func TestPolicyNotValid(t *testing.T) {
 		policy := ACLPolicy{}
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
-		policy.Label = "PeopleBaseReader"
+		policy.Name = "PeopleBaseReader"
 		policy.Permit = []PolicyStatement{
 			{
-				Label: "PeopleBaseReader",
+				Name: "PeopleBaseReader",
 				Actions: []ActionString{
 					"people:ListEmployee",
 					"people:ReadEmployee",
 				},
-				Resources: []ARNString{
+				Resources: []UURString{
 					"uur:581616507495:default:hr-app:organisation:people/*",
 				},
 			},
@@ -439,12 +439,12 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Label: "PeopleBaseReader",
+			Name: "PeopleBaseReader",
 			Actions: []ActionString{
 				"people:ListEmployee",
 				"people:ReadEmployee",
 			},
-			Resources: []ARNString{
+			Resources: []UURString{
 				"uur:581616507495:default:hr-app:organisation:people/*",
 			},
 		}
@@ -454,11 +454,11 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Label: "PeopleBaseReader",
+			Name: "PeopleBaseReader",
 			Actions: []ActionString{
 				"not a valid action",
 			},
-			Resources: []ARNString{
+			Resources: []UURString{
 				"uur:581616507495:default:hr-app:organisation:people/*",
 			},
 		}
@@ -468,12 +468,12 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Label: "PeopleBaseReader",
+			Name: "PeopleBaseReader",
 			Actions: []ActionString{
 				"people:ListEmployee",
 				"people:ReadEmployee",
 			},
-			Resources: []ARNString{
+			Resources: []UURString{
 				"not a valid uur",
 			},
 		}
@@ -491,7 +491,7 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		uur := ARNString("uur:000111023455:default:hr-app1:time-management1:people/1")
+		uur := UURString("uur:000111023455:default:hr-app1:time-management1:people/1")
 		_, err = uur.getRegex(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = uur.IsValid(PolicyVersionString("0000-00-00"))

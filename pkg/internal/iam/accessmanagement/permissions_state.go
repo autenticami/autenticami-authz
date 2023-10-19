@@ -31,7 +31,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*policyStat
 	if policyStatement == nil {
 		return nil, ErrAccessManagementInvalidDataType
 	}
-	policyStatementString, err := core.Stringify(policyStatement, []string{"Label"})
+	policyStatementString, err := core.Stringify(policyStatement, []string{"Name"})
 	if err != nil {
 		return nil, err
 	}

@@ -18,11 +18,11 @@
       "policy_uur": "uur:581616507495:default:autenticami:iam:policy/people-reader",
       "policy_payload": {
         "Syntax": "autenticami1",
-        "Label": "people-reader",
+        "Name": "people-reader",
         "Type": "ACL",
         "Permit": [
           {
-            "Label": "permit-hr/person/reader/any",
+            "Name": "permit-hr/person/reader/any",
             "Actions": [
               "people:ListEmployee",
               "people:ReadEmployee"
@@ -32,7 +32,7 @@
             ]
           },
           {
-            "Label": "permit-hr/timesheet/writer/any",
+            "Name": "permit-hr/timesheet/writer/any",
             "Actions": [
               "people:ReadTimesheet",
               "people:CreateTimesheet",
@@ -46,7 +46,7 @@
         ],
         "Forbid": [
           {
-            "Label": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+            "Name": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
             "Actions": [
               "people:Read"
             ],

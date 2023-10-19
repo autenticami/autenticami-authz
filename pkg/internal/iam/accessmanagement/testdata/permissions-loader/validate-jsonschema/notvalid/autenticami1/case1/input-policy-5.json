@@ -1,6 +1,6 @@
 {
     "Syntax": "autenticami1",
-    "Label": "PeopleBaseReader",
+    "Name": "PeopleBaseReader",
     "Type": "ACL",
     "Permit": "Not a valid type",
     "Forbid": []
