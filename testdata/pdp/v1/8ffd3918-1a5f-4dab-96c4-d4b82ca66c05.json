@@ -1,0 +1,62 @@
+{
+  "users": [
+    {
+      "user_id": "75c4d382-d752-41ca-aa71-9ddd70f994af",
+      "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com ",
+      "permissions": {
+        "policies": {
+          "inline": [],
+          "referenced": [
+            "uur:581616507495:default:autenticami:iam:policy/people-reader"
+          ]
+        }
+      }
+    }
+  ],
+  "policies": [
+    {
+      "policy_uur": "uur:581616507495:default:autenticami:iam:policy/people-reader",
+      "policy_payload": {
+        "Version": "2022-07-21",
+        "Label": "people-reader",
+        "Description": "This policy enable List and Read access to employee and timesheet of the domain people.",
+        "Type": "ACL",
+        "Permit": [
+          {
+            "Label": "permit-hr/person/reader/any",
+            "Actions": [
+              "people:ListEmployee",
+              "people:ReadEmployee"
+            ],
+            "Resources": [
+              "uur:581616507495:default:hr-app:organisation:people/*"
+            ]
+          },
+          {
+            "Label": "permit-hr/timesheet/writer/any",
+            "Actions": [
+              "people:ReadTimesheet",
+              "people:CreateTimesheet",
+              "people:UpdateTimesheet",
+              "people:DeleteTimesheet"
+            ],
+            "Resources": [
+              "uur:581616507495:default:hr-app:time-management:people/*"
+            ]
+          }
+        ],
+        "Forbid": [
+          {
+            "Label": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+            "Actions": [
+              "people:Read"
+            ],
+            "Resources": [
+              "uur:581616507495:default:hr-app:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2"
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
