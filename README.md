@@ -15,7 +15,7 @@
 
 `Autenticami` is a multi-account `Identity and Access Management` (IAM or IdAM) solution to enable a modern identity-based project access control for third party projects.
 
-All you have to do is describe your project's resources and create your own access control policies. Resources are organized into hierarchies of Applications and Domains.
+All you have to do is describe your project's resources and create your own access control policies. Resources are organized into Project's Domains.
 
 `Autenticami` allows to specify who or what can access resources by the means of fine-grained permissions:
 

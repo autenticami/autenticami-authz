@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	pb "github.com/autenticami/autenticami-authz/cmd/pdp/api/v1"
+	pb "github.com/autenticami/autenticami-authz/cmd/node/client/api/v1"
 
 	"google.golang.org/grpc"
 )
