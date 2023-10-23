@@ -5,11 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "autenticami-api",
+            "name": "autenticami-pdp",
             "type": "go",
             "request": "launch",
             "mode": "auto",
-            "program": "./cmd/api/main.go",
+            "program": "./cmd/pdp/main.go",
             "env": {
                 "AUTENTICAMI_PDP_DATA": "../../testdata/pdp/autenticami1"
             }

@@ -7,7 +7,7 @@ import (
 	"net"
 	"os"
 
-	pb "github.com/autenticami/autenticami-authz/cmd/api/v1"
+	pb "github.com/autenticami/autenticami-authz/cmd/pdp/api/v1"
 
 	"google.golang.org/grpc"
 )
@@ -41,14 +41,14 @@ func main() {
 	log.Printf("listening at %v", lis.Addr())
 
 	dataFolder := getEnv("AUTENTICAMI_PDP_DATA", ".")
-    files, err := os.ReadDir(dataFolder)
-    if err != nil {
-        log.Fatal(err)
-    }
+	files, err := os.ReadDir(dataFolder)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    for _, file := range files {
-        fmt.Println(file.Name(), file.IsDir())
-    }
+	for _, file := range files {
+		fmt.Println(file.Name(), file.IsDir())
+	}
 
 	s := grpc.NewServer()
 
