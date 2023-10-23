@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.30.0
 // 	protoc        v4.24.4
-// source: cmd/node/client/v1/pdp.proto
+// source: cmd/agent/v1/pdp.proto
 
 package v1
 

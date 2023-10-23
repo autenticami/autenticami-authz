@@ -104,11 +104,11 @@ func TestUURNotValid(t *testing.T) {
 			}
 			notValidDomains := notValidResources
 			uurs := []UURString{
-				"uur:581616507495:default:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:default:!!:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:default:hr-app:!!:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:!!:hr-app:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:!!:default:hr-app:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:default:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:default:!!:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:default:hr-app:!!:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:!!:hr-app:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:!!:default:hr-app:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 			}
 			// Accounts combinations
 			for _, notValidNumber := range notValidNumbers {
@@ -135,10 +135,10 @@ func TestUURNotValid(t *testing.T) {
 				assert.False(got, "wrong result\ngot: %sshouldn't be a valid uur", spew.Sdump(uur))
 			}
 			uurStrings := []UURString{
-				"ar n:000111023455:default1:hr-app1:time-management1:people/1",
-				"auur:000111023455:default1:hr-app1:time-management1:people/1",
-				"uur:000111023455:default1:!!:time-management1:people/1",
-				"uur:000111023455:default:hr-app1:time-management1:people/ 1",
+				"ar n:000111023455:default1:hr-app1:time-management1:person/1",
+				"auur:000111023455:default1:hr-app1:time-management1:person/1",
+				"uur:000111023455:default1:!!:time-management1:person/1",
+				"uur:000111023455:default:hr-app1:time-management1:person/ 1",
 			}
 			for _, uurString := range uurStrings {
 				_, err := uurString.Parse(version)
@@ -198,11 +198,11 @@ func TestUURValid(t *testing.T) {
 			validDomains := validResources
 			uurs := []UURString{
 				"uur:::::",
-				"uur:581616507495:default:hr-app:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:de*ault:hr-ap*p:time-management:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:def*ult:hr-ap*p:time-managem*ent:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:defa*lt:hr-ap*p:time-managem*ent:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
-				"uur:581616507495:defau*t:hr-ap*p:time-managem*ent:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:default:hr-app:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:de*ault:hr-ap*p:time-management:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:def*ult:hr-ap*p:time-managem*ent:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:defa*lt:hr-ap*p:time-managem*ent:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+				"uur:581616507495:defau*t:hr-ap*p:time-managem*ent:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 				"uur:581616507495:defaul*:hr-ap*p:time-managem*ent:*pe*rson*/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
 				"uur:581616507495:*efault:hr-ap*p:time-managem*ent:*pe*rson*/*bc182*146-1598-4fde-99aa-b2d4d08bc1e2",
 			}
@@ -231,8 +231,8 @@ func TestUURValid(t *testing.T) {
 				assert.True(got, "wrong result\ngot: %should be a valid uur", spew.Sdump(uur))
 			}
 			uurStringItems := [][]string{
-				{"uur:000111023455:default1:hr-app1:time-management1:people/1", "000111023455", "default1", "hr-app1", "time-management1", "people", "1"},
-				{"uur:000111023455:default1:hr-app1:time-management1:people/role/employee/1", "000111023455", "default1", "hr-app1", "time-management1", "people", "role/employee/1"},
+				{"uur:000111023455:default1:hr-app1:time-management1:person/1", "000111023455", "default1", "hr-app1", "time-management1", "person", "1"},
+				{"uur:000111023455:default1:hr-app1:time-management1:person/role/employee/1", "000111023455", "default1", "hr-app1", "time-management1", "person", "role/employee/1"},
 			}
 			for _, uurStringItem := range uurStringItems {
 				uurstring := UURString(uurStringItem[0])
@@ -267,7 +267,7 @@ func TestActionsNotValid(t *testing.T) {
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
-			var defaultvalidprojectname ActionString = "people"
+			var defaultvalidprojectname ActionString = "person"
 			var defaultvaliddomainname ActionString = "Read"
 			notValidNames := []ActionString{
 				"-n",
@@ -286,7 +286,7 @@ func TestActionsNotValid(t *testing.T) {
 			actions := []ActionString{
 				"!",
 				"!:Read",
-				"people:!",
+				"person:!",
 				"!:!",
 			}
 			// Resources combinations
@@ -304,7 +304,7 @@ func TestActionsNotValid(t *testing.T) {
 			actionStrings := []ActionString{
 				"",
 				"@:Read",
-				"people:@",
+				"person:@",
 				"@:@",
 			}
 			for _, actionString := range actionStrings {
@@ -321,7 +321,7 @@ func TestActionsValid(t *testing.T) {
 	for _, version := range versions {
 		t.Run(strings.ToUpper(string(version)), func(t *testing.T) {
 			assert := assert.New(t)
-			var defaultvalidprojectname ActionString = "people"
+			var defaultvalidprojectname ActionString = "person"
 			var defaultvaliddomainname ActionString = "Read"
 			validNames := []ActionString{
 				"n",
@@ -336,7 +336,7 @@ func TestActionsValid(t *testing.T) {
 				"*nn9*a1*",
 			}
 			actions := []ActionString{
-				"people:Read",
+				"person:Read",
 				":",
 			}
 			// Application combinations
@@ -352,9 +352,9 @@ func TestActionsValid(t *testing.T) {
 				assert.True(got, "wrong result\ngot: %sshould be of a valid action", spew.Sdump(action))
 			}
 			actionStringItems := [][]string{
-				{"people:Read", "people", "Read"},
-				{"people:", "people", "*"},
-				{"people:*", "people", "*"},
+				{"person:Read", "person", "Read"},
+				{"person:", "person", "*"},
+				{"person:*", "person", "*"},
 				{":Read", "*", "Read"},
 				{"*:Read", "*", "Read"},
 			}
@@ -401,10 +401,10 @@ func TestPolicyNotValid(t *testing.T) {
 		policy := ACLPolicy{}
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
-		policy.Name = "PeopleBaseReader"
+		policy.Name = "person-base-reader"
 		policy.Permit = []PolicyStatement{
 			{
-				Name: "People Base Reader",
+				Name: "person Base Reader",
 			},
 		}
 		isValid, err = validateACLPolicy(&policy)
@@ -415,16 +415,16 @@ func TestPolicyNotValid(t *testing.T) {
 		policy := ACLPolicy{}
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
-		policy.Name = "PeopleBaseReader"
+		policy.Name = "person-base-reader"
 		policy.Permit = []PolicyStatement{
 			{
-				Name: "PeopleBaseReader",
+				Name: "person-base-reader",
 				Actions: []ActionString{
-					"people:ListEmployee",
-					"people:ReadEmployee",
+					"person:ListEmployee",
+					"person:ReadEmployee",
 				},
 				Resources: []UURString{
-					"uur:581616507495:default:hr-app:organisation:people/*",
+					"uur:581616507495:default:hr-app:organisation:person/*",
 				},
 			},
 		}
@@ -439,13 +439,13 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Name: "PeopleBaseReader",
+			Name: "person-base-reader",
 			Actions: []ActionString{
-				"people:ListEmployee",
-				"people:ReadEmployee",
+				"person:ListEmployee",
+				"person:ReadEmployee",
 			},
 			Resources: []UURString{
-				"uur:581616507495:default:hr-app:organisation:people/*",
+				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
 		isValid, err = validatePolicyStatement(PolicyVersionString("0000-00-00"), &policyStatement)
@@ -454,12 +454,12 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Name: "PeopleBaseReader",
+			Name: "person-base-reader",
 			Actions: []ActionString{
 				"not a valid action",
 			},
 			Resources: []UURString{
-				"uur:581616507495:default:hr-app:organisation:people/*",
+				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
 		isValid, err = validatePolicyStatement(PolicyV1, &policyStatement)
@@ -468,10 +468,10 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policyStatement := PolicyStatement{
-			Name: "PeopleBaseReader",
+			Name: "person-base-reader",
 			Actions: []ActionString{
-				"people:ListEmployee",
-				"people:ReadEmployee",
+				"person:ListEmployee",
+				"person:ReadEmployee",
 			},
 			Resources: []UURString{
 				"not a valid uur",
@@ -491,7 +491,7 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		uur := UURString("uur:000111023455:default:hr-app1:time-management1:people/1")
+		uur := UURString("uur:000111023455:default:hr-app1:time-management1:person/1")
 		_, err = uur.getRegex(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = uur.IsValid(PolicyVersionString("0000-00-00"))
@@ -500,7 +500,7 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 	{
-		action := ActionString("people:Read")
+		action := ActionString("person:Read")
 		_, err = action.getRegex(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = action.IsValid(PolicyVersionString("0000-00-00"))

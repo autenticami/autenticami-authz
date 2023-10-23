@@ -1,26 +1,26 @@
 {
     "Syntax": "autenticami1",
-    "Name": "PeopleBaseReader",
+    "Name": "person-base-reader",
     "Type": "ACL",
     "Permit": [
         {
             "Actions": [
-                "people:ListEmployee",
-                "people:ReadEmployee"
+                "person:ListEmployee",
+                "person:ReadEmployee"
             ],
             "Resources": [
-                "uur:581616507495:default:hr-app:organisation:people/*"
+                "uur:581616507495:default:hr-app:organisation:person/*"
             ]
         },
         {
             "Actions": [
-                "people:ReadTimesheet",
-                "people:CreateTimesheet",
-                "people:UpdateTimesheet",
-                "people:DeleteTimesheet"
+                "person:ReadTimesheet",
+                "person:CreateTimesheet",
+                "person:UpdateTimesheet",
+                "person:DeleteTimesheet"
             ],
             "Resources": [
-                "uur:581616507495:default:hr-app:time-management:people/*"
+                "uur:581616507495:default:hr-app:time-management:person/*"
             ]
         }
     ],

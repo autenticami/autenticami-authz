@@ -2,7 +2,7 @@ syntax="proto3";
 
 package policydecisionpoint;
 
-option go_package = "github.com/autenticami/autenticami-authz/cmd/node/client/v1";
+option go_package = "github.com/autenticami/autenticami-authz/cmd/agent/v1";
 
 message PermissionsSateRequest {
   string identityUUR= 1;

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.4
-// source: cmd/node/client/v1/pdp.proto
+// source: cmd/agent/v1/pdp.proto
 
 package v1
 
@@ -105,5 +105,5 @@ var PermissionsService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "cmd/node/client/v1/pdp.proto",
+	Metadata: "cmd/agent/v1/pdp.proto",
 }

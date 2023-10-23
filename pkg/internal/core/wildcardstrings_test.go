@@ -227,16 +227,16 @@ func TestWildcardStringComparation(t *testing.T) {
 	{
 		inclusions := [][]string{
 			{
-				"hr-app:time-management:data-entry:581616507495:people/bc182146-*-4fde-99aa-b2d4d08bc1e2:people:ReadTimesheet",
-				"hr-app:time-management:data-entry:581616507495:people/bc182146-1598-4fde-99aa-b2d4d08bc1e2:people:ReadTimesheet",
+				"hr-app:time-management:data-entry:581616507495:person/bc182146-*-4fde-99aa-b2d4d08bc1e2:person:ReadTimesheet",
+				"hr-app:time-management:data-entry:581616507495:person/bc182146-1598-4fde-99aa-b2d4d08bc1e2:person:ReadTimesheet",
 			},
 			{
-				"hr-app:time-management:data-entry:*:people/*99aa-b2d4d08bc1e2:people:ReadTimesheet",
-				"hr-app:time-management:data-entry:581616507495:people/bc182146-*-*-99aa-b2d4d08bc1e2:people:ReadTimesheet",
+				"hr-app:time-management:data-entry:*:person/*99aa-b2d4d08bc1e2:person:ReadTimesheet",
+				"hr-app:time-management:data-entry:581616507495:person/bc182146-*-*-99aa-b2d4d08bc1e2:person:ReadTimesheet",
 			},
 			{
-				"hr-app:time-*:*:581616507495:people/*:people:ReadTimesheet",
-				"hr-app:time-management:data-entry:581616507495:people/*:people:ReadTimesheet",
+				"hr-app:time-*:*:581616507495:person/*:person:ReadTimesheet",
+				"hr-app:time-management:data-entry:581616507495:person/*:person:ReadTimesheet",
 			},
 		}
 		for _, inclusion := range inclusions {

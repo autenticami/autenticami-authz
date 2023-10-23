@@ -70,14 +70,14 @@ converage-json:
 
 build-release:
 	mkdir -p dist
-	go build -o dist/autenticami ./cmd/node/client
+	go build -o dist/autenticami ./cmd/agent
 
 build-docker:
 	docker stop autenticami || true && docker rm autenticami || true
 	docker build -t autenticami .
 
 run-release:
-	go run ./cmd/node/client
+	go run ./cmd/agent
 
 run-docker:
 	docker run --name autenticami autenticami

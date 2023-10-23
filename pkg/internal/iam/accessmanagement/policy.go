@@ -11,7 +11,7 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/internal/core"
 )
 
-// A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:people/*.
+// A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:person/*.
 // REF: https://docs.autenticami.com/accounts/projects/resources/
 
 const (
@@ -78,7 +78,7 @@ type ACLPolicy struct {
 //go:embed data/acl-policy-schema.json
 var aclPolicySchema []byte
 
-// A policy statement list acctions associated to resources.
+// A policy statement list actions associated to resources.
 // REF: https://docs.autenticami.com/access-management/permissions-policies/#policy-statement
 
 type PolicyStatement struct {

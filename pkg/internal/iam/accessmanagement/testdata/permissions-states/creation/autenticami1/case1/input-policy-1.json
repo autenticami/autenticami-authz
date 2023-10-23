@@ -1,15 +1,15 @@
 {
     "Syntax": "autenticami1",
-    "Name": "PeopleBaseReader",
+    "Name": "person-base-reader",
     "Permit": [
         {
             "Name": "permit-hr/person/reader/any",
             "Actions": [
-                "people:ListEmployee",
-                "people:ReadEmployee"
+                "person:ListEmployee",
+                "person:ReadEmployee"
             ],
             "Resources": [
-                "uur:581616507495:default:hr-app:organisation:people/*"
+                "uur:581616507495:default:hr-app:organisation:person/*"
             ]
         }
     ],
