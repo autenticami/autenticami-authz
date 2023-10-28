@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type PermissionsServiceClient interface {
 	GetPermissionsState(ctx context.Context, in *PermissionsStateRequest, opts ...grpc.CallOption) (*PermissionsStateResponse, error)
-	CheckPermissions(ctx context.Context, in *CheckPermissionsRequest, opts ...grpc.CallOption) (*CheckPermissionsResponse, error)
+	CheckPermissions(ctx context.Context, in *PermissionsCheckRequest, opts ...grpc.CallOption) (*PermissionsCheckResponse, error)
 }
 
 type permissionsServiceClient struct {
@@ -48,8 +48,8 @@ func (c *permissionsServiceClient) GetPermissionsState(ctx context.Context, in *
 	return out, nil
 }
 
-func (c *permissionsServiceClient) CheckPermissions(ctx context.Context, in *CheckPermissionsRequest, opts ...grpc.CallOption) (*CheckPermissionsResponse, error) {
-	out := new(CheckPermissionsResponse)
+func (c *permissionsServiceClient) CheckPermissions(ctx context.Context, in *PermissionsCheckRequest, opts ...grpc.CallOption) (*PermissionsCheckResponse, error) {
+	out := new(PermissionsCheckResponse)
 	err := c.cc.Invoke(ctx, PermissionsService_CheckPermissions_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -62,7 +62,7 @@ func (c *permissionsServiceClient) CheckPermissions(ctx context.Context, in *Che
 // for forward compatibility
 type PermissionsServiceServer interface {
 	GetPermissionsState(context.Context, *PermissionsStateRequest) (*PermissionsStateResponse, error)
-	CheckPermissions(context.Context, *CheckPermissionsRequest) (*CheckPermissionsResponse, error)
+	CheckPermissions(context.Context, *PermissionsCheckRequest) (*PermissionsCheckResponse, error)
 	mustEmbedUnimplementedPermissionsServiceServer()
 }
 
@@ -73,7 +73,7 @@ type UnimplementedPermissionsServiceServer struct {
 func (UnimplementedPermissionsServiceServer) GetPermissionsState(context.Context, *PermissionsStateRequest) (*PermissionsStateResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPermissionsState not implemented")
 }
-func (UnimplementedPermissionsServiceServer) CheckPermissions(context.Context, *CheckPermissionsRequest) (*CheckPermissionsResponse, error) {
+func (UnimplementedPermissionsServiceServer) CheckPermissions(context.Context, *PermissionsCheckRequest) (*PermissionsCheckResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CheckPermissions not implemented")
 }
 func (UnimplementedPermissionsServiceServer) mustEmbedUnimplementedPermissionsServiceServer() {}
@@ -108,7 +108,7 @@ func _PermissionsService_GetPermissionsState_Handler(srv interface{}, ctx contex
 }
 
 func _PermissionsService_CheckPermissions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CheckPermissionsRequest)
+	in := new(PermissionsCheckRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -120,7 +120,7 @@ func _PermissionsService_CheckPermissions_Handler(srv interface{}, ctx context.C
 		FullMethod: PermissionsService_CheckPermissions_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PermissionsServiceServer).CheckPermissions(ctx, req.(*CheckPermissionsRequest))
+		return srv.(PermissionsServiceServer).CheckPermissions(ctx, req.(*PermissionsCheckRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

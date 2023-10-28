@@ -14,14 +14,14 @@ message Identity {
   repeated Attribute attributes = 2;
 }
 
-// Permissions Service is the service that provides the permissions state of the user.
+// Permission state
 
 message PermissionsStateRequest {
   Identity identity = 1;
 }
 
 message PolicyStatement {
-  repeated string name = 1;
+  string name = 1;
   repeated string actions = 2;
   repeated string resources = 3;
 }
@@ -40,12 +40,12 @@ message PermissionsState {
 
 message PermissionsStateResponse {
   Identity identity = 1;
-  optional PermissionsState permissionsState = 2;
+  PermissionsState permissionsState = 2;
 }
 
-// Check permits or forbids a request.
+// Permissions Check
 
-message PermissionsEvaluation {
+message PermissionsCheck {
   string requestId = 1;
   string account = 2;
   string tenant = 3;
@@ -55,29 +55,29 @@ message PermissionsEvaluation {
   repeated string actions = 7;
 }
 
-message CheckPermissionsRequest {
+message PermissionsCheckRequest {
   Identity identity = 1;
-  repeated PermissionsEvaluation requests = 2;
+  repeated PermissionsCheck checks = 2;
 }
 
-message PermissionsEvaluationExplanation {
+message PermissionCheckOutcomeExplanation {
   bool isExplicitlyDenied = 1;
   bool isImplicitlyDenied = 2;
 }
 
-message PermissionCheck {
-  PermissionsEvaluation request = 1;
+message PermissionCheckOutcome {
+  PermissionsCheck check = 1;
   bool allowed = 2;
-  PermissionsEvaluationExplanation explanation = 3;
+  PermissionCheckOutcomeExplanation explanation = 3;
 }
 
-message CheckPermissionsResponse {
+message PermissionsCheckResponse {
   Identity identity = 1;
-  repeated PermissionCheck responses = 2;
+  repeated PermissionCheckOutcome checks = 2;
   bool allowed = 3;
 }
 
 service PermissionsService {
   rpc GetPermissionsState (PermissionsStateRequest) returns (PermissionsStateResponse);
-  rpc CheckPermissions(CheckPermissionsRequest) returns (CheckPermissionsResponse);
+  rpc CheckPermissions(PermissionsCheckRequest) returns (PermissionsCheckResponse);
 }

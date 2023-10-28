@@ -28,16 +28,15 @@ func (s *PermissionsServer) GetPermissionsState(ctx context.Context, req *pb.Per
 	return permissions, nil
 }
 
-func (s *PermissionsServer) CheckPermissions(ctx context.Context, req *pb.CheckPermissionsRequest) (*pb.CheckPermissionsResponse, error) {
+func (s *PermissionsServer) CheckPermissions(ctx context.Context, req *pb.PermissionsCheckRequest) (*pb.PermissionsCheckResponse, error) {
 	log.Printf("received: %v", req.Identity.GetUur())
-	permissions := &pb.CheckPermissionsResponse{
+	permissions := &pb.PermissionsCheckResponse{
 		Identity: &pb.Identity{
 			Uur: req.Identity.GetUur(),
 		},
-		Responses: []*pb.PermissionCheck {},
+		Checks: []*pb.PermissionCheckOutcome {},
 		Allowed: true,
 	}
-
 	return permissions, nil
 }
 
