@@ -19,10 +19,10 @@ clean:
 
 init-dependency:
 	go get -u github.com/antonfisher/nested-logrus-formatter
-	go get -u github.com/gin-gonic/gin
 	go get -u golang.org/x/crypto
-	go get -u gorm.io/gorm
-	go get -u gorm.io/driver/postgres
+	# go get -u github.com/gin-gonic/gin
+	# go get -u gorm.io/gorm
+	# go get -u gorm.io/driver/postgres
 	go get -u github.com/sirupsen/logrus
 	go get -u github.com/joho/godotenv
 	go get -u github.com/go-playground/validator/v10@v10.15.1
@@ -30,7 +30,8 @@ init-dependency:
 	go get -u github.com/google/uuid@v1.3.1
 	go get -u github.com/davecgh/go-spew/spew@v1.1.1
 	go get -u github.com/xeipuuv/gojsonschema@v1.2.0
-	go get google.golang.org/grpc@v1.59.0
+	go get -u google.golang.org/grpc@v1.59.0
+	go get -u get github.com/dgraph-io/badger/v4
 
 
 mod:
