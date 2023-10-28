@@ -28,16 +28,27 @@ func (s *PermissionsServer) GetPermissionsState(ctx context.Context, req *pb.Per
 	return permissions, nil
 }
 
-func (s *PermissionsServer) CheckPermissions(ctx context.Context, req *pb.PermissionsCheckRequest) (*pb.PermissionsCheckResponse, error) {
+func (s *PermissionsServer) EvaluatePermissions(ctx context.Context, req *pb.PermissionsEvaluationRequest) (*pb.PermissionsEvaluationResponse, error) {
 	log.Printf("received: %v", req.Identity.GetUur())
-	permissions := &pb.PermissionsCheckResponse{
+	permissionsEvaluation := &pb.PermissionsEvaluationResponse{
 		Identity: &pb.Identity{
 			Uur: req.Identity.GetUur(),
 		},
-		Checks: []*pb.PermissionCheckOutcome {},
+		Evaluations: make([]*pb.PermissionsEvaluationOutcome, len(req.Evaluations)),
 		Allowed: true,
 	}
-	return permissions, nil
+	for i, evaluation := range req.Evaluations {
+		outcome := &pb.PermissionsEvaluationOutcome{
+			Evaluation: evaluation,
+			Allowed: true,
+			Explanation: &pb.PermissionsEvaluationOutcomeExplanation{
+				IsExplicitlyDenied:  true,
+				IsImplicitlyDenied:  false,
+			},
+		}
+		permissionsEvaluation.Evaluations[i] = outcome
+	}
+	return permissionsEvaluation, nil
 }
 
 func getEnv(key, fallback string) string {

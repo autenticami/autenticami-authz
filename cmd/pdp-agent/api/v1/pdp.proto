@@ -43,10 +43,10 @@ message PermissionsStateResponse {
   PermissionsState permissionsState = 2;
 }
 
-// Permissions Check
+// Permissions evaluation
 
-message PermissionsCheck {
-  string requestId = 1;
+message PermissionsEvaluation {
+  string id = 1;
   string account = 2;
   string tenant = 3;
   string project = 4;
@@ -55,29 +55,29 @@ message PermissionsCheck {
   repeated string actions = 7;
 }
 
-message PermissionsCheckRequest {
+message PermissionsEvaluationRequest {
   Identity identity = 1;
-  repeated PermissionsCheck checks = 2;
+  repeated PermissionsEvaluation evaluations = 2;
 }
 
-message PermissionCheckOutcomeExplanation {
+message PermissionsEvaluationOutcomeExplanation {
   bool isExplicitlyDenied = 1;
   bool isImplicitlyDenied = 2;
 }
 
-message PermissionCheckOutcome {
-  PermissionsCheck check = 1;
+message PermissionsEvaluationOutcome {
+  PermissionsEvaluation evaluation = 1;
   bool allowed = 2;
-  PermissionCheckOutcomeExplanation explanation = 3;
+  PermissionsEvaluationOutcomeExplanation explanation = 3;
 }
 
-message PermissionsCheckResponse {
+message PermissionsEvaluationResponse {
   Identity identity = 1;
-  repeated PermissionCheckOutcome checks = 2;
+  repeated PermissionsEvaluationOutcome evaluations = 2;
   bool allowed = 3;
 }
 
 service PermissionsService {
   rpc GetPermissionsState (PermissionsStateRequest) returns (PermissionsStateResponse);
-  rpc CheckPermissions(PermissionsCheckRequest) returns (PermissionsCheckResponse);
+  rpc EvaluatePermissions(PermissionsEvaluationRequest) returns (PermissionsEvaluationResponse);
 }
