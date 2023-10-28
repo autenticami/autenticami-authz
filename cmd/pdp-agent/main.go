@@ -8,6 +8,7 @@ import (
 	"os"
 
 	pb "github.com/autenticami/autenticami-authz/cmd/pdp-agent/api/v1"
+	"github.com/google/uuid"
 
 	"google.golang.org/grpc"
 )
@@ -46,6 +47,7 @@ func (s *PermissionsServer) EvaluatePermissions(ctx context.Context, req *pb.Per
 				IsImplicitlyDenied:  false,
 			},
 		}
+		outcome.Evaluation.Id = uuid.New().String()
 		permissionsEvaluation.Evaluations[i] = outcome
 	}
 	return permissionsEvaluation, nil
