@@ -17,9 +17,11 @@ type PermissionsServer struct {
 }
 
 func (s *PermissionsServer) GetPermissionsState(ctx context.Context, req *pb.PermissionsStateRequest) (*pb.PermissionsStateResponse, error) {
-	log.Printf("received: %v", req.GetIdentityUUR())
+	log.Printf("received: %v", req.Identity.GetUur())
 	permissions := &pb.PermissionsStateResponse{
-		IdentityUUR:      req.GetIdentityUUR(),
+		Identity: &pb.Identity{
+			Uur: req.Identity.GetUur(),
+		},
 		PermissionsState: nil,
 	}
 
@@ -27,10 +29,12 @@ func (s *PermissionsServer) GetPermissionsState(ctx context.Context, req *pb.Per
 }
 
 func (s *PermissionsServer) CheckPermissions(ctx context.Context, req *pb.CheckPermissionsRequest) (*pb.CheckPermissionsResponse, error) {
-	log.Printf("received: %v", req.GetIdentityUUR())
+	log.Printf("received: %v", req.Identity.GetUur())
 	permissions := &pb.CheckPermissionsResponse{
-		IdentityUUR:      req.GetIdentityUUR(),
-		Responses: []*pb.PermissionsResponse {},
+		Identity: &pb.Identity{
+			Uur: req.Identity.GetUur(),
+		},
+		Responses: []*pb.PermissionCheck {},
 		Allowed: true,
 	}
 
