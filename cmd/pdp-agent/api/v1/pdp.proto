@@ -1,0 +1,73 @@
+syntax="proto3";
+
+package policydecisionpoint;
+
+option go_package = "github.com/autenticami/autenticami-authz/cmd/pdp-agent/v1";
+
+// Permissions Service is the service that provides the permissions state of the user.
+
+message PermissionsStateRequest {
+  string identityUUR = 1;
+}
+
+message PolicyStatement {
+  repeated string name = 1;
+  repeated string actions = 2;
+  repeated string resources = 3;
+}
+
+message PolicyStatementDescription {
+  string id = 1;
+  PolicyStatement statement = 2;
+  string statmentStringified = 3;
+  string statmentHashed = 4;
+}
+
+message PermissionsState {
+  repeated PolicyStatementDescription forbid = 1;
+  repeated PolicyStatementDescription permit = 2;
+}
+
+message PermissionsStateResponse {
+  string identityUUR = 1;
+  optional PermissionsState permissionsState = 2;
+}
+
+// Check permits or forbids a request.
+
+message PermissionsRequest {
+  string requestId = 1;
+  string account = 2;
+  string tenant = 3;
+  string project = 4;
+  string domain = 5;
+  string resource = 6;
+  repeated string actions = 7;
+}
+
+message CheckPermissionsRequest {
+  string identityUUR = 1;
+  repeated PermissionsRequest requests = 2;
+}
+
+message PermissionsResponse {
+  PermissionsRequest request = 1;
+  bool allowed = 2;
+  PermissionsResponseExplanation explanation = 3;
+}
+
+message PermissionsResponseExplanation {
+  bool isExplicitlyDenied = 1;
+  bool isImplicitlyDenied = 2;
+}
+
+message CheckPermissionsResponse {
+  string identityUUR = 1;
+  repeated PermissionsResponse responses = 2;
+  bool allowed = 3;
+}
+
+service PermissionsService {
+  rpc GetPermissionsState (PermissionsStateRequest) returns (PermissionsStateResponse);
+  rpc CheckPermissions(CheckPermissionsRequest) returns (CheckPermissionsResponse);
+}
