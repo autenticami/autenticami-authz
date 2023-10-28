@@ -23,9 +23,11 @@ func (s *PermissionsServer) GetPermissionsState(ctx context.Context, req *pb.Per
 		Identity: &pb.Identity{
 			Uur: req.Identity.GetUur(),
 		},
-		PermissionsState: nil,
+		PermissionsState: &pb.PermissionsState{
+			Forbid: []*pb.PolicyStatementDescription {},
+			Permit: []*pb.PolicyStatementDescription {},
+		},
 	}
-
 	return permissions, nil
 }
 
@@ -47,7 +49,9 @@ func (s *PermissionsServer) EvaluatePermissions(ctx context.Context, req *pb.Per
 				IsImplicitlyDenied:  false,
 			},
 		}
-		outcome.Evaluation.Id = uuid.New().String()
+		if len(outcome.Evaluation.Id) == 0 {
+			outcome.Evaluation.Id = uuid.New().String()
+		}
 		permissionsEvaluation.Evaluations[i] = outcome
 	}
 	return permissionsEvaluation, nil
