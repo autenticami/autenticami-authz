@@ -11,6 +11,7 @@
             "mode": "auto",
             "program": "./cmd/pdp_agent/main.go",
             "env": {
+                "AUTENTICAMI-AGENT-TYPE": "PDP-LOCAL",
                 "AUTENTICAMI_PDP_DATA": "../../testdata/pdp/autenticami1"
             }
         }

@@ -3,22 +3,24 @@ package main
 import (
 	"net"
 	"os"
+	"strings"
 
 	cmd_pdp_apiv1 "github.com/autenticami/autenticami-authz/cmd/pdp_agent/api/v1"
 	pkg_core "github.com/autenticami/autenticami-authz/pkg/core"
 	pkg_pdp "github.com/autenticami/autenticami-authz/pkg/pdp_agent"
 	pkg_pdp_local "github.com/autenticami/autenticami-authz/pkg/pdp_agent/local"
-	
-	"google.golang.org/grpc"
+
 	log "github.com/sirupsen/logrus"
+	"google.golang.org/grpc"
 )
 
 var config = func() pkg_core.Config {
-	if pkg_pdp.EnvKeyAutenticamiAgentType == "PDP-LOCAL" {
+	agentType := pkg_core.GetEnv(pkg_pdp.EnvKeyAutenticamiAgentType, "PDP-REMOTE")
+	if strings.ToUpper(agentType) == "PDP-LOCAL" {
 		return pkg_pdp_local.NewLocalConfig()
-	} else {
-		return nil
 	}
+	log.Fatalf("%s: %s is an invalid agent type", pkg_pdp.EnvKeyAutenticamiAgentType, agentType)
+	panic(1)
 }()
 
 func init() {
