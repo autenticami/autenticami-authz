@@ -4,7 +4,7 @@
 package local
 
 import(
-	pkgiAM "github.com/autenticami/autenticami-authz/pkg/internal/iam/accessmanagement"
+	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
 )
 
 type PDPLocalService struct {
@@ -14,7 +14,7 @@ type PDPLocalService struct {
 func (s PDPLocalService) Setup() {
 }
 
-func (s PDPLocalService) GetPermissionsState(identityUUR string) *pkgiAM.PermissionsState {
+func (s PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) *pkgAM.PermissionsState {
 	return nil
 }
 

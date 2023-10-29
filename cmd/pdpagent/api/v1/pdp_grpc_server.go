@@ -5,7 +5,8 @@ package v1
 
 import (
 	"context"
-	
+
+	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/pdpagent"
 
 	"github.com/google/uuid"
@@ -18,7 +19,7 @@ type PDPServer struct {
 }
 
 func (s *PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
-	permissionsState := s.Service.GetPermissionsState(req.Identity.Uur)
+	permissionsState := s.Service.GetPermissionsState(pkgAM.UURString(req.Identity.Uur))
 	if permissionsState != nil {
 		log.Info(permissionsState)
 	}

@@ -8,6 +8,10 @@ import (
 	"strconv"
 )
 
+const (
+	UnknownText = "unknown"
+)
+
 type errorCode int
 
 type Error struct {
