@@ -26,7 +26,7 @@ message PolicyStatement {
   repeated string resources = 3;
 }
 
-message PolicyStatementDescription {
+message PolicyStatementWrapper {
   string id = 1;
   PolicyStatement statement = 2;
   string statmentStringified = 3;
@@ -34,8 +34,8 @@ message PolicyStatementDescription {
 }
 
 message PermissionsState {
-  repeated PolicyStatementDescription forbid = 1;
-  repeated PolicyStatementDescription permit = 2;
+  repeated PolicyStatementWrapper forbid = 1;
+  repeated PolicyStatementWrapper permit = 2;
 }
 
 message PermissionsStateResponse {

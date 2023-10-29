@@ -23,18 +23,18 @@ type papDoc struct {
 }
 
 func getBytes(key interface{}) ([]byte, error) {
-    var buf bytes.Buffer
+	var buf bytes.Buffer
 	gob.Register(map[string]interface{}{})
 	gob.Register([]interface{}{})
-    enc := gob.NewEncoder(&buf)
-    err := enc.Encode(key)
-    if err != nil {
-        return nil, err
-    }
-    return buf.Bytes(), nil
+	enc := gob.NewEncoder(&buf)
+	err := enc.Encode(key)
+	if err != nil {
+		return nil, err
+	}
+	return buf.Bytes(), nil
 }
 
-func loadCache(cache *map[string]interface{}, appFolder string, key string, targetKey string) error {
+func loadCache(cache *map[string]interface{}, appFolder string, key string, targetKey string, encode bool) error {
 	files, err := os.ReadDir(appFolder)
 	if err != nil {
 		return errors.Join(ErrPDPAgentLocalInvalidAppData, err)
@@ -48,11 +48,19 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 		var data papDoc
 		err := json.Unmarshal(bArray, &data)
 		if err != nil {
-			return ErrPDPAgentLocalInvalidAppData
+			return errors.Join(ErrPDPAgentLocalInvalidAppData, err)
 		}
 		for _, item := range data.Items {
 			key := item[key].(string)
-			(*cache)[key] = item[targetKey]
+			if !encode {
+				(*cache)[key] = item[targetKey]
+			} else {
+				bytes, err := getBytes(item[targetKey])
+				if err != nil {
+					return errors.Join(ErrPDPAgentLocalInvalidAppData, err)
+				}
+				(*cache)[key] = bytes
+			}
 		}
 	}
 	return nil
@@ -61,11 +69,11 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 func (s PDPLocalService) Setup() error {
 	var err error
 	s.cache = make(map[string]interface{})
-	err = loadCache(&s.cache, s.config.appData+"/autenticami1/identities/", "user_uur", "policies")
+	err = loadCache(&s.cache, s.config.appData+"/autenticami1/identities/", "user_uur", "policies", false)
 	if err != nil {
 		return ErrPDPAgentLocalInvalidAppData
 	}
-	err = loadCache(&s.cache, s.config.appData+"/autenticami1/policies/", "policy_uur", "policy_payload")
+	err = loadCache(&s.cache, s.config.appData+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
 	if err != nil {
 		return ErrPDPAgentLocalInvalidAppData
 	}
@@ -73,7 +81,19 @@ func (s PDPLocalService) Setup() error {
 }
 
 func (s PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkgAM.PermissionsState, error) {
-	return nil, nil
+	engine, err := pkgAM.NewPermissionsEngine()
+	if err != nil {
+		return nil, err
+	}
+	var permissionState *pkgAM.PermissionsState
+	policies := s.cache[string(identityUUR)]
+	for _, policy := range policies.([]string) {
+		permissionState, err = engine.BuildPermissions(s.cache[policy].([]byte))
+	}
+	if err != nil {
+		return nil, err
+	}
+	return permissionState, nil
 }
 
 func NewPDPLocalService(config LocalConfig) PDPLocalService {

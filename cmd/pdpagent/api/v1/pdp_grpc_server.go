@@ -18,7 +18,7 @@ type PDPServer struct {
 	Service pkgPdp.PDPService
 }
 
-func (s *PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
+func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
 	permissionsState, _ := s.Service.GetPermissionsState(pkgAM.UURString(req.Identity.Uur))
 	if permissionsState == nil {
 		return nil, errors.New("permission state cannot be built for the given identity")
@@ -28,14 +28,21 @@ func (s *PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsSta
 			Uur: req.Identity.GetUur(),
 		},
 		PermissionsState: &PermissionsState{
-			Forbid: []*PolicyStatementDescription{},
-			Permit: []*PolicyStatementDescription{},
+			Forbid: []*PolicyStatementWrapper{},
+			Permit: []*PolicyStatementWrapper{},
 		},
+	}
+	for i, wrapper := range permissionsState.GetForbidList() {
+		permissions.PermissionsState.Forbid[i] = &PolicyStatementWrapper{
+			Id: wrapper.Id.String(),
+			StatmentStringified: wrapper.StatmentStringified,
+			StatmentHashed: wrapper.StatmentHashed,
+		}
 	}
 	return permissions, nil
 }
 
-func (s *PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEvaluationRequest) (*PermissionsEvaluationResponse, error) {
+func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEvaluationRequest) (*PermissionsEvaluationResponse, error) {
 	permissionsEvaluation := &PermissionsEvaluationResponse{
 		Identity: &Identity{
 			Uur: req.Identity.GetUur(),

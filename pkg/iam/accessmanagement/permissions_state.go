@@ -13,10 +13,10 @@ import (
 )
 
 type PolicyStatementWrapper struct {
-	id                  uuid.UUID
-	statement           *PolicyStatement
-	statmentStringified string
-	statmentHashed      string
+	Id                  uuid.UUID
+	Statement           PolicyStatement
+	StatmentStringified string
+	StatmentHashed      string
 	// sanitizedStatement           *PolicyStatement
 	// sanitizedStatmentStringified string
 	// sanitizedStatmentHashed      string
@@ -41,10 +41,10 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStat
 	bs := h.Sum(nil)
 	policyStatementHash := fmt.Sprintf("%x", bs)
 	return &PolicyStatementWrapper{
-		id:                  uuid.New(),
-		statement:           policyStatement,
-		statmentStringified: policyStatementString,
-		statmentHashed:      policyStatementHash,
+		Id:                  uuid.New(),
+		Statement:           *policyStatement,
+		StatmentStringified: policyStatementString,
+		StatmentHashed:      policyStatementHash,
 	}, nil
 }
 
