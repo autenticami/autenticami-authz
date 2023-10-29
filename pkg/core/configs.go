@@ -3,7 +3,6 @@
 
 package core
 
-
 type Config interface {
-    IsLocal() bool
+	IsLocal() bool
 }

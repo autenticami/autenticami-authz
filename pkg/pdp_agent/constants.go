@@ -4,7 +4,7 @@
 package pdp_agent
 
 const (
-	EnvKeyAutenticamiEnvironment = "AUTENTICAMI-ENVIRONMENT"
-	EnvKeyAutenticamiAgentType = "AUTENTICAMI-AGENT-TYPE"
+	EnvKeyAutenticamiEnvironment  = "AUTENTICAMI-ENVIRONMENT"
+	EnvKeyAutenticamiAgentType    = "AUTENTICAMI-AGENT-TYPE"
 	EnvKeyAutenticamiAgentAppData = "AUTENTICAMI-AGENT-APPDATA"
 )

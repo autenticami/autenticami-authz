@@ -17,7 +17,7 @@ func (c LocalConfig) IsLocal() bool {
 	return c.isLocal
 }
 
-func NewLocalConfig() (LocalConfig) {
+func NewLocalConfig() LocalConfig {
 	localConfig := LocalConfig{
 		isLocal: pCore.GetEnv(pdp_agent.EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		appData: pCore.GetEnv(pdp_agent.EnvKeyAutenticamiAgentAppData, "."),

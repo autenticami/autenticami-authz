@@ -12,24 +12,21 @@ import (
 	"google.golang.org/grpc"
 )
 
-
-func getConfig() pCore.Config {
+var localConfig = func() pCore.Config {
 	return pdpConfig.NewLocalConfig()
-}
-
-var localConfig = getConfig()
+}()
 
 func init() {
 	if localConfig.IsLocal() {
 		// Log as ASCII instead of the default JSON formatter.
-		log.SetFormatter(&log.TextFormatter{ ForceColors: true, DisableColors: false, FullTimestamp: true})
+		log.SetFormatter(&log.TextFormatter{ForceColors: true, DisableColors: false, FullTimestamp: true})
 		// Output to stdout instead of the default stderr
 		log.SetOutput(os.Stdout)
 		// Only log the info severity or above.
 		log.SetLevel(log.InfoLevel)
 	} else {
 		// Log as JSON instead of the default ASCII formatter.
-		log.SetFormatter(&log.JSONFormatter{ PrettyPrint: true})
+		log.SetFormatter(&log.JSONFormatter{PrettyPrint: true})
 		// Output to stdout instead of the default stderr
 		log.SetOutput(os.Stdout)
 		// Only log the info severity or above.
@@ -46,7 +43,7 @@ func main() {
 	log.Infof("listening at %v", lis.Addr())
 
 	s := grpc.NewServer()
-	
+
 	pbApiV1.RegisterPDPServiceServer(s, &pbApiV1.PDPServer{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("grpc server failed: %v", err)
