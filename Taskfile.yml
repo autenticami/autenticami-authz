@@ -11,7 +11,7 @@ tasks:
     silent: true
   hot:
     cmds:
-      - air --build.cmd "go build -o bin/pdpagent ./cmd/pdpagent/main.go" --build.bin "./bin/pdpagent"
+      - air --build.cmd "go build -o dist/pdpagent ./cmd/pdpagent/main.go" --build.bin "./dist/pdpagent"
   test:
     cmds:
       - make coverage
