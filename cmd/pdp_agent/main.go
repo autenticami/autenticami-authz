@@ -5,16 +5,22 @@ import (
 	"os"
 
 	pbApiV1 "github.com/autenticami/autenticami-authz/cmd/pdp_agent/api/v1"
+	pCore "github.com/autenticami/autenticami-authz/pkg/core"
 	pdpConfig "github.com/autenticami/autenticami-authz/pkg/pdp_agent/local"
 	log "github.com/sirupsen/logrus"
 
 	"google.golang.org/grpc"
 )
 
-var localConfig = pdpConfig.NewLocalConfig()
+
+func getConfig() pCore.Config {
+	return pdpConfig.NewLocalConfig()
+}
+
+var localConfig = getConfig()
 
 func init() {
-	if localConfig.IsLocal {
+	if localConfig.IsLocal() {
 		// Log as ASCII instead of the default JSON formatter.
 		log.SetFormatter(&log.TextFormatter{ ForceColors: true, DisableColors: false, FullTimestamp: true})
 		// Output to stdout instead of the default stderr

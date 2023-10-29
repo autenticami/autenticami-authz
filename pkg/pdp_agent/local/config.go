@@ -5,15 +5,22 @@ package local
 
 import (
 	pCore "github.com/autenticami/autenticami-authz/pkg/internal/core"
+	"github.com/autenticami/autenticami-authz/pkg/pdp_agent"
 )
 
 type LocalConfig struct {
-	IsLocal bool
+	isLocal bool
+	appData string
+}
+
+func (c LocalConfig) IsLocal() bool {
+	return c.isLocal
 }
 
 func NewLocalConfig() (LocalConfig) {
 	localConfig := LocalConfig{
-		IsLocal: pCore.GetEnv("IS_LOCAL", "LOCAL") == "LOCAL",
+		isLocal: pCore.GetEnv(pdp_agent.EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
+		appData: pCore.GetEnv(pdp_agent.EnvKeyAutenticamiAgentAppData, "."),
 	}
 	return localConfig
 }
