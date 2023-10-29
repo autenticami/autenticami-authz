@@ -9,6 +9,7 @@ import (
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/pdpagent"
 
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 type PDPServer struct {
@@ -17,6 +18,10 @@ type PDPServer struct {
 }
 
 func (s *PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
+	permissionsState := s.Service.GetPermissionsState(req.Identity.Uur)
+	if permissionsState != nil {
+		log.Info(permissionsState)
+	}
 	permissions := &PermissionsStateResponse{
 		Identity: &Identity{
 			Uur: req.Identity.GetUur(),
