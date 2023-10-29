@@ -4,20 +4,25 @@ import (
 	"net"
 	"os"
 
-	pbApiV1 "github.com/autenticami/autenticami-authz/cmd/pdp_agent/api/v1"
-	pCore "github.com/autenticami/autenticami-authz/pkg/core"
-	pdpConfig "github.com/autenticami/autenticami-authz/pkg/pdp_agent/local"
-	log "github.com/sirupsen/logrus"
-
+	cmd_pdp_apiv1 "github.com/autenticami/autenticami-authz/cmd/pdp_agent/api/v1"
+	pkg_core "github.com/autenticami/autenticami-authz/pkg/core"
+	pkg_pdp "github.com/autenticami/autenticami-authz/pkg/pdp_agent"
+	pkg_pdp_local "github.com/autenticami/autenticami-authz/pkg/pdp_agent/local"
+	
 	"google.golang.org/grpc"
+	log "github.com/sirupsen/logrus"
 )
 
-var localConfig = func() pCore.Config {
-	return pdpConfig.NewLocalConfig()
+var config = func() pkg_core.Config {
+	if pkg_pdp.EnvKeyAutenticamiAgentType == "PDP-LOCAL" {
+		return pkg_pdp_local.NewLocalConfig()
+	} else {
+		return nil
+	}
 }()
 
 func init() {
-	if localConfig.IsLocal() {
+	if config.IsLocal() {
 		// Log as ASCII instead of the default JSON formatter.
 		log.SetFormatter(&log.TextFormatter{ForceColors: true, DisableColors: false, FullTimestamp: true})
 		// Output to stdout instead of the default stderr
@@ -44,7 +49,7 @@ func main() {
 
 	s := grpc.NewServer()
 
-	pbApiV1.RegisterPDPServiceServer(s, &pbApiV1.PDPServer{})
+	cmd_pdp_apiv1.RegisterPDPServiceServer(s, &cmd_pdp_apiv1.PDPServer{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("grpc server failed: %v", err)
 		os.Exit(1)

@@ -7,7 +7,8 @@ import (
 	"encoding/json"
 	"errors"
 
-	pCore "github.com/autenticami/autenticami-authz/pkg/core"
+	pkg_core "github.com/autenticami/autenticami-authz/pkg/core"
+	
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -40,7 +41,7 @@ func newPermissionsLoader() (*permissionsLoader, error) {
 
 func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 	if bData == nil {
-		return false, pCore.ErrJSONDataMarshaling
+		return false, pkg_core.ErrJSONDataMarshaling
 	}
 	var err error
 	var isValid bool
@@ -57,7 +58,7 @@ func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 		aclPolicy := ACLPolicy{}
 		err := json.Unmarshal(bData, &aclPolicy)
 		if err != nil {
-			return false, errors.Join(pCore.ErrJSONDataMarshaling, err)
+			return false, errors.Join(pkg_core.ErrJSONDataMarshaling, err)
 		}
 		isValid, err = d.registerACLPolicy(&aclPolicy)
 		if err != nil {
