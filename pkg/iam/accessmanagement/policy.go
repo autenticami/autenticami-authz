@@ -121,8 +121,10 @@ func (a UURString) getRegex(version PolicyVersionString) (string, error) {
 	case PolicyV1:
 		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
 		cSlashHyphenName := fmt.Sprintf(`%s+(\/%s)*`, cHyphenName, cHyphenName)
+		cHyphenExtendedName := `([a-zA-Z0-9\.@\*]+(-[a-zA-Z0-9\.@\*]+)*)`
+		cSlashHyphenExtendedName := fmt.Sprintf(`%s+(\/%s)*`, cHyphenExtendedName, cHyphenExtendedName)
 		cNumber := `\d{10,14}`
-		cResourceFilterSlashHyphenName := fmt.Sprintf(`(?P<resource>%s+)(\/(?P<resourcefilter>%s))*`, cHyphenName, cSlashHyphenName)
+		cResourceFilterSlashHyphenName := fmt.Sprintf(`(?P<resource>%s+)(\/(?P<resourcefilter>%s))*`, cHyphenName, cSlashHyphenExtendedName)
 		regex := fmt.Sprintf("^uur:(?P<account>(%s)?):(?P<tenant>(%s)?):(?P<project>(%s)?):(?P<domain>(%s)?):(%s)?$", cNumber, cHyphenName, cHyphenName, cSlashHyphenName, cResourceFilterSlashHyphenName)
 		return regex, nil
 	default:

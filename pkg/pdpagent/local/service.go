@@ -73,8 +73,10 @@ func (s *PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkg
 	}
 	var permissionState *pkgAM.PermissionsState
 	policies := s.cache[string(identityUUR)]
-	for _, policy := range policies.([]interface{}) {
-		permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
+	if policies != nil {
+		for _, policy := range policies.([]interface{}) {
+			permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
+		}
 	}
 	if err != nil {
 		return nil, err

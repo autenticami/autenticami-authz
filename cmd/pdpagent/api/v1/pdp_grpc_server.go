@@ -19,36 +19,19 @@ type PDPServer struct {
 }
 
 func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
-	permissionsState, _ := s.Service.GetPermissionsState(pkgAM.UURString(req.Identity.Uur))
+	identityUUR := pkgAM.UURString(req.Identity.Uur)
+	isValid, err := identityUUR.IsValid(pkgAM.PolicyV1)
+	if err != nil {
+		return nil, errors.New("Identity UUR is not valid")
+	}
+	if !isValid {
+		return nil, errors.New("Identity UUR is not valid")
+	}
+	permissionsState, _ := s.Service.GetPermissionsState(identityUUR)
 	if permissionsState == nil {
 		return nil, errors.New("permission state cannot be built for the given identity")
 	}
-	forbidList := permissionsState.GetForbidList()
-	permitList := permissionsState.GetPermitList()
-	permissions := &PermissionsStateResponse{
-		Identity: &Identity{
-			Uur: req.Identity.GetUur(),
-		},
-		PermissionsState: &PermissionsState{
-			Forbid: make([]*PolicyStatementWrapper, len(forbidList)),
-			Permit: make([]*PolicyStatementWrapper, len(permitList)),
-		},
-	}
-	for i, wrapper := range forbidList {
-		permissions.PermissionsState.Forbid[i] = &PolicyStatementWrapper{
-			Id: wrapper.Id.String(),
-			StatmentStringified: wrapper.StatmentStringified,
-			StatmentHashed: wrapper.StatmentHashed,
-		}
-	}
-	for i, wrapper := range permitList {
-		permissions.PermissionsState.Permit[i] = &PolicyStatementWrapper{
-			Id: wrapper.Id.String(),
-			StatmentStringified: wrapper.StatmentStringified,
-			StatmentHashed: wrapper.StatmentHashed,
-		}
-	}
-	return permissions, nil
+	return mapToPermissionsStateResponse(req.Identity.GetUur(), permissionsState)
 }
 
 func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEvaluationRequest) (*PermissionsEvaluationResponse, error) {
