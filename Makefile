@@ -23,7 +23,7 @@ init-dependency:
 	# go get -u github.com/gin-gonic/gin
 	# go get -u gorm.io/gorm
 	# go get -u gorm.io/driver/postgres
-	go get -u github.com/sirupsen/logrus
+	go get -u github.com/sirupsen/
 	go get -u github.com/joho/godotenv
 	go get -u github.com/go-playground/validator/v10@v10.15.1
 	go get -u github.com/stretchr/testify@v1.8.4
@@ -71,14 +71,14 @@ converage-json:
 
 build-release:
 	mkdir -p dist
-	go build -o dist/autenticami ./cmd/pdp-agent
+	go build -o dist/autenticami ./cmd/pdp_agent
 
 build-docker:
 	docker stop autenticami || true && docker rm autenticami || true
 	docker build -t autenticami .
 
 run-release:
-	go run ./cmd/pdp-agent
+	go run ./cmd/pdp_agent
 
 run-docker:
 	docker run --name autenticami autenticami
