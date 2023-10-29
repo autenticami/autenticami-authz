@@ -1,7 +1,7 @@
 {
   "items": [
     {
-      "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com ",
+      "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com",
       "policies": [
         "uur:581616507495:default:autenticami:iam:policy/person-reader"
       ]

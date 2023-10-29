@@ -4,8 +4,6 @@
 package local
 
 import (
-	"bytes"
-	"encoding/gob"
 	"encoding/json"
 	"errors"
 	"os"
@@ -20,18 +18,6 @@ type PDPLocalService struct {
 }
 type papDoc struct {
 	Items []map[string]interface{} `json:"items"`
-}
-
-func getBytes(key interface{}) ([]byte, error) {
-	var buf bytes.Buffer
-	gob.Register(map[string]interface{}{})
-	gob.Register([]interface{}{})
-	enc := gob.NewEncoder(&buf)
-	err := enc.Encode(key)
-	if err != nil {
-		return nil, err
-	}
-	return buf.Bytes(), nil
 }
 
 func loadCache(cache *map[string]interface{}, appFolder string, key string, targetKey string, encode bool) error {
@@ -55,7 +41,7 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 			if !encode {
 				(*cache)[key] = item[targetKey]
 			} else {
-				bytes, err := getBytes(item[targetKey])
+				bytes, err := json.Marshal(item[targetKey])
 				if err != nil {
 					return errors.Join(ErrPDPAgentLocalInvalidAppData, err)
 				}
@@ -66,7 +52,7 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 	return nil
 }
 
-func (s PDPLocalService) Setup() error {
+func (s *PDPLocalService) Setup() error {
 	var err error
 	s.cache = make(map[string]interface{})
 	err = loadCache(&s.cache, s.config.appData+"/autenticami1/identities/", "user_uur", "policies", false)
@@ -80,15 +66,15 @@ func (s PDPLocalService) Setup() error {
 	return nil
 }
 
-func (s PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkgAM.PermissionsState, error) {
+func (s *PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkgAM.PermissionsState, error) {
 	engine, err := pkgAM.NewPermissionsEngine()
 	if err != nil {
 		return nil, err
 	}
 	var permissionState *pkgAM.PermissionsState
 	policies := s.cache[string(identityUUR)]
-	for _, policy := range policies.([]string) {
-		permissionState, err = engine.BuildPermissions(s.cache[policy].([]byte))
+	for _, policy := range policies.([]interface{}) {
+		permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
 	}
 	if err != nil {
 		return nil, err
@@ -96,9 +82,9 @@ func (s PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkgA
 	return permissionState, nil
 }
 
-func NewPDPLocalService(config LocalConfig) PDPLocalService {
+func NewPDPLocalService(config LocalConfig) *PDPLocalService {
 	service := PDPLocalService{
 		config: config,
 	}
-	return service
+	return &service
 }

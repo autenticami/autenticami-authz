@@ -23,17 +23,26 @@ func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStat
 	if permissionsState == nil {
 		return nil, errors.New("permission state cannot be built for the given identity")
 	}
+	forbidList := permissionsState.GetForbidList()
+	permitList := permissionsState.GetPermitList()
 	permissions := &PermissionsStateResponse{
 		Identity: &Identity{
 			Uur: req.Identity.GetUur(),
 		},
 		PermissionsState: &PermissionsState{
-			Forbid: []*PolicyStatementWrapper{},
-			Permit: []*PolicyStatementWrapper{},
+			Forbid: make([]*PolicyStatementWrapper, len(forbidList)),
+			Permit: make([]*PolicyStatementWrapper, len(permitList)),
 		},
 	}
-	for i, wrapper := range permissionsState.GetForbidList() {
+	for i, wrapper := range forbidList {
 		permissions.PermissionsState.Forbid[i] = &PolicyStatementWrapper{
+			Id: wrapper.Id.String(),
+			StatmentStringified: wrapper.StatmentStringified,
+			StatmentHashed: wrapper.StatmentHashed,
+		}
+	}
+	for i, wrapper := range permitList {
+		permissions.PermissionsState.Permit[i] = &PolicyStatementWrapper{
 			Id: wrapper.Id.String(),
 			StatmentStringified: wrapper.StatmentStringified,
 			StatmentHashed: wrapper.StatmentHashed,
