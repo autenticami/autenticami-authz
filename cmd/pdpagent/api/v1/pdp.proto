@@ -2,7 +2,7 @@ syntax="proto3";
 
 package policydecisionpoint;
 
-option go_package = "github.com/autenticami/autenticami-authz/cmd/pdp_agent/v1";
+option go_package = "github.com/autenticami/autenticami-authz/cmd/pdpagent/v1";
 
 message Attribute {
    string key = 1;

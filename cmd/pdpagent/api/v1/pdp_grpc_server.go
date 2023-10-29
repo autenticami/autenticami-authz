@@ -6,11 +6,14 @@ package v1
 import (
 	"context"
 	
+	pkgPdp "github.com/autenticami/autenticami-authz/pkg/pdpagent"
+
 	"github.com/google/uuid"
 )
 
 type PDPServer struct {
 	UnimplementedPDPServiceServer
+	Service pkgPdp.PDPService
 }
 
 func (s *PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {

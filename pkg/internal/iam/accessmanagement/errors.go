@@ -6,24 +6,24 @@ package accessmanagement
 import (
 	"errors"
 
-	pkgi_core "github.com/autenticami/autenticami-authz/pkg/internal/core"
+	pkgiCore "github.com/autenticami/autenticami-authz/pkg/internal/core"
 )
 
 var (
 	// ErrAccessManagementUnsupportedBuilder is returned wether the builder is unsupported.
-	ErrAccessManagementUnsupportedBuilder = errors.Join(errors.New("accessmanagement: unsupported builder"), pkgi_core.ErrCodeUnsupportedFeature)
+	ErrAccessManagementUnsupportedBuilder = errors.Join(errors.New("accessmanagement: unsupported builder"), pkgiCore.ErrCodeUnsupportedFeature)
 	// ErrAccessManagementUnsupportedDataType is returned wether the data type is not supported.
-	ErrAccessManagementUnsupportedDataType = errors.Join(errors.New("accessmanagement: unsupported data type"), pkgi_core.ErrCodeUnsupportedDataType)
+	ErrAccessManagementUnsupportedDataType = errors.Join(errors.New("accessmanagement: unsupported data type"), pkgiCore.ErrCodeUnsupportedDataType)
 	// ErrAccessManagementInvalidDataType is returned wether the data type is invalid.
-	ErrAccessManagementInvalidDataType = errors.Join(errors.New("accessmanagement: invalid data type"), pkgi_core.ErrCodeInvalidDataType)
+	ErrAccessManagementInvalidDataType = errors.Join(errors.New("accessmanagement: invalid data type"), pkgiCore.ErrCodeInvalidDataType)
 	// ErrAccessManagementUnsupportedSyntax is returned wether the string implement an unsupported syntax.
-	ErrAccessManagementUnsupportedSyntax = errors.Join(errors.New("accessmanagement: unsupported syntax"), pkgi_core.ErrCodeBadSyntax)
+	ErrAccessManagementUnsupportedSyntax = errors.Join(errors.New("accessmanagement: unsupported syntax"), pkgiCore.ErrCodeBadSyntax)
 	// ErrAccessManagementInvalidUUR is returned wether the action string is invalid or unsupported.
-	ErrAccessManagementInvalidUUR = errors.Join(errors.New("accessmanagement: invalid or unsupported uur syntax"), pkgi_core.ErrCodeBadSyntax)
+	ErrAccessManagementInvalidUUR = errors.Join(errors.New("accessmanagement: invalid or unsupported uur syntax"), pkgiCore.ErrCodeBadSyntax)
 	// ErrAccessManagementInvalidAction is returned wether the action string is invalid or unsupported.
-	ErrAccessManagementInvalidAction = errors.Join(errors.New("accessmanagement: invalid or unsupported action syntax"), pkgi_core.ErrCodeBadSyntax)
+	ErrAccessManagementInvalidAction = errors.Join(errors.New("accessmanagement: invalid or unsupported action syntax"), pkgiCore.ErrCodeBadSyntax)
 	// ErrAccessManagementUnsupportedVersion is returned wether required version is not supported.
-	ErrAccessManagementUnsupportedVersion = errors.Join(errors.New("accessmanagement: unsupported version"), pkgi_core.ErrCodeUnsupportedVersion)
+	ErrAccessManagementUnsupportedVersion = errors.Join(errors.New("accessmanagement: unsupported version"), pkgiCore.ErrCodeUnsupportedVersion)
 	// ErrAccessManagementJSONSchemaValidation is returned wether the json schema validation failed.
-	ErrAccessManagementJSONSchemaValidation = errors.Join(errors.New("accessmanagement: json schema validation failed"), pkgi_core.ErrCodeJSONSchemaValidation)
+	ErrAccessManagementJSONSchemaValidation = errors.Join(errors.New("accessmanagement: json schema validation failed"), pkgiCore.ErrCodeJSONSchemaValidation)
 )

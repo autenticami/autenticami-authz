@@ -7,8 +7,8 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	pkgi_core "github.com/autenticami/autenticami-authz/pkg/internal/core"
-	
+	pkgiCore "github.com/autenticami/autenticami-authz/pkg/internal/core"
+
 	"github.com/google/uuid"
 )
 
@@ -32,7 +32,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*policyStat
 	if policyStatement == nil {
 		return nil, ErrAccessManagementInvalidDataType
 	}
-	policyStatementString, err := pkgi_core.Stringify(policyStatement, []string{"Name"})
+	policyStatementString, err := pkgiCore.Stringify(policyStatement, []string{"Name"})
 	if err != nil {
 		return nil, err
 	}
