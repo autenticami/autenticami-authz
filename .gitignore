@@ -205,6 +205,7 @@ $RECYCLE.BIN/
 
 # Start Custom
 
+bin
 dist
 .task
 .tmp
