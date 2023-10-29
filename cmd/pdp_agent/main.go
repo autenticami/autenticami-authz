@@ -5,20 +5,30 @@ import (
 	"os"
 
 	pbApiV1 "github.com/autenticami/autenticami-authz/cmd/pdp_agent/api/v1"
+	pdpConfig "github.com/autenticami/autenticami-authz/pkg/pdp_agent/local"
 	log "github.com/sirupsen/logrus"
 
 	"google.golang.org/grpc"
 )
 
+var localConfig = pdpConfig.NewLocalConfig()
+
 func init() {
-	// Log as JSON instead of the default ASCII formatter.
-	log.SetFormatter(&log.JSONFormatter{})
-
-	// Output to stdout instead of the default stderr
-	log.SetOutput(os.Stdout)
-
-	// Only log the info severity or above.
-	log.SetLevel(log.InfoLevel)
+	if localConfig.IsLocal {
+		// Log as ASCII instead of the default JSON formatter.
+		log.SetFormatter(&log.TextFormatter{ ForceColors: true, DisableColors: false, FullTimestamp: true})
+		// Output to stdout instead of the default stderr
+		log.SetOutput(os.Stdout)
+		// Only log the info severity or above.
+		log.SetLevel(log.InfoLevel)
+	} else {
+		// Log as JSON instead of the default ASCII formatter.
+		log.SetFormatter(&log.JSONFormatter{ PrettyPrint: true})
+		// Output to stdout instead of the default stderr
+		log.SetOutput(os.Stdout)
+		// Only log the info severity or above.
+		log.SetLevel(log.WarnLevel)
+	}
 }
 
 func main() {
