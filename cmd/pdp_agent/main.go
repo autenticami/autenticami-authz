@@ -25,23 +25,15 @@ func main() {
 	lis, err := net.Listen("tcp", ":50051")
 	if err != nil {
 		log.Fatalf("tcp connection failed: %v", err)
+		os.Exit(1)
 	}
-	log.Printf("listening at %v", lis.Addr())
-
-	// dataFolder := getEnv("AUTENTICAMI_PDP_DATA", ".")
-	// files, err := os.ReadDir(dataFolder)
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-
-	// for _, file := range files {
-	// 	fmt.Println(file.Name(), file.IsDir())
-	// }
+	log.Infof("listening at %v", lis.Addr())
 
 	s := grpc.NewServer()
 
 	pbApiV1.RegisterPDPServiceServer(s, &pbApiV1.PDPServer{})
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("grpc server failed: %v", err)
+		os.Exit(1)
 	}
 }
