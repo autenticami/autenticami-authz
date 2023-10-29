@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type policyStatementWrapper struct {
+type PolicyStatementWrapper struct {
 	id                  uuid.UUID
 	statement           *PolicyStatement
 	statmentStringified string
@@ -24,11 +24,11 @@ type policyStatementWrapper struct {
 
 type PermissionsState struct {
 	duplicates map[uuid.UUID]uuid.UUID
-	forbid     []*policyStatementWrapper
-	permit     []*policyStatementWrapper
+	forbid     []*PolicyStatementWrapper
+	permit     []*PolicyStatementWrapper
 }
 
-func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*policyStatementWrapper, error) {
+func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStatementWrapper, error) {
 	if policyStatement == nil {
 		return nil, ErrAccessManagementInvalidDataType
 	}
@@ -40,7 +40,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*policyStat
 	h.Write([]byte(policyStatementString))
 	bs := h.Sum(nil)
 	policyStatementHash := fmt.Sprintf("%x", bs)
-	return &policyStatementWrapper{
+	return &PolicyStatementWrapper{
 		id:                  uuid.New(),
 		statement:           policyStatement,
 		statmentStringified: policyStatementString,
@@ -48,8 +48,8 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*policyStat
 	}, nil
 }
 
-func createPolicyStatementWrappers(policyStatements []PolicyStatement) ([]*policyStatementWrapper, error) {
-	wrappers := make([]*policyStatementWrapper, len(policyStatements))
+func createPolicyStatementWrappers(policyStatements []PolicyStatement) ([]*PolicyStatementWrapper, error) {
+	wrappers := make([]*PolicyStatementWrapper, len(policyStatements))
 	for i, policyStatement := range policyStatements {
 		wrapper, err := createPolicyStatementWrapper(&policyStatement)
 		if err != nil {
@@ -63,8 +63,8 @@ func createPolicyStatementWrappers(policyStatements []PolicyStatement) ([]*polic
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
 		duplicates: map[uuid.UUID]uuid.UUID{},
-		forbid:     make([]*policyStatementWrapper, 0),
-		permit:     make([]*policyStatementWrapper, 0),
+		forbid:     make([]*PolicyStatementWrapper, 0),
+		permit:     make([]*PolicyStatementWrapper, 0),
 	}
 }
 
@@ -84,4 +84,20 @@ func (b *PermissionsState) AllowACLPolicyStatements(policyStatements []PolicySta
 	}
 	b.permit = append(b.permit, wrappers...)
 	return nil
+}
+
+func (b *PermissionsState) GetForbidList() []PolicyStatementWrapper {
+	list := make([]PolicyStatementWrapper, len(b.forbid))
+	for i, forbid := range b.forbid {
+		list[i] = *forbid
+	}
+	return list
+}
+
+func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
+	list := make([]PolicyStatementWrapper, len(b.permit))
+	for i, permit := range b.permit {
+		list[i] = *permit
+	}
+	return list
 }

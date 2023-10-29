@@ -8,6 +8,6 @@ import(
 )
 
 type PDPService interface {
-	Setup()
-	GetPermissionsState(identityUUR pkgAM.UURString) *pkgAM.PermissionsState
+	Setup() error
+	GetPermissionsState(identityUUR pkgAM.UURString) (*pkgAM.PermissionsState, error)
 }

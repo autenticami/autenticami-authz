@@ -59,7 +59,11 @@ func main() {
 		log.Fatal("PDP-REMOTE is not implemented yet")
 		os.Exit(1)
 	}
-	pdpServer.Service.Setup()
+	err = pdpServer.Service.Setup()
+	if err != nil {
+		log.Fatalf("service setup failed: %v", err)
+		os.Exit(1)
+	}
 	cmdPdpApiV1.RegisterPDPServiceServer(s, pdpServer)
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("grpc server failed: %v", err)

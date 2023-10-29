@@ -1,19 +1,5 @@
 {
-  "identities": [
-    {
-      "user_id": "75c4d382-d752-41ca-aa71-9ddd70f994af",
-      "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com ",
-      "permissions": {
-        "policies": {
-          "inline": [],
-          "referenced": [
-            "uur:581616507495:default:autenticami:iam:policy/person-reader"
-          ]
-        }
-      }
-    }
-  ],
-  "policies": [
+  "items": [
     {
       "policy_uur": "uur:581616507495:default:autenticami:iam:policy/person-reader",
       "policy_payload": {

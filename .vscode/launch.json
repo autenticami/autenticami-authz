@@ -12,7 +12,7 @@
             "program": "./cmd/pdpagent/main.go",
             "env": {
                 "AUTENTICAMI-AGENT-TYPE": "PDP-LOCAL",
-                "AUTENTICAMI_PDP_DATA": "../../testdata/pdp/autenticami1"
+                "AUTENTICAMI-AGENT-APPDATA": "../../testdata/pdp"
             }
         }
     ]
