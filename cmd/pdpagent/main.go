@@ -9,13 +9,13 @@ import (
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
 	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
-	pkgAgents "github.com/autenticami/autenticami-authz/pkg/agents"
+	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
-var config = func() pkgAgents.AgentConfig {
+var config = func() pkgAgentsCore.AgentConfig {
 	agentType := pkgCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == "PDP-LOCAL" {
 		return pkgPdpLocal.NewLocalConfig()
