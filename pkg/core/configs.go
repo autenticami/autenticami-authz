@@ -7,7 +7,6 @@ import "os"
 
 type Config interface {
 	GetGoEnv() bool
-	GetAgentType() string
 }
 
 func GetEnv(key, fallback string) string {

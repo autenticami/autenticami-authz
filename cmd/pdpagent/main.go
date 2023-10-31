@@ -6,15 +6,16 @@ import (
 	"strings"
 
 	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/cmd/pdpagent/api/v1"
+	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
+	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
 	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
-	pkgPdp "github.com/autenticami/autenticami-authz/pkg/pdpagent"
-	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/pdpagent/local"
+	pkgAgents "github.com/autenticami/autenticami-authz/pkg/agents"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 )
 
-var config = func() pkgCore.Config {
+var config = func() pkgAgents.AgentConfig {
 	agentType := pkgCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == "PDP-LOCAL" {
 		return pkgPdpLocal.NewLocalConfig()
@@ -53,7 +54,7 @@ func main() {
 	s := grpc.NewServer()
 
 	pdpServer := &cmdPdpApiV1.PDPServer{}
-	if  isLocalAgent {
+	if isLocalAgent {
 		pdpServer.Service = pkgPdpLocal.NewPDPLocalService(config.(pkgPdpLocal.LocalConfig))
 	} else {
 		log.Fatal("PDP-REMOTE is not implemented yet")

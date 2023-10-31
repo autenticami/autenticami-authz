@@ -7,8 +7,8 @@ import (
 	"context"
 	"errors"
 
+	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
-	pkgPdp "github.com/autenticami/autenticami-authz/pkg/pdpagent"
 
 	"github.com/google/uuid"
 )

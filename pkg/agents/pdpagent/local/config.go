@@ -4,8 +4,8 @@
 package local
 
 import (
+	pkgAgent "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
-	pkgAgent "github.com/autenticami/autenticami-authz/pkg/pdpagent"
 )
 
 type LocalConfig struct {
