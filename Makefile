@@ -78,7 +78,7 @@ build-docker:
 	docker build -t autenticami .
 
 run-release:
-	go run ./cmd/pdp_agent
+	go run ./cmd/pdpagent
 
 run-docker:
 	docker run --name autenticami autenticami
