@@ -16,6 +16,7 @@ type PDPLocalService struct {
 	config LocalConfig
 	cache  map[string]interface{}
 }
+
 type papDoc struct {
 	Items []map[string]interface{} `json:"items"`
 }
