@@ -11,6 +11,12 @@ tasks:
   hot:
     cmds:
       - air --build.cmd "go build -o dist/pdpagent ./cmd/pdpagent/main.go" --build.bin "./dist/pdpagent"
+  apipdpstate:
+    cmds:
+      - grpcurl -plaintext -d @ localhost:50051 policydecisionpoint.PDPService/GetPermissionsState < ./.grpc/pdpservice/get-permissionsstate.json | jq
+  apipdpeval:
+    cmds:
+      - grpcurl -plaintext -d @ localhost:50051 policydecisionpoint.PDPService/EvaluatePermissions < ./.grpc/pdpservice/evaluate-permissions.json | jq
   test:
     cmds:
       - make coverage

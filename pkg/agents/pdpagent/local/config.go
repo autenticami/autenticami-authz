@@ -14,7 +14,7 @@ type LocalConfig struct {
 	appData   string
 }
 
-func (c LocalConfig) GetGoEnv() bool {
+func (c LocalConfig) IsLocalEnv() bool {
 	return c.isLocal
 }
 

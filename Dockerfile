@@ -1,5 +1,5 @@
 # Build Stage
-FROM golang:1.20.7 AS BuildStage
+FROM golang:1.21.3 AS BuildStage
 LABEL maintainer="Nitro Agility S.r.l. Team <opensource@nitroagility.com>"
 
 COPY ./cmd /app/cmd

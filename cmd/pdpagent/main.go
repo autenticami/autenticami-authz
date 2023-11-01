@@ -6,13 +6,14 @@ import (
 	"strings"
 
 	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/cmd/pdpagent/api/v1"
+	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
 	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
-	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 var config = func() pkgAgentsCore.AgentConfig {
@@ -25,7 +26,7 @@ var config = func() pkgAgentsCore.AgentConfig {
 }()
 
 func init() {
-	if config.GetGoEnv() {
+	if config.IsLocalEnv() {
 		// Log as ASCII instead of the default JSON formatter.
 		log.SetFormatter(&log.TextFormatter{ForceColors: true, DisableColors: false, FullTimestamp: true})
 		// Output to stdout instead of the default stderr
@@ -57,15 +58,19 @@ func main() {
 	if isLocalAgent {
 		pdpServer.Service = pkgPdpLocal.NewPDPLocalService(config.(pkgPdpLocal.LocalConfig))
 	} else {
-		log.Fatal("PDP-REMOTE is not implemented yet")
+		log.Fatal("pdp-remote is not implemented yet")
 		os.Exit(1)
 	}
 	err = pdpServer.Service.Setup()
 	if err != nil {
-		log.Fatalf("service setup failed: %v", err)
+		log.Fatalf("pdpservice setup has failed: %v", err)
 		os.Exit(1)
 	}
 	cmdPdpApiV1.RegisterPDPServiceServer(s, pdpServer)
+	if config.IsLocalEnv() {
+		reflection.Register(s)
+		log.Info("grpc server registered the reflection service")
+	}
 	if err := s.Serve(lis); err != nil {
 		log.Fatalf("grpc server failed: %v", err)
 		os.Exit(1)

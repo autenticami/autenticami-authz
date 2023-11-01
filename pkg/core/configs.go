@@ -6,7 +6,7 @@ package core
 import "os"
 
 type Config interface {
-	GetGoEnv() bool
+	IsLocalEnv() bool
 }
 
 func GetEnv(key, fallback string) string {
