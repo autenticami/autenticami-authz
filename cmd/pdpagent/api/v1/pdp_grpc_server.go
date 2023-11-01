@@ -6,6 +6,7 @@ package v1
 import (
 	"context"
 	"errors"
+	"log"
 
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
@@ -22,12 +23,16 @@ func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStat
 	identityUUR := pkgAM.UURString(req.Identity.Uur)
 	isValid, err := identityUUR.IsValid(pkgAM.PolicyV1)
 	if err != nil {
+		log.Fatalf("error while validating identity UUR: %v", err)
 		return nil, errors.New("Identity UUR is not valid")
 	}
 	if !isValid {
 		return nil, errors.New("Identity UUR is not valid")
 	}
-	permissionsState, _ := s.Service.GetPermissionsState(identityUUR)
+	permissionsState, err := s.Service.GetPermissionsState(identityUUR)
+	if err != nil {
+		log.Fatalf("error while getting permissions state: %v", err)
+	}
 	if permissionsState == nil {
 		return nil, errors.New("permission state cannot be built for the given identity")
 	}

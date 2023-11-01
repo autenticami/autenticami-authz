@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"net"
 	"os"
 	"strings"
+	"time"
 
 	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/cmd/pdpagent/api/v1"
 	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
@@ -43,6 +45,21 @@ func init() {
 	}
 }
 
+func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+	h, err := handler(ctx, req)
+	if err != nil {
+		log.Errorf("request - method:%s\tDuration:%s\tError:%v\n", info.FullMethod, time.Since(start), err)
+	} else {
+		log.Infof("request - method:%s\tDuration:%s\n", info.FullMethod, time.Since(start))
+	}
+	return h, err
+}
+
+func withServerUnaryInterceptor() grpc.ServerOption {
+	return grpc.UnaryInterceptor(serverInterceptor)
+}
+
 func main() {
 	isLocalAgent := config.GetAgentType() == pkgPdp.AutenticamiPDPAgentTypeLocal
 	lis, err := net.Listen("tcp", ":50051")
@@ -52,7 +69,9 @@ func main() {
 	}
 	log.Infof("listening at %v", lis.Addr())
 
-	s := grpc.NewServer()
+	s := grpc.NewServer(
+		withServerUnaryInterceptor(),
+	)
 
 	pdpServer := &cmdPdpApiV1.PDPServer{}
 	if isLocalAgent {
@@ -65,6 +84,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("pdpservice setup has failed: %v", err)
 		os.Exit(1)
+	} else {
+		log.Info("pdpservice setup succeded")
 	}
 	cmdPdpApiV1.RegisterPDPServiceServer(s, pdpServer)
 	if config.IsLocalEnv() {
