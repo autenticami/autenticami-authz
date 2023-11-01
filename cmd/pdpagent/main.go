@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+    "runtime/debug"
 	"net"
 	"os"
 	"strings"
@@ -46,12 +47,17 @@ func init() {
 }
 
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Fatalf("panic occurred: %v stacktrace:%s", err, debug.Stack())
+		}
+	}()
 	start := time.Now()
 	h, err := handler(ctx, req)
 	if err != nil {
-		log.Errorf("request - method:%s\tDuration:%s\tError:%v\n", info.FullMethod, time.Since(start), err)
+		log.Errorf("request - method:%s duration:%s error:%v", info.FullMethod, time.Since(start), err)
 	} else {
-		log.Infof("request - method:%s\tDuration:%s\n", info.FullMethod, time.Since(start))
+		log.Infof("request - method:%s duration:%s", info.FullMethod, time.Since(start))
 	}
 	return h, err
 }
