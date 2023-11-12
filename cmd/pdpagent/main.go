@@ -9,10 +9,10 @@ import (
 	"time"
 
 	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/cmd/pdpagent/api/v1"
+	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
 	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
-	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -21,7 +21,7 @@ import (
 
 var config = func() pkgAgentsCore.AgentConfig {
 	agentType := pkgCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
-	if strings.ToUpper(agentType) == "PDP-LOCAL" {
+	if strings.ToUpper(agentType) == pkgPdp.AutenticamiPDPAgentTypeLocal {
 		return pkgPdpLocal.NewLocalConfig()
 	}
 	log.Fatalf("%s: %s is an invalid agent type", pkgPdp.EnvKeyAutenticamiAgentType, agentType)
@@ -30,22 +30,23 @@ var config = func() pkgAgentsCore.AgentConfig {
 
 func init() {
 	if config.IsLocalEnv() {
-		// Log as ASCII instead of the default JSON formatter.
+		// log as ASCII instead of the default JSON formatter.
 		log.SetFormatter(&log.TextFormatter{ForceColors: true, DisableColors: false, FullTimestamp: true})
-		// Output to stdout instead of the default stderr
+		// output to stdout instead of the default stderr
 		log.SetOutput(os.Stdout)
-		// Only log the info severity or above.
+		// only log the info severity or above.
 		log.SetLevel(log.InfoLevel)
 	} else {
-		// Log as JSON instead of the default ASCII formatter.
+		// log as JSON instead of the default ASCII formatter.
 		log.SetFormatter(&log.JSONFormatter{PrettyPrint: true})
-		// Output to stdout instead of the default stderr
+		// output to stdout instead of the default stderr
 		log.SetOutput(os.Stdout)
-		// Only log the info severity or above.
+		// only log the info severity or above.
 		log.SetLevel(log.WarnLevel)
 	}
 }
 
+// serverInterceptor is a unary interceptor that logs the duration of each request.
 func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -62,6 +63,7 @@ func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnarySer
 	return h, err
 }
 
+// withServerUnaryInterceptor returns a grpc.ServerOption that adds a unary interceptor to the server.
 func withServerUnaryInterceptor() grpc.ServerOption {
 	return grpc.UnaryInterceptor(serverInterceptor)
 }
