@@ -9,7 +9,6 @@ import (
 	"time"
 
 	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/cmd/pdpagent/api/v1"
-	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
 	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
@@ -20,7 +19,7 @@ import (
 )
 
 var config = func() pkgAgentsCore.AgentConfig {
-	agentType := pkgCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
+	agentType := pkgAgentsCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == pkgPdp.AutenticamiPDPAgentTypeLocal {
 		return pkgPdpLocal.NewLocalConfig()
 	}

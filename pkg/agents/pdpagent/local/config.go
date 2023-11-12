@@ -5,7 +5,7 @@ package local
 
 import (
 	pkgAgent "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
-	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
+	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 )
 
 type LocalConfig struct {
@@ -24,9 +24,9 @@ func (c LocalConfig) GetAgentType() string {
 
 func NewLocalConfig() LocalConfig {
 	localConfig := LocalConfig{
-		isLocal:   pkgCore.GetEnv(pkgAgent.EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
+		isLocal:   pkgAgentsCore.GetEnv(pkgAgent.EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		agentType: pkgAgent.AutenticamiPDPAgentTypeLocal,
-		appData:   pkgCore.GetEnv(pkgAgent.EnvKeyAutenticamiAgentAppData, "."),
+		appData:   pkgAgentsCore.GetEnv(pkgAgent.EnvKeyAutenticamiAgentAppData, "."),
 	}
 	return localConfig
 }

@@ -3,11 +3,16 @@
 
 package core
 
-import(
-	pkgCore "github.com/autenticami/autenticami-authz/pkg/core"
-)
+import "os"
 
 type AgentConfig interface {
-	pkgCore.Config
+	IsLocalEnv() bool
 	GetAgentType() string
+}
+
+func GetEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
 }
