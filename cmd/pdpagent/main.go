@@ -1,3 +1,6 @@
+// Copyright (c) Nitro Agility S.r.l.
+// SPDX-License-Identifier: Apache-2.0
+
 package main
 
 import (
@@ -19,12 +22,17 @@ import (
 	"google.golang.org/grpc/reflection"
 )
 
-var config = func() pkgAgentsCore.AgentConfig {
-	agentType := pkgAgentsCore.GetEnv(pkgPdp.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
+var config = func() *pkgPdp.PDPAgentConfig {
+	agentType := pkgAgentsCore.GetEnv(pkgAgentsCore.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == pkgPdp.AutenticamiPDPAgentTypeLocal {
-		return pkgPdpLocal.NewLocalConfig()
+		config, err := pkgPdp.NewPDPAgentConfig()
+		if err != nil {
+			log.Errorf("local agent - invalid configuration:%v", err)
+			panic(1)
+		}
+		return config
 	}
-	log.Fatalf("%s: %s is an invalid agent type", pkgPdp.EnvKeyAutenticamiAgentType, agentType)
+	log.Fatalf("%s: %s is an invalid agent type", pkgAgentsCore.EnvKeyAutenticamiAgentType, agentType)
 	panic(1)
 }()
 
@@ -83,7 +91,7 @@ func main() {
 
 	pdpServer := &cmdPdpApiV1.PDPServer{}
 	if isLocalAgent {
-		pdpServer.Service = pkgPdpLocal.NewPDPLocalService(config.(pkgPdpLocal.LocalConfig))
+		pdpServer.Service = pkgPdpLocal.NewPDPLocalService(config)
 	} else {
 		log.Fatal("pdp-remote is not implemented yet")
 		os.Exit(1)

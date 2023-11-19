@@ -8,11 +8,14 @@
     "go.vetFlags": [],
     "go.coverOnSave": false,
     "go.alternateTools": {
-      "go-langserver": "gopls", 
+      "go-langserver": "gopls",
     },
     "[go]": {
         "editor.codeActionsOnSave": {
             "source.organizeImports": true
         },
     },
+    "cSpell.words": [
+        "unmarshaled"
+    ],
 }

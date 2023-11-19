@@ -9,11 +9,12 @@ import (
 	"os"
 	"path/filepath"
 
+	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
 )
 
 type PDPLocalService struct {
-	config LocalConfig
+	config *pkgPdp.PDPAgentConfig
 	cache  map[string]interface{}
 }
 
@@ -56,11 +57,11 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 func (s *PDPLocalService) Setup() error {
 	var err error
 	s.cache = make(map[string]interface{})
-	err = loadCache(&s.cache, s.config.appData+"/autenticami1/identities/", "user_uur", "policies", false)
+	err = loadCache(&s.cache, s.config.GetAgentAppData() + "/autenticami1/identities/", "user_uur", "policies", false)
 	if err != nil {
 		return ErrPDPAgentLocalInvalidAppData
 	}
-	err = loadCache(&s.cache, s.config.appData+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
+	err = loadCache(&s.cache, s.config.GetAgentAppData() + "/autenticami1/policies/", "policy_uur", "policy_payload", true)
 	if err != nil {
 		return ErrPDPAgentLocalInvalidAppData
 	}
@@ -85,7 +86,7 @@ func (s *PDPLocalService) GetPermissionsState(identityUUR pkgAM.UURString) (*pkg
 	return permissionState, nil
 }
 
-func NewPDPLocalService(config LocalConfig) *PDPLocalService {
+func NewPDPLocalService(config *pkgPdp.PDPAgentConfig) *PDPLocalService {
 	service := PDPLocalService{
 		config: config,
 	}
