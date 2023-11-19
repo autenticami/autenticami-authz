@@ -8,6 +8,7 @@ import "os"
 type AgentConfig interface {
 	IsLocalEnv() bool
 	GetAgentType() string
+	GetAgentPort() string
 }
 
 func GetEnv(key, fallback string) string {

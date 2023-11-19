@@ -2,9 +2,10 @@ package main
 
 import (
 	"context"
-    "runtime/debug"
+	"fmt"
 	"net"
 	"os"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -69,7 +70,7 @@ func withServerUnaryInterceptor() grpc.ServerOption {
 
 func main() {
 	isLocalAgent := config.GetAgentType() == pkgPdp.AutenticamiPDPAgentTypeLocal
-	lis, err := net.Listen("tcp", ":50051")
+	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.GetAgentPort()))
 	if err != nil {
 		log.Fatalf("tcp connection failed: %v", err)
 		os.Exit(1)

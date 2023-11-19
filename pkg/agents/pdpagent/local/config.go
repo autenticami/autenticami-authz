@@ -12,6 +12,7 @@ type LocalConfig struct {
 	isLocal   bool
 	agentType string
 	appData   string
+	appPort   string
 }
 
 func (c LocalConfig) IsLocalEnv() bool {
@@ -22,11 +23,16 @@ func (c LocalConfig) GetAgentType() string {
 	return c.agentType
 }
 
+func (c LocalConfig) GetAgentPort() string {
+	return c.appPort
+}
+
 func NewLocalConfig() LocalConfig {
 	localConfig := LocalConfig{
 		isLocal:   pkgAgentsCore.GetEnv(pkgAgent.EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		agentType: pkgAgent.AutenticamiPDPAgentTypeLocal,
 		appData:   pkgAgentsCore.GetEnv(pkgAgent.EnvKeyAutenticamiAgentAppData, "."),
+		appPort:   pkgAgentsCore.GetEnv(pkgAgent.EnvKeyAutenticamiAgentPort, "9090"),
 	}
 	return localConfig
 }
