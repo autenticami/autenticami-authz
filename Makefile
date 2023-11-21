@@ -13,7 +13,7 @@ install:
 clean:
 	rm -rf dist/
 	rm -rf tmp/
-	rm -f coverage.out 
+	rm -f coverage.out
 	rm -f result.json
 
 
@@ -39,7 +39,7 @@ mod:
 	go mod tidy
 
 protoc:
-	protoc cmd/pdpagent/api/v1/*.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --proto_path=.
+	protoc internal/agents/pdpagent/api/v1/*.proto --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative --proto_path=.
 
 check:
 	staticcheck  ./...
@@ -52,7 +52,7 @@ lint:
 
 
 lint-fix:
-	gofmt -s -w **/**.go       
+	gofmt -s -w **/**.go
 	go vet ./...
 	gofumpt -l -w .
 	golangci-lint run ./... --fix
