@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.3.0
 // - protoc             v4.24.4
-// source: internal/agents/pdpagent/api/v1/pdp.proto
+// source: internal/api/pdp/v1/pdp.proto
 
 package v1
 
@@ -142,5 +142,5 @@ var PDPService_ServiceDesc = grpc.ServiceDesc{
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "internal/agents/pdpagent/api/v1/pdp.proto",
+	Metadata: "internal/api/pdp/v1/pdp.proto",
 }

@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/internal/agents/pdpagent/api/v1"
+	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
 	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
 	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
 	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
