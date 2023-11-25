@@ -15,7 +15,11 @@ const (
 type ErrorCode int
 
 type Error struct {
-	Err ErrorCode
+	err ErrorCode
+}
+
+func NewError(err ErrorCode) *Error {
+	return &Error{err}
 }
 
 var errorCodes = [...]string{
@@ -64,7 +68,7 @@ func (e ErrorCode) Message() string {
 }
 
 func (e *Error) Error() string {
-	return fmt.Sprintf("core: %s", e.Err)
+	return fmt.Sprintf("core: %s", e.err)
 }
 
 func (e *Error) Is(tgt error) bool {
@@ -72,13 +76,13 @@ func (e *Error) Is(tgt error) bool {
 	if !ok {
 		return false
 	}
-	return e.Err == target.Err
+	return e.err == target.err
 }
 
 func (e *Error) GetCode() int {
-	return int(e.Err)
+	return int(e.err)
 }
 
 func (e *Error) GetMessage() string {
-	return e.Err.Message()
+	return e.err.Message()
 }

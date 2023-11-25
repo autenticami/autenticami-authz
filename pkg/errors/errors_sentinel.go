@@ -26,17 +26,17 @@ const (
 
 var (
 	// 1xx
-	ErrCodeGeneric error = &iErrors.Error{codeGeneric}
+	ErrCodeGeneric error = iErrors.NewError(codeGeneric)
 	// 4xx
-	ErrCodeUnsupportedFeature error = &iErrors.Error{codeUnsupportedFeature}
-	ErrCodeBadSyntax          error = &iErrors.Error{codeBadSyntax}
+	ErrCodeUnsupportedFeature error = iErrors.NewError(codeUnsupportedFeature)
+	ErrCodeBadSyntax          error = iErrors.NewError(codeBadSyntax)
 	// 5xx
-	ErrCodeDataMarshaling       error = &iErrors.Error{codeDataMarshaling}
-	ErrCodeDataUnmarshaling     error = &iErrors.Error{codeDataUnmarshaling}
-	ErrCodeJSONSchemaValidation error = &iErrors.Error{codeJSONSchemaValidation}
-	ErrCodeUnsupportedDataType  error = &iErrors.Error{codeUnsupportedDataType}
-	ErrCodeInvalidDataType      error = &iErrors.Error{codeInvalidDataType}
-	ErrCodeUnsupportedVersion   error = &iErrors.Error{codeUnsupportedVersion}
+	ErrCodeDataMarshaling       error = iErrors.NewError(codeDataMarshaling)
+	ErrCodeDataUnmarshaling     error = iErrors.NewError(codeDataUnmarshaling)
+	ErrCodeJSONSchemaValidation error = iErrors.NewError(codeJSONSchemaValidation)
+	ErrCodeUnsupportedDataType  error = iErrors.NewError(codeUnsupportedDataType)
+	ErrCodeInvalidDataType      error = iErrors.NewError(codeInvalidDataType)
+	ErrCodeUnsupportedVersion   error = iErrors.NewError(codeUnsupportedVersion)
 )
 
 var (

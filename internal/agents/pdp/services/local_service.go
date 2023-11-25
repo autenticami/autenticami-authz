@@ -16,14 +16,14 @@ import (
 
 type PDPLocalService struct {
 	config *configs.PDPAgentConfig
-	cache  map[string]interface{}
+	cache  map[string]any
 }
 
 type papDoc struct {
-	Items []map[string]interface{} `json:"items"`
+	Items []map[string]any `json:"items"`
 }
 
-func loadCache(cache *map[string]interface{}, appFolder string, key string, targetKey string, encode bool) error {
+func loadCache(cache *map[string]any, appFolder string, key string, targetKey string, encode bool) error {
 	files, err := os.ReadDir(appFolder)
 	if err != nil {
 		return errors.Join(iErrors.ErrPDPAgentLocalInvalidAppData, err)
@@ -57,7 +57,7 @@ func loadCache(cache *map[string]interface{}, appFolder string, key string, targ
 
 func (s *PDPLocalService) Setup() error {
 	var err error
-	s.cache = make(map[string]interface{})
+	s.cache = make(map[string]any)
 	err = loadCache(&s.cache, s.config.GetAgentAppData()+"/autenticami1/identities/", "user_uur", "policies", false)
 	if err != nil {
 		return iErrors.ErrPDPAgentLocalInvalidAppData
@@ -77,7 +77,7 @@ func (s *PDPLocalService) GetPermissionsState(identityUUR am.UURString) (*am.Per
 	var permissionState *am.PermissionsState
 	policies := s.cache[string(identityUUR)]
 	if policies != nil {
-		for _, policy := range policies.([]interface{}) {
+		for _, policy := range policies.([]any) {
 			permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
 		}
 	}

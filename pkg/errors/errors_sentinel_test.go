@@ -4,13 +4,11 @@
 package errors
 
 import (
-	iErrors "github.com/autenticami/autenticami-authz/pkg/internal/errors"
-)
-
-import (
 	"errors"
 	"fmt"
 	"testing"
+
+	iErrors "github.com/autenticami/autenticami-authz/pkg/internal/errors"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -49,9 +47,9 @@ func TestErrorCodes(t *testing.T) {
 	}
 	{
 		assert.Equal(iErrors.UnknownText, iErrors.ErrorCode(0).Message(), "wrong result\nErrors shold be the same")
-		assert.Equal("core: unknown", fmt.Sprint(&iErrors.Error{iErrors.ErrorCode(0)}), "wrong result\nErrors shold be the same")
+		assert.Equal("core: unknown", fmt.Sprint(iErrors.NewError(iErrors.ErrorCode(0))), "wrong result\nErrors shold be the same")
 
 		assert.Equal(iErrors.UnknownText, iErrors.ErrorCode(9999).Message(), "wrong result\nErrors shold be the same")
-		assert.Equal("core: unknown", fmt.Sprint(&iErrors.Error{iErrors.ErrorCode(9999)}), "wrong result\nErrors shold be the same")
+		assert.Equal("core: unknown", fmt.Sprint(iErrors.NewError(iErrors.ErrorCode(9999))), "wrong result\nErrors shold be the same")
 	}
 }

@@ -16,7 +16,7 @@ import (
 	"github.com/autenticami/autenticami-authz/internal/agents/extensions"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
-	"github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
+	pdpV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
@@ -56,7 +56,7 @@ func init() {
 }
 
 // serverInterceptor is a unary interceptor that logs the duration of each request.
-func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+func serverInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Fatalf("panic occurred: %v stacktrace:%s", err, debug.Stack())
@@ -90,7 +90,7 @@ func main() {
 		withServerUnaryInterceptor(),
 	)
 
-	pdpServer := &v1.PDPServer{}
+	pdpServer := &pdpV1.PDPServer{}
 	if isLocalAgent {
 		pdpServer.Service = services.NewPDPLocalService(config)
 	} else {
@@ -104,7 +104,7 @@ func main() {
 	} else {
 		log.Info("pdpservice setup succeded")
 	}
-	v1.RegisterPDPServiceServer(s, pdpServer)
+	pdpV1.RegisterPDPServiceServer(s, pdpServer)
 	if config.IsLocalEnv() {
 		reflection.Register(s)
 		log.Info("grpc server registered the reflection service")
