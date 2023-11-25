@@ -4,10 +4,10 @@
 package v1
 
 import (
-	pkgAM "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
+	am "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
 )
 
-func mapToPolicyStatement(policyStatement *pkgAM.PolicyStatement) (*PolicyStatement, error) {
+func mapToPolicyStatement(policyStatement *am.PolicyStatement) (*PolicyStatement, error) {
 	result := &PolicyStatement{
 		Name:      string(policyStatement.Name),
 		Actions:   make([]string, len(policyStatement.Actions)),
@@ -22,7 +22,7 @@ func mapToPolicyStatement(policyStatement *pkgAM.PolicyStatement) (*PolicyStatem
 	return result, nil
 }
 
-func mapToPolicyStatementWrapper(policyStatementWrapper *pkgAM.PolicyStatementWrapper) (*PolicyStatementWrapper, error) {
+func mapToPolicyStatementWrapper(policyStatementWrapper *am.PolicyStatementWrapper) (*PolicyStatementWrapper, error) {
 	policyStatement, err := mapToPolicyStatement(&policyStatementWrapper.Statement)
 	if err != nil {
 		return nil, err
@@ -36,7 +36,7 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *pkgAM.PolicyStatementWr
 	return result, nil
 }
 
-func mapToPermissionsStateResponse(identityUUR string, permissionsState *pkgAM.PermissionsState) (*PermissionsStateResponse, error) {
+func mapToPermissionsStateResponse(identityUUR string, permissionsState *am.PermissionsState) (*PermissionsStateResponse, error) {
 	forbidList := permissionsState.GetForbidList()
 	permitList := permissionsState.GetPermitList()
 	result := &PermissionsStateResponse{
