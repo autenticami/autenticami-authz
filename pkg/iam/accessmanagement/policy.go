@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"regexp"
 
-	pkgiCore "github.com/autenticami/autenticami-authz/pkg/internal/core"
+	"github.com/autenticami/autenticami-authz/pkg/extensions"
 )
 
 // A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:person/*.
@@ -19,25 +19,25 @@ const (
 	actionFormatString = "%s:%s"
 )
 
-type UURString pkgiCore.WildcardString
+type UURString extensions.WildcardString
 
 type UUR struct {
-	account        pkgiCore.WildcardString
-	tenant         pkgiCore.WildcardString
-	project        pkgiCore.WildcardString
-	domain         pkgiCore.WildcardString
-	resource       pkgiCore.WildcardString
-	resourceFilter pkgiCore.WildcardString
+	account        extensions.WildcardString
+	tenant         extensions.WildcardString
+	project        extensions.WildcardString
+	domain         extensions.WildcardString
+	resource       extensions.WildcardString
+	resourceFilter extensions.WildcardString
 }
 
 // An action is an operation that can affect more than one resource in the context of one or more tenants.
 // REF: https://docs.autenticami.com/accounts/projects/actions/
 
-type ActionString pkgiCore.WildcardString
+type ActionString extensions.WildcardString
 
 type Action struct {
-	Resource pkgiCore.WildcardString
-	Action   pkgiCore.WildcardString
+	Resource extensions.WildcardString
+	Action   extensions.WildcardString
 }
 
 type (
@@ -159,12 +159,12 @@ func (a UURString) Parse(version PolicyVersionString) (*UUR, error) {
 	}
 	result := findStringSubmatch(pattern, string(a))
 	return &UUR{
-		account:        pkgiCore.WildcardString(sanitizeTokenName(result["account"])),
-		tenant:         pkgiCore.WildcardString(sanitizeTokenName(result["tenant"])),
-		project:        pkgiCore.WildcardString(sanitizeTokenName(result["project"])),
-		domain:         pkgiCore.WildcardString(sanitizeTokenName(result["domain"])),
-		resource:       pkgiCore.WildcardString(sanitizeTokenName(result["resource"])),
-		resourceFilter: pkgiCore.WildcardString(sanitizeTokenName(result["resourcefilter"])),
+		account:        extensions.WildcardString(sanitizeTokenName(result["account"])),
+		tenant:         extensions.WildcardString(sanitizeTokenName(result["tenant"])),
+		project:        extensions.WildcardString(sanitizeTokenName(result["project"])),
+		domain:         extensions.WildcardString(sanitizeTokenName(result["domain"])),
+		resource:       extensions.WildcardString(sanitizeTokenName(result["resource"])),
+		resourceFilter: extensions.WildcardString(sanitizeTokenName(result["resourcefilter"])),
 	}, nil
 }
 
@@ -206,8 +206,8 @@ func (a ActionString) Parse(version PolicyVersionString) (*Action, error) {
 	}
 	result := findStringSubmatch(pattern, string(a))
 	return &Action{
-		Resource: pkgiCore.WildcardString(sanitizeTokenName(result["resource"])),
-		Action:   pkgiCore.WildcardString(sanitizeTokenName(result["action"])),
+		Resource: extensions.WildcardString(sanitizeTokenName(result["resource"])),
+		Action:   extensions.WildcardString(sanitizeTokenName(result["action"])),
 	}, nil
 }
 

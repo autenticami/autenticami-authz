@@ -9,8 +9,8 @@ import (
 
 func mapToPolicyStatement(policyStatement *pkgAM.PolicyStatement) (*PolicyStatement, error) {
 	result := &PolicyStatement{
-		Name: string(policyStatement.Name),
-		Actions: make([]string, len(policyStatement.Actions)),
+		Name:      string(policyStatement.Name),
+		Actions:   make([]string, len(policyStatement.Actions)),
 		Resources: make([]string, len(policyStatement.Resources)),
 	}
 	for i, action := range policyStatement.Actions {
@@ -28,10 +28,10 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *pkgAM.PolicyStatementWr
 		return nil, err
 	}
 	result := &PolicyStatementWrapper{
-		Id: policyStatementWrapper.Id.String(),
-		Statement: policyStatement,
+		Id:                  policyStatementWrapper.ID.String(),
+		Statement:           policyStatement,
 		StatmentStringified: policyStatementWrapper.StatmentStringified,
-		StatmentHashed: policyStatementWrapper.StatmentHashed,
+		StatmentHashed:      policyStatementWrapper.StatmentHashed,
 	}
 	return result, nil
 }
@@ -49,14 +49,14 @@ func mapToPermissionsStateResponse(identityUUR string, permissionsState *pkgAM.P
 		},
 	}
 	for i, wrapper := range forbidList {
-		policyStatementWrapper , err := mapToPolicyStatementWrapper(&wrapper)
+		policyStatementWrapper, err := mapToPolicyStatementWrapper(&wrapper)
 		if err != nil {
 			return nil, err
 		}
 		result.PermissionsState.Forbid[i] = policyStatementWrapper
 	}
 	for i, wrapper := range permitList {
-		policyStatementWrapper , err := mapToPolicyStatementWrapper(&wrapper)
+		policyStatementWrapper, err := mapToPolicyStatementWrapper(&wrapper)
 		if err != nil {
 			return nil, err
 		}

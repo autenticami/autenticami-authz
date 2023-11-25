@@ -7,13 +7,13 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	pkgiCore "github.com/autenticami/autenticami-authz/pkg/internal/core"
+	"github.com/autenticami/autenticami-authz/pkg/extensions"
 
 	"github.com/google/uuid"
 )
 
 type PolicyStatementWrapper struct {
-	Id                  uuid.UUID
+	ID                  uuid.UUID
 	Statement           PolicyStatement
 	StatmentStringified string
 	StatmentHashed      string
@@ -32,7 +32,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStat
 	if policyStatement == nil {
 		return nil, ErrAccessManagementInvalidDataType
 	}
-	policyStatementString, err := pkgiCore.Stringify(policyStatement, []string{"Name"})
+	policyStatementString, err := extensions.Stringify(policyStatement, []string{"Name"})
 	if err != nil {
 		return nil, err
 	}
@@ -41,7 +41,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStat
 	bs := h.Sum(nil)
 	policyStatementHash := fmt.Sprintf("%x", bs)
 	return &PolicyStatementWrapper{
-		Id:                  uuid.New(),
+		ID:                  uuid.New(),
 		Statement:           *policyStatement,
 		StatmentStringified: policyStatementString,
 		StatmentHashed:      policyStatementHash,

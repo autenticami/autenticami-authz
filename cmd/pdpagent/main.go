@@ -12,27 +12,28 @@ import (
 	"strings"
 	"time"
 
-	cmdPdpApiV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
-	pkgAgentsCore "github.com/autenticami/autenticami-authz/pkg/agents/core"
-	pkgPdp "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent"
-	pkgPdpLocal "github.com/autenticami/autenticami-authz/pkg/agents/pdpagent/local"
+	iConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
+	"github.com/autenticami/autenticami-authz/internal/agents/extensions"
+	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
+	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
+	"github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
 
 	log "github.com/sirupsen/logrus"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 )
 
-var config = func() *pkgPdp.PDPAgentConfig {
-	agentType := pkgAgentsCore.GetEnv(pkgAgentsCore.EnvKeyAutenticamiAgentType, pkgPdp.AutenticamiPDPAgentTypeLocal)
-	if strings.ToUpper(agentType) == pkgPdp.AutenticamiPDPAgentTypeLocal {
-		config, err := pkgPdp.NewPDPAgentConfig()
+var config = func() *configs.PDPAgentConfig {
+	agentType := extensions.GetEnv(iConfigs.EnvKeyAutenticamiAgentType, configs.AutenticamiPDPAgentTypeLocal)
+	if strings.ToUpper(agentType) == configs.AutenticamiPDPAgentTypeLocal {
+		config, err := configs.NewPDPAgentConfig()
 		if err != nil {
 			log.Errorf("local agent - invalid configuration:%v", err)
 			panic(1)
 		}
 		return config
 	}
-	log.Fatalf("%s: %s is an invalid agent type", pkgAgentsCore.EnvKeyAutenticamiAgentType, agentType)
+	log.Fatalf("%s: %s is an invalid agent type", iConfigs.EnvKeyAutenticamiAgentType, agentType)
 	panic(1)
 }()
 
@@ -77,7 +78,7 @@ func withServerUnaryInterceptor() grpc.ServerOption {
 }
 
 func main() {
-	isLocalAgent := config.GetAgentType() == pkgPdp.AutenticamiPDPAgentTypeLocal
+	isLocalAgent := config.GetAgentType() == configs.AutenticamiPDPAgentTypeLocal
 	lis, err := net.Listen("tcp", fmt.Sprintf(":%s", config.GetAgentPort()))
 	if err != nil {
 		log.Fatalf("tcp connection failed: %v", err)
@@ -89,9 +90,9 @@ func main() {
 		withServerUnaryInterceptor(),
 	)
 
-	pdpServer := &cmdPdpApiV1.PDPServer{}
+	pdpServer := &v1.PDPServer{}
 	if isLocalAgent {
-		pdpServer.Service = pkgPdpLocal.NewPDPLocalService(config)
+		pdpServer.Service = services.NewPDPLocalService(config)
 	} else {
 		log.Fatal("pdp-remote is not implemented yet")
 		os.Exit(1)
@@ -103,7 +104,7 @@ func main() {
 	} else {
 		log.Info("pdpservice setup succeded")
 	}
-	cmdPdpApiV1.RegisterPDPServiceServer(s, pdpServer)
+	v1.RegisterPDPServiceServer(s, pdpServer)
 	if config.IsLocalEnv() {
 		reflection.Register(s)
 		log.Info("grpc server registered the reflection service")
