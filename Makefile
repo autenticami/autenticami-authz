@@ -74,7 +74,7 @@ converage-json:
 
 build-release:
 	mkdir -p dist
-	go build -o dist/autenticami ./cmd/pdpagent
+	go build -o dist/pdpagent ./cmd/pdpagent
 
 build-docker:
 	docker stop autenticami || true && docker rm autenticami || true
