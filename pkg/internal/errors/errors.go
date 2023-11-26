@@ -18,7 +18,7 @@ type Error struct {
 	err ErrorCode
 }
 
-func NewError(err ErrorCode) *Error {
+func newError(err ErrorCode) *Error {
 	return &Error{err}
 }
 
@@ -36,6 +36,36 @@ var errorCodes = [...]string{
 	551: "invalid datatype",
 	552: "unsupported version",
 }
+
+const (
+	// 1xxx
+	errorCodeGeneric = ErrorCode(100)
+	// 4xxx
+	errorCodeUnsupportedFeature = ErrorCode(401)
+	errorCodeBadSyntax          = ErrorCode(402)
+	// 4xxx
+	errorCodeDataMarshaling       = ErrorCode(501)
+	errorCodeDataUnmarshaling     = ErrorCode(502)
+	errorCodeJSONSchemaValidation = ErrorCode(520)
+	errorCodeUnsupportedDataType  = ErrorCode(550)
+	errorCodeInvalidDataType      = ErrorCode(551)
+	errorCodeUnsupportedVersion   = ErrorCode(552)
+)
+
+var (
+	// 1xx
+	ErrCodeGeneric error = newError(errorCodeGeneric)
+	// 4xx
+	ErrCodeUnsupportedFeature error = newError(errorCodeUnsupportedFeature)
+	ErrCodeBadSyntax          error = newError(errorCodeBadSyntax)
+	// 5xx
+	ErrCodeDataMarshaling       error = newError(errorCodeDataMarshaling)
+	ErrCodeDataUnmarshaling     error = newError(errorCodeDataUnmarshaling)
+	ErrCodeJSONSchemaValidation error = newError(errorCodeJSONSchemaValidation)
+	ErrCodeUnsupportedDataType  error = newError(errorCodeUnsupportedDataType)
+	ErrCodeInvalidDataType      error = newError(errorCodeInvalidDataType)
+	ErrCodeUnsupportedVersion   error = newError(errorCodeUnsupportedVersion)
+)
 
 func (e ErrorCode) Error() string {
 	message := e.Message()

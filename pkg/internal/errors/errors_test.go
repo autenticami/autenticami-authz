@@ -8,8 +8,6 @@ import (
 	"fmt"
 	"testing"
 
-	iErrors "github.com/autenticami/autenticami-authz/pkg/internal/errors"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,12 +23,12 @@ func TestErrorCodes(t *testing.T) {
 		err := errors.Join(errors.New("accessmanagement: invalid or unsupported uur syntax"), ErrCodeBadSyntax)
 		assert.True(errors.Is(err, ErrCodeBadSyntax), "wrong result\nError Join should include type ErrCodeBadSyntax")
 
-		var errType *iErrors.Error
+		var errType *Error
 		assert.True(errors.As(err, &errType), "wrong result\nError Join should be able to extract an error as ErrCodeBadSyntax")
 		assert.True(errors.Is(errType, ErrCodeBadSyntax), "wrong result\nErrCodeGeneric shold be equal to error Codes creted with the same number")
 	}
 	{
-		var errType *iErrors.Error
+		var errType *Error
 		assert.True(errors.As(ErrCodeBadSyntax, &errType), "wrong result\nErrCodeBadSyntax should be able to extract an error as ErrCodeBadSyntax")
 		assert.Equal(errType.GetCode(), 402, "wrong result\n Wrong error code")
 		assert.Equal(errType.GetMessage(), "bad syntax", "wrong result\nWrong error message")
@@ -41,15 +39,15 @@ func TestErrorCodes(t *testing.T) {
 		assert.False(errors.Is(ErrCodeGeneric, errors.New("Sample errore")), "wrong result\nErrors sholdn't be the same")
 	}
 	{
-		assert.True(errors.Is(iErrors.ErrorCode(100), iErrors.ErrorCode(100)), "wrong result\nErrors shold be the same")
-		assert.False(errors.Is(iErrors.ErrorCode(100), iErrors.ErrorCode(401)), "wrong result\nErrors sholdn't be the same")
-		assert.False(errors.Is(iErrors.ErrorCode(100), errors.New("Sample errore")), "wrong result\nErrors sholdn't be the same")
+		assert.True(errors.Is(ErrorCode(100), ErrorCode(100)), "wrong result\nErrors shold be the same")
+		assert.False(errors.Is(ErrorCode(100), ErrorCode(401)), "wrong result\nErrors sholdn't be the same")
+		assert.False(errors.Is(ErrorCode(100), errors.New("Sample errore")), "wrong result\nErrors sholdn't be the same")
 	}
 	{
-		assert.Equal(iErrors.UnknownText, iErrors.ErrorCode(0).Message(), "wrong result\nErrors shold be the same")
-		assert.Equal("core: unknown", fmt.Sprint(iErrors.NewError(iErrors.ErrorCode(0))), "wrong result\nErrors shold be the same")
+		assert.Equal(UnknownText, ErrorCode(0).Message(), "wrong result\nErrors shold be the same")
+		assert.Equal("core: unknown", fmt.Sprint(newError(ErrorCode(0))), "wrong result\nErrors shold be the same")
 
-		assert.Equal(iErrors.UnknownText, iErrors.ErrorCode(9999).Message(), "wrong result\nErrors shold be the same")
-		assert.Equal("core: unknown", fmt.Sprint(iErrors.NewError(iErrors.ErrorCode(9999))), "wrong result\nErrors shold be the same")
+		assert.Equal(UnknownText, ErrorCode(9999).Message(), "wrong result\nErrors shold be the same")
+		assert.Equal("core: unknown", fmt.Sprint(newError(ErrorCode(9999))), "wrong result\nErrors shold be the same")
 	}
 }

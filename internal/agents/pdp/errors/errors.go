@@ -11,7 +11,7 @@ import (
 
 var (
 	// ErrPDPAgentLocalInvalidAppData is returned wether the appdata is invalid.
-	ErrPDPAgentLocalInvalidAppData = errors.Join(errors.New("pdpagent: application data folder is invalid"), iErrors.ErrCodeGeneric)
+	ErrPDPAgentLocalInvalidAppData = errors.Join(errors.New("pdpagent: application data folder is invalid"), iErrors.ErrGeneric)
 	// ErrPDPAgentLocalInvalidPort is returned wether the port is invalid.
-	ErrPDPAgentLocalInvalidPort = errors.Join(errors.New("pdpagent: application port is invalid"), iErrors.ErrCodeGeneric)
+	ErrPDPAgentLocalInvalidPort = errors.Join(errors.New("pdpagent: application port is invalid"), iErrors.ErrGeneric)
 )

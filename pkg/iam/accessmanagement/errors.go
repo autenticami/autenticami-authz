@@ -6,7 +6,7 @@ package accessmanagement
 import (
 	"errors"
 
-	iErrors "github.com/autenticami/autenticami-authz/pkg/errors"
+	iErrors "github.com/autenticami/autenticami-authz/pkg/internal/errors"
 )
 
 var (
