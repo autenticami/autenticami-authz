@@ -10,8 +10,10 @@ import (
 	"path/filepath"
 
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+
 	iErrors "github.com/autenticami/autenticami-authz/internal/agents/pdp/errors"
-	am "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
 )
 
 type PDPLocalService struct {
@@ -69,12 +71,12 @@ func (s *PDPLocalService) Setup() error {
 	return nil
 }
 
-func (s *PDPLocalService) GetPermissionsState(identityUUR am.UURString) (*am.PermissionsState, error) {
-	engine, err := am.NewPermissionsEngine()
+func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error) {
+	engine, err := permissions.NewPermissionsEngine()
 	if err != nil {
 		return nil, err
 	}
-	var permissionState *am.PermissionsState
+	var permissionState *permissions.PermissionsState
 	policies := s.cache[string(identityUUR)]
 	if policies != nil {
 		for _, policy := range policies.([]any) {

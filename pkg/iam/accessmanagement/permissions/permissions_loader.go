@@ -1,15 +1,17 @@
 // Copyright (c) Nitro Agility S.r.l.
 // SPDX-License-Identifier: Apache-2.0
 
-package accessmanagement
+package permissions
 
 import (
 	"encoding/json"
 	"errors"
 
-	iErrors "github.com/autenticami/autenticami-authz/pkg/errors"
-
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	"github.com/xeipuuv/gojsonschema"
+
+	iErrors1 "github.com/autenticami/autenticami-authz/pkg/errors"
+	iErrors2 "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 // Permissions permit identities to access a resource or execute a specific action and they are granted through the association of policies.
@@ -24,7 +26,7 @@ func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 	documentLoader := gojsonschema.NewBytesLoader(json)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {
-		return false, errors.Join(ErrAccessManagementJSONSchemaValidation, err)
+		return false, errors.Join(iErrors2.ErrAccessManagementJSONSchemaValidation, err)
 	}
 	if result.Valid() {
 		return true, nil
@@ -41,24 +43,24 @@ func newPermissionsLoader() (*permissionsLoader, error) {
 
 func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 	if bData == nil {
-		return false, iErrors.ErrJSONDataMarshaling
+		return false, iErrors1.ErrJSONDataMarshaling
 	}
 	var err error
 	var isValid bool
-	policy := Policy{}
+	policy := policies.Policy{}
 	err = json.Unmarshal(bData, &policy)
 	if err != nil {
-		return false, errors.Join(ErrAccessManagementInvalidDataType, err)
+		return false, errors.Join(iErrors2.ErrAccessManagementInvalidDataType, err)
 	}
 	if !policy.Syntax.IsValid() {
-		return false, errors.Join(ErrAccessManagementUnsupportedVersion, err)
+		return false, errors.Join(iErrors2.ErrAccessManagementUnsupportedVersion, err)
 	}
 	switch policy.Type {
-	case PolicyACLType:
-		aclPolicy := ACLPolicy{}
+	case policies.PolicyACLType:
+		aclPolicy := policies.ACLPolicy{}
 		err := json.Unmarshal(bData, &aclPolicy)
 		if err != nil {
-			return false, errors.Join(iErrors.ErrJSONDataMarshaling, err)
+			return false, errors.Join(iErrors1.ErrJSONDataMarshaling, err)
 		}
 		isValid, err = d.registerACLPolicy(&aclPolicy)
 		if err != nil {
@@ -68,21 +70,21 @@ func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 			return false, nil
 		}
 	default:
-		return false, ErrAccessManagementUnsupportedDataType
+		return false, iErrors2.ErrAccessManagementUnsupportedDataType
 	}
 	return true, nil
 }
 
-func (d *permissionsLoader) registerACLPolicy(policy *ACLPolicy) (bool, error) {
-	if policy.Type != PolicyACLType {
-		return false, ErrAccessManagementUnsupportedDataType
+func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool, error) {
+	if policy.Type != policies.PolicyACLType {
+		return false, iErrors2.ErrAccessManagementUnsupportedDataType
 	}
-	isValid, err := validateACLPolicy(policy)
+	isValid, err := policies.ValidateACLPolicy(policy)
 	if err != nil {
 		return false, err
 	}
 	if !isValid {
-		return false, ErrAccessManagementInvalidDataType
+		return false, iErrors2.ErrAccessManagementInvalidDataType
 	}
 	if len(policy.Permit) > 0 {
 		err := d.permissionsState.AllowACLPolicyStatements(policy.Permit)

@@ -1,7 +1,7 @@
 // Copyright (c) Nitro Agility S.r.l.
 // SPDX-License-Identifier: Apache-2.0
 
-package accessmanagement
+package policies
 
 import (
 	_ "embed"
@@ -9,6 +9,8 @@ import (
 	"regexp"
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions"
+
+	iErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 // A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:person/*.
@@ -128,7 +130,7 @@ func (a UURString) getRegex(version PolicyVersionString) (string, error) {
 		regex := fmt.Sprintf("^uur:(?P<account>(%s)?):(?P<tenant>(%s)?):(?P<project>(%s)?):(?P<domain>(%s)?):(%s)?$", cNumber, cHyphenName, cHyphenName, cSlashHyphenName, cResourceFilterSlashHyphenName)
 		return regex, nil
 	default:
-		return "", ErrAccessManagementUnsupportedVersion
+		return "", iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -141,7 +143,7 @@ func (a UURString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(a))
 	default:
-		return false, ErrAccessManagementUnsupportedVersion
+		return false, iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -151,7 +153,7 @@ func (a UURString) Parse(version PolicyVersionString) (*UUR, error) {
 		return nil, err
 	}
 	if !isValied {
-		return nil, ErrAccessManagementInvalidUUR
+		return nil, iErrors.ErrAccessManagementInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -175,7 +177,7 @@ func (a ActionString) getRegex(version PolicyVersionString) (string, error) {
 		regex := fmt.Sprintf("^(?P<resource>(%s)?):(?P<action>(%s)?)$", cHyphenName, cHyphenName)
 		return regex, nil
 	default:
-		return "", ErrAccessManagementUnsupportedVersion
+		return "", iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -188,7 +190,7 @@ func (a ActionString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(a))
 	default:
-		return false, ErrAccessManagementUnsupportedVersion
+		return false, iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -198,7 +200,7 @@ func (a ActionString) Parse(version PolicyVersionString) (*Action, error) {
 		return nil, err
 	}
 	if !isValied {
-		return nil, ErrAccessManagementInvalidUUR
+		return nil, iErrors.ErrAccessManagementInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -220,7 +222,7 @@ func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 	case PolicyV1:
 		return p == PolicyACLType || p == PolicyTrustIdentityType, nil
 	default:
-		return false, ErrAccessManagementUnsupportedVersion
+		return false, iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -232,7 +234,7 @@ func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error)
 		regex := fmt.Sprintf("^((%s)?)$", cSlashHyphenName)
 		return regex, nil
 	default:
-		return "", ErrAccessManagementUnsupportedVersion
+		return "", iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
@@ -245,13 +247,13 @@ func (p PolicyLabelString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(p))
 	default:
-		return false, ErrAccessManagementUnsupportedVersion
+		return false, iErrors.ErrAccessManagementUnsupportedVersion
 	}
 }
 
 func validatePolicyStatement(version PolicyVersionString, policyStatement *PolicyStatement) (bool, error) {
 	if !version.IsValid() || policyStatement == nil {
-		return false, ErrAccessManagementInvalidDataType
+		return false, iErrors.ErrAccessManagementInvalidDataType
 	}
 	var isValid bool
 	var err error
@@ -283,7 +285,7 @@ func validatePolicyStatement(version PolicyVersionString, policyStatement *Polic
 	return true, nil
 }
 
-func validateACLPolicy(policy *ACLPolicy) (bool, error) {
+func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
 	if policy == nil || !policy.Syntax.IsValid() || policy.Type != PolicyACLType {
 		return false, nil
 	}

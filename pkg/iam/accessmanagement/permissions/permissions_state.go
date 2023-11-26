@@ -1,20 +1,22 @@
 // Copyright (c) Nitro Agility S.r.l.
 // SPDX-License-Identifier: Apache-2.0
 
-package accessmanagement
+package permissions
 
 import (
 	"crypto/sha256"
 	"fmt"
 
+	"github.com/google/uuid"
 	"github.com/autenticami/autenticami-authz/pkg/extensions"
 
-	"github.com/google/uuid"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	iErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 type PolicyStatementWrapper struct {
 	ID                  uuid.UUID
-	Statement           PolicyStatement
+	Statement           policies.PolicyStatement
 	StatmentStringified string
 	StatmentHashed      string
 	// sanitizedStatement           *PolicyStatement
@@ -28,9 +30,9 @@ type PermissionsState struct {
 	permit     []*PolicyStatementWrapper
 }
 
-func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStatementWrapper, error) {
+func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*PolicyStatementWrapper, error) {
 	if policyStatement == nil {
-		return nil, ErrAccessManagementInvalidDataType
+		return nil, iErrors.ErrAccessManagementInvalidDataType
 	}
 	policyStatementString, err := extensions.Stringify(policyStatement, []string{"Name"})
 	if err != nil {
@@ -48,7 +50,7 @@ func createPolicyStatementWrapper(policyStatement *PolicyStatement) (*PolicyStat
 	}, nil
 }
 
-func createPolicyStatementWrappers(policyStatements []PolicyStatement) ([]*PolicyStatementWrapper, error) {
+func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) ([]*PolicyStatementWrapper, error) {
 	wrappers := make([]*PolicyStatementWrapper, len(policyStatements))
 	for i, policyStatement := range policyStatements {
 		wrapper, err := createPolicyStatementWrapper(&policyStatement)
@@ -68,7 +70,7 @@ func newPermissionsState() *PermissionsState {
 	}
 }
 
-func (b *PermissionsState) DenyACLPolicyStatements(policyStatements []PolicyStatement) error {
+func (b *PermissionsState) DenyACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -77,7 +79,7 @@ func (b *PermissionsState) DenyACLPolicyStatements(policyStatements []PolicyStat
 	return nil
 }
 
-func (b *PermissionsState) AllowACLPolicyStatements(policyStatements []PolicyStatement) error {
+func (b *PermissionsState) AllowACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err

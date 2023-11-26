@@ -4,10 +4,11 @@
 package services
 
 import (
-	am "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
 type PDPService interface {
 	Setup() error
-	GetPermissionsState(identityUUR am.UURString) (*am.PermissionsState, error)
+	GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error)
 }

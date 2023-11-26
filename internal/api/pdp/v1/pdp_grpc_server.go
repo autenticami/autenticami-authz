@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
-	am "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
 	"github.com/google/uuid"
 )
@@ -20,8 +20,8 @@ type PDPServer struct {
 }
 
 func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
-	identityUUR := am.UURString(req.Identity.Uur)
-	isValid, err := identityUUR.IsValid(am.PolicyV1)
+	identityUUR := policies.UURString(req.Identity.Uur)
+	isValid, err := identityUUR.IsValid(policies.PolicyV1)
 	if err != nil {
 		log.Fatalf("error while validating identity UUR: %v", err)
 		return nil, errors.New("Identity UUR is not valid")

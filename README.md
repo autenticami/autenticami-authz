@@ -2,16 +2,15 @@
 
 [![Documentation](https://img.shields.io/website?label=Docs&url=https%3A%2F%2Fdocs.autenticami.com%2F)](https://docs.autenticami.com/)
 [![AutenticamiCI](https://github.com/autenticami/autenticami-authz/actions/workflows/autenticami-ci.yml/badge.svg)](https://github.com/autenticami/autenticami-authz/actions/workflows/autenticami-ci.yml)
-[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz) 
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
 [![Bugs](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=bugs)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=coverage)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz) 
+[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
 [![Go Report Card](https://goreportcard.com/badge/github.com/autenticami/autenticami-authz)](https://goreportcard.com/report/github.com/autenticami/autenticami-authz)
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz) 
-[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz) 
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=autenticami_autenticami-authz&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=autenticami_autenticami-authz)
 
 <img src="assets/images/autenticami-black-logo.png" width="250px" height="auto"/>
-
 
 `Autenticami` is a multi-account `Identity and Access Management` (IAM or IdAM) solution to enable a modern identity-based access control.
 

@@ -4,10 +4,11 @@
 package v1
 
 import (
-	am "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
-func mapToPolicyStatement(policyStatement *am.PolicyStatement) (*PolicyStatement, error) {
+func mapToPolicyStatement(policyStatement *policies.PolicyStatement) (*PolicyStatement, error) {
 	result := &PolicyStatement{
 		Name:      string(policyStatement.Name),
 		Actions:   make([]string, len(policyStatement.Actions)),
@@ -22,7 +23,7 @@ func mapToPolicyStatement(policyStatement *am.PolicyStatement) (*PolicyStatement
 	return result, nil
 }
 
-func mapToPolicyStatementWrapper(policyStatementWrapper *am.PolicyStatementWrapper) (*PolicyStatementWrapper, error) {
+func mapToPolicyStatementWrapper(policyStatementWrapper *permissions.PolicyStatementWrapper) (*PolicyStatementWrapper, error) {
 	policyStatement, err := mapToPolicyStatement(&policyStatementWrapper.Statement)
 	if err != nil {
 		return nil, err
@@ -36,7 +37,7 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *am.PolicyStatementWrapp
 	return result, nil
 }
 
-func mapToPermissionsStateResponse(identityUUR string, permissionsState *am.PermissionsState) (*PermissionsStateResponse, error) {
+func mapToPermissionsStateResponse(identityUUR string, permissionsState *permissions.PermissionsState) (*PermissionsStateResponse, error) {
 	forbidList := permissionsState.GetForbidList()
 	permitList := permissionsState.GetPermitList()
 	result := &PermissionsStateResponse{

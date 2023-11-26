@@ -1,7 +1,7 @@
 // Copyright (c) Nitro Agility S.r.l.
 // SPDX-License-Identifier: Apache-2.0
 
-package accessmanagement
+package policies
 
 import (
 	"encoding/json"
@@ -379,7 +379,7 @@ func TestPolicyNotValid(t *testing.T) {
 	var isValid bool
 	var err error
 	{
-		isValid, err = validateACLPolicy(nil)
+		isValid, err = ValidateACLPolicy(nil)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
@@ -387,13 +387,13 @@ func TestPolicyNotValid(t *testing.T) {
 		policy := ACLPolicy{}
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyTypeString("X")
-		isValid, err = validateACLPolicy(&policy)
+		isValid, err = ValidateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 
 		policy.Type = PolicyACLType
 		policy.Name = "This is not valid as there are spaces"
-		isValid, err = validateACLPolicy(&policy)
+		isValid, err = ValidateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
@@ -407,7 +407,7 @@ func TestPolicyNotValid(t *testing.T) {
 				Name: "person Base Reader",
 			},
 		}
-		isValid, err = validateACLPolicy(&policy)
+		isValid, err = ValidateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
@@ -428,7 +428,7 @@ func TestPolicyNotValid(t *testing.T) {
 				},
 			},
 		}
-		isValid, err = validateACLPolicy(&policy)
+		isValid, err = ValidateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.True(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(isValid))
 	}
