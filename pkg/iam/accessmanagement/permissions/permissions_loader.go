@@ -41,7 +41,7 @@ func newPermissionsLoader() (*permissionsLoader, error) {
 	}, nil
 }
 
-func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
+func (d *permissionsLoader) registerPolicy(bData []byte) (bool, error) {
 	if bData == nil {
 		return false, authzErrors.ErrJSONDataMarshaling
 	}
@@ -101,6 +101,6 @@ func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 	return true, nil
 }
 
-func (d *permissionsLoader) BuildPermissionsState() (*PermissionsState, error) {
+func (d *permissionsLoader) buildPermissionsState() (*PermissionsState, error) {
 	return d.permissionsState, nil
 }

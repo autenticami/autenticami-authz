@@ -11,19 +11,19 @@ type PermissionsEngine struct {
 }
 
 func NewPermissionsEngine() (*PermissionsEngine, error) {
-	director, err := newPermissionsLoader()
+	loader, err := newPermissionsLoader()
 	if err != nil {
 		return nil, err
 	}
 	return &PermissionsEngine{
-		loader: director,
+		loader: loader,
 	}, nil
 }
 
 func (d *PermissionsEngine) BuildPermissions(bData []byte) (*PermissionsState, error) {
-	_, err := d.loader.RegisterPolicy(bData)
+	_, err := d.loader.registerPolicy(bData)
 	if err != nil {
 		return nil, err
 	}
-	return d.loader.BuildPermissionsState()
+	return d.loader.buildPermissionsState()
 }

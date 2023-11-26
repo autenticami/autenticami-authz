@@ -101,7 +101,7 @@ func TestPermissionsLoaderRegisterPolicyValid(t *testing.T) {
 					assert := assert.New(t)
 					bArray, _ := os.ReadFile(testDataCaseInputPath)
 					permLoader, _ := newPermissionsLoader()
-					registered, err := permLoader.RegisterPolicy(bArray)
+					registered, err := permLoader.registerPolicy(bArray)
 					assert.Nil(err, "wrong result\nshould be nil")
 					assert.True(registered, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(registered))
 				})
@@ -120,7 +120,7 @@ func TestMiscellaneousPermissionsLoader(t *testing.T) {
 	}
 	{
 		permissionsLoader, _ := newPermissionsLoader()
-		_, err = permissionsLoader.RegisterPolicy([]byte("\\)[\\S ]+\\s((?:(?"))
+		_, err = permissionsLoader.registerPolicy([]byte("\\)[\\S ]+\\s((?:(?"))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementInvalidDataType", spew.Sdump(err))
 	}
 }
