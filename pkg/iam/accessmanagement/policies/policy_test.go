@@ -404,7 +404,7 @@ func TestPolicyNotValid(t *testing.T) {
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
-		policy.Permit = []PolicyStatement{
+		policy.Permit = []*PolicyStatement{
 			{
 				Name: "person Base Reader",
 			},
@@ -418,7 +418,7 @@ func TestPolicyNotValid(t *testing.T) {
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
-		policy.Permit = []PolicyStatement{
+		policy.Permit = []*PolicyStatement{
 			{
 				Name: "person-base-reader",
 				Actions: []ActionString{
