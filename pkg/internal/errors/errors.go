@@ -9,18 +9,8 @@ import (
 )
 
 const (
-	UnknownText = "unknown"
+	unknownText = "unknown"
 )
-
-type ErrorCode int
-
-type Error struct {
-	err ErrorCode
-}
-
-func newError(err ErrorCode) *Error {
-	return &Error{err}
-}
 
 var errorCodes = [...]string{
 	// 1xx generic errors
@@ -39,35 +29,45 @@ var errorCodes = [...]string{
 
 const (
 	// 1xxx
-	errorCodeGeneric = ErrorCode(100)
+	errorCodeGeneric = errorCode(100)
 	// 4xxx
-	errorCodeUnsupportedFeature = ErrorCode(401)
-	errorCodeBadSyntax          = ErrorCode(402)
+	errorCodeUnsupportedFeature = errorCode(401)
+	errorCodeBadSyntax          = errorCode(402)
 	// 4xxx
-	errorCodeDataMarshaling       = ErrorCode(501)
-	errorCodeDataUnmarshaling     = ErrorCode(502)
-	errorCodeJSONSchemaValidation = ErrorCode(520)
-	errorCodeUnsupportedDataType  = ErrorCode(550)
-	errorCodeInvalidDataType      = ErrorCode(551)
-	errorCodeUnsupportedVersion   = ErrorCode(552)
+	errorCodeDataMarshaling       = errorCode(501)
+	errorCodeDataUnmarshaling     = errorCode(502)
+	errorCodeJSONSchemaValidation = errorCode(520)
+	errorCodeUnsupportedDataType  = errorCode(550)
+	errorCodeInvalidDataType      = errorCode(551)
+	errorCodeUnsupportedVersion   = errorCode(552)
 )
 
 var (
 	// 1xx
-	ErrCodeGeneric error = newError(errorCodeGeneric)
+	GenericBaseError error = newBaseError(errorCodeGeneric)
 	// 4xx
-	ErrCodeUnsupportedFeature error = newError(errorCodeUnsupportedFeature)
-	ErrCodeBadSyntax          error = newError(errorCodeBadSyntax)
+	UnsupportedFeatureBaseError error = newBaseError(errorCodeUnsupportedFeature)
+	BadSyntaxBaseError          error = newBaseError(errorCodeBadSyntax)
 	// 5xx
-	ErrCodeDataMarshaling       error = newError(errorCodeDataMarshaling)
-	ErrCodeDataUnmarshaling     error = newError(errorCodeDataUnmarshaling)
-	ErrCodeJSONSchemaValidation error = newError(errorCodeJSONSchemaValidation)
-	ErrCodeUnsupportedDataType  error = newError(errorCodeUnsupportedDataType)
-	ErrCodeInvalidDataType      error = newError(errorCodeInvalidDataType)
-	ErrCodeUnsupportedVersion   error = newError(errorCodeUnsupportedVersion)
+	DataMarshalingBaseError       error = newBaseError(errorCodeDataMarshaling)
+	DataUnmarshalingBaseError     error = newBaseError(errorCodeDataUnmarshaling)
+	JSONSchemaValidationBaseError error = newBaseError(errorCodeJSONSchemaValidation)
+	UnsupportedDataTypeBaseError  error = newBaseError(errorCodeUnsupportedDataType)
+	InvalidDataTypeBaseError      error = newBaseError(errorCodeInvalidDataType)
+	UnsupportedVersionBaseError   error = newBaseError(errorCodeUnsupportedVersion)
 )
 
-func (e ErrorCode) Error() string {
+type errorCode int
+
+type baseError struct {
+	err errorCode
+}
+
+func newBaseError(err errorCode) *baseError {
+	return &baseError{err}
+}
+
+func (e errorCode) Error() string {
 	message := e.Message()
 	if 0 <= int(e) && int(e) < len(errorCodes) {
 		s := errorCodes[e]
@@ -78,41 +78,41 @@ func (e ErrorCode) Error() string {
 	return message
 }
 
-func (e ErrorCode) Is(tgt error) bool {
-	target, ok := tgt.(ErrorCode)
+func (e errorCode) Is(tgt error) bool {
+	target, ok := tgt.(errorCode)
 	if !ok {
 		return false
 	}
 	return e == target
 }
 
-func (e ErrorCode) Message() string {
+func (e errorCode) Message() string {
 	var message string
 	if 0 <= int(e) && int(e) < len(errorCodes) {
 		message = errorCodes[e]
 	}
 	if message == "" {
-		message = UnknownText
+		message = unknownText
 	}
 	return message
 }
 
-func (e *Error) Error() string {
+func (e *baseError) Error() string {
 	return fmt.Sprintf("core: %s", e.err)
 }
 
-func (e *Error) Is(tgt error) bool {
-	target, ok := tgt.(*Error)
+func (e *baseError) Is(tgt error) bool {
+	target, ok := tgt.(*baseError)
 	if !ok {
 		return false
 	}
 	return e.err == target.err
 }
 
-func (e *Error) GetCode() int {
+func (e *baseError) GetCode() int {
 	return int(e.err)
 }
 
-func (e *Error) GetMessage() string {
+func (e *baseError) GetMessage() string {
 	return e.err.Message()
 }
