@@ -7,11 +7,11 @@ import (
 	"crypto/sha256"
 	"fmt"
 
-	"github.com/google/uuid"
 	"github.com/autenticami/autenticami-authz/pkg/extensions"
+	"github.com/google/uuid"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	iErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
 type PolicyStatementWrapper struct {
