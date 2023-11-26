@@ -10,7 +10,7 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/extensions"
 	"github.com/google/uuid"
 
-	iErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
@@ -32,7 +32,7 @@ type PermissionsState struct {
 
 func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*PolicyStatementWrapper, error) {
 	if policyStatement == nil {
-		return nil, iErrors.ErrAccessManagementInvalidDataType
+		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
 	policyStatementString, err := extensions.Stringify(policyStatement, []string{"Name"})
 	if err != nil {

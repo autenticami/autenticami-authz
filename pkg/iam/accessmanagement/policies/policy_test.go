@@ -13,6 +13,8 @@ import (
 
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
+
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 func TestJSONUnmarshaling(t *testing.T) {
@@ -143,7 +145,7 @@ func TestUURNotValid(t *testing.T) {
 			for _, uurString := range uurStrings {
 				_, err := uurString.Parse(version)
 				assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
-				assert.True(errors.Is(err, ErrAccessManagementInvalidUUR), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
+				assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidUUR), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
 			}
 		})
 	}
@@ -310,7 +312,7 @@ func TestActionsNotValid(t *testing.T) {
 			for _, actionString := range actionStrings {
 				_, err := actionString.Parse(version)
 				assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
-				assert.False(errors.Is(err, ErrAccessManagementInvalidAction), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
+				assert.False(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidAction), "wrong result\ngot: %sshould be of type ErrInvalidAction", spew.Sdump(err))
 			}
 		})
 	}
@@ -434,7 +436,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		isValid, err = validatePolicyStatement(PolicyVersionString("0000-00-00"), nil)
-		assert.True(errors.Is(err, ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
@@ -449,7 +451,7 @@ func TestPolicyNotValid(t *testing.T) {
 			},
 		}
 		isValid, err = validatePolicyStatement(PolicyVersionString("0000-00-00"), &policyStatement)
-		assert.True(errors.Is(err, ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
@@ -493,20 +495,20 @@ func TestMiscellaneousPolicies(t *testing.T) {
 	{
 		uur := UURString("uur:000111023455:default:hr-app1:time-management1:person/1")
 		_, err = uur.getRegex(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = uur.IsValid(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = uur.Parse(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 	{
 		action := ActionString("person:Read")
 		_, err = action.getRegex(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = action.IsValid(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = action.Parse(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 	{
 		policyType := PolicyACLType
@@ -516,13 +518,13 @@ func TestMiscellaneousPolicies(t *testing.T) {
 	{
 		policyType := PolicyACLType
 		_, err = policyType.IsValid(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 	{
 		policyLabel := PolicyLabelString("permit-hr/person/reader/any")
 		_, err = policyLabel.getRegex(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		_, err = policyLabel.IsValid(PolicyVersionString("0000-00-00"))
-		assert.True(errors.Is(err, ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 }

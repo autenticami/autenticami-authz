@@ -9,6 +9,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )
@@ -18,7 +19,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 		Path       string
 		InputFiles func() []string
 	}{
-		string(PolicyV1): {
+		string(policies.PolicyV1): {
 			"./testdata/permissions-states/creation",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
@@ -38,7 +39,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 				totAllows, totDenies := 0, 0
 				for _, input := range test.InputFiles() {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
-					data := ACLPolicy{}
+					data := policies.ACLPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 
 					var err error

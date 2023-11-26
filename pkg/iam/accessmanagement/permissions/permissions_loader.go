@@ -10,8 +10,8 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	"github.com/xeipuuv/gojsonschema"
 
-	iErrors1 "github.com/autenticami/autenticami-authz/pkg/errors"
-	iErrors2 "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 // Permissions permit identities to access a resource or execute a specific action and they are granted through the association of policies.
@@ -26,7 +26,7 @@ func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 	documentLoader := gojsonschema.NewBytesLoader(json)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {
-		return false, errors.Join(iErrors2.ErrAccessManagementJSONSchemaValidation, err)
+		return false, errors.Join(authzAMErrors.ErrAccessManagementJSONSchemaValidation, err)
 	}
 	if result.Valid() {
 		return true, nil
@@ -43,24 +43,24 @@ func newPermissionsLoader() (*permissionsLoader, error) {
 
 func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 	if bData == nil {
-		return false, iErrors1.ErrJSONDataMarshaling
+		return false, authzErrors.ErrJSONDataMarshaling
 	}
 	var err error
 	var isValid bool
 	policy := policies.Policy{}
 	err = json.Unmarshal(bData, &policy)
 	if err != nil {
-		return false, errors.Join(iErrors2.ErrAccessManagementInvalidDataType, err)
+		return false, errors.Join(authzAMErrors.ErrAccessManagementInvalidDataType, err)
 	}
 	if !policy.Syntax.IsValid() {
-		return false, errors.Join(iErrors2.ErrAccessManagementUnsupportedVersion, err)
+		return false, errors.Join(authzAMErrors.ErrAccessManagementUnsupportedVersion, err)
 	}
 	switch policy.Type {
 	case policies.PolicyACLType:
 		aclPolicy := policies.ACLPolicy{}
 		err := json.Unmarshal(bData, &aclPolicy)
 		if err != nil {
-			return false, errors.Join(iErrors1.ErrJSONDataMarshaling, err)
+			return false, errors.Join(authzErrors.ErrJSONDataMarshaling, err)
 		}
 		isValid, err = d.registerACLPolicy(&aclPolicy)
 		if err != nil {
@@ -70,21 +70,21 @@ func (d *permissionsLoader) RegisterPolicy(bData []byte) (bool, error) {
 			return false, nil
 		}
 	default:
-		return false, iErrors2.ErrAccessManagementUnsupportedDataType
+		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
 	}
 	return true, nil
 }
 
 func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool, error) {
 	if policy.Type != policies.PolicyACLType {
-		return false, iErrors2.ErrAccessManagementUnsupportedDataType
+		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
 	}
 	isValid, err := policies.ValidateACLPolicy(policy)
 	if err != nil {
 		return false, err
 	}
 	if !isValid {
-		return false, iErrors2.ErrAccessManagementInvalidDataType
+		return false, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
 	if len(policy.Permit) > 0 {
 		err := d.permissionsState.AllowACLPolicyStatements(policy.Permit)

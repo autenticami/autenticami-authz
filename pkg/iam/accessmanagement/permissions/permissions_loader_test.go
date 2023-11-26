@@ -9,15 +9,18 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
+
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 func TestJsonSchemaValidationForValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV1): {
+		string(policies.PolicyV1): {
 			"./testdata/permissions-loader/validate-jsonschema/valid",
 		},
 	}
@@ -35,7 +38,7 @@ func TestJsonSchemaValidationForValid(t *testing.T) {
 				t.Run(strings.ToUpper(version+"-"+caseName+"-"+inputName), func(t *testing.T) {
 					assert := assert.New(t)
 					bArray, _ := os.ReadFile(testDataCaseInputPath)
-					isValid, err := isValidJSON(aclPolicySchema, bArray)
+					isValid, err := isValidJSON(policies.AclPolicySchema, bArray)
 					assert.Nil(err, "wrong result\nshould be nil")
 					assert.True(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(isValid))
 				})
@@ -48,7 +51,7 @@ func TestJsonSchemaValidationForNotValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV1): {
+		string(policies.PolicyV1): {
 			"./testdata/permissions-loader/validate-jsonschema/notvalid",
 		},
 	}
@@ -66,7 +69,7 @@ func TestJsonSchemaValidationForNotValid(t *testing.T) {
 				t.Run(strings.ToUpper(version+"-"+caseName+"-"+inputName), func(t *testing.T) {
 					assert := assert.New(t)
 					bArray, _ := os.ReadFile(testDataCaseInputPath)
-					isValid, err := isValidJSON(aclPolicySchema, bArray)
+					isValid, err := isValidJSON(policies.AclPolicySchema, bArray)
 					assert.Nil(err, "wrong result\nshould be nil")
 					assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 				})
@@ -79,7 +82,7 @@ func TestPermissionsLoaderRegisterPolicyValid(t *testing.T) {
 	tests := map[string]struct {
 		Path string
 	}{
-		string(PolicyV1): {
+		string(policies.PolicyV1): {
 			"./testdata/permissions-loader/register-policy/valid",
 		},
 	}
@@ -113,11 +116,11 @@ func TestMiscellaneousPermissionsLoader(t *testing.T) {
 	{
 		_, err = isValidJSON(nil, nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
-		assert.True(errors.Is(err, ErrAccessManagementJSONSchemaValidation), "wrong result\ngot: %sshould be of type ErrAccessManagementJSONSchemaValidation", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementJSONSchemaValidation), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementJSONSchemaValidation", spew.Sdump(err))
 	}
 	{
 		permissionsLoader, _ := newPermissionsLoader()
 		_, err = permissionsLoader.RegisterPolicy([]byte("\\)[\\S ]+\\s((?:(?"))
-		assert.True(errors.Is(err, ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrAccessManagementInvalidDataType", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementInvalidDataType", spew.Sdump(err))
 	}
 }
