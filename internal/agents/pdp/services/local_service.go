@@ -13,7 +13,7 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
-	pdpErrors "github.com/autenticami/autenticami-authz/internal/agents/pdp/errors"
+	authzIntPdpErrors "github.com/autenticami/autenticami-authz/internal/agents/pdp/errors"
 )
 
 type PDPLocalService struct {
@@ -28,7 +28,7 @@ type papDoc struct {
 func loadCache(cache *map[string]any, appFolder string, key string, targetKey string, encode bool) error {
 	files, err := os.ReadDir(appFolder)
 	if err != nil {
-		return errors.Join(pdpErrors.ErrPDPAgentLocalInvalidAppData, err)
+		return errors.Join(authzIntPdpErrors.ErrPDPAgentLocalInvalidAppData, err)
 	}
 	for _, file := range files {
 		fileName := appFolder + file.Name()
@@ -39,7 +39,7 @@ func loadCache(cache *map[string]any, appFolder string, key string, targetKey st
 		var data papDoc
 		err := json.Unmarshal(bArray, &data)
 		if err != nil {
-			return errors.Join(pdpErrors.ErrPDPAgentLocalInvalidAppData, err)
+			return errors.Join(authzIntPdpErrors.ErrPDPAgentLocalInvalidAppData, err)
 		}
 		for _, item := range data.Items {
 			key := item[key].(string)
@@ -48,7 +48,7 @@ func loadCache(cache *map[string]any, appFolder string, key string, targetKey st
 			} else {
 				bytes, err := json.Marshal(item[targetKey])
 				if err != nil {
-					return errors.Join(pdpErrors.ErrPDPAgentLocalInvalidAppData, err)
+					return errors.Join(authzIntPdpErrors.ErrPDPAgentLocalInvalidAppData, err)
 				}
 				(*cache)[key] = bytes
 			}
@@ -62,11 +62,11 @@ func (s *PDPLocalService) Setup() error {
 	s.cache = make(map[string]any)
 	err = loadCache(&s.cache, s.config.GetAgentAppData()+"/autenticami1/identities/", "user_uur", "policies", false)
 	if err != nil {
-		return pdpErrors.ErrPDPAgentLocalInvalidAppData
+		return authzIntPdpErrors.ErrPDPAgentLocalInvalidAppData
 	}
 	err = loadCache(&s.cache, s.config.GetAgentAppData()+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
 	if err != nil {
-		return pdpErrors.ErrPDPAgentLocalInvalidAppData
+		return authzIntPdpErrors.ErrPDPAgentLocalInvalidAppData
 	}
 	return nil
 }
