@@ -38,7 +38,7 @@ func TestJsonSchemaValidationForValid(t *testing.T) {
 				t.Run(strings.ToUpper(version+"-"+caseName+"-"+inputName), func(t *testing.T) {
 					assert := assert.New(t)
 					bArray, _ := os.ReadFile(testDataCaseInputPath)
-					isValid, err := isValidJSON(policies.AclPolicySchema, bArray)
+					isValid, err := isValidJSON(policies.ACLPolicySchema, bArray)
 					assert.Nil(err, "wrong result\nshould be nil")
 					assert.True(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(isValid))
 				})
@@ -69,7 +69,7 @@ func TestJsonSchemaValidationForNotValid(t *testing.T) {
 				t.Run(strings.ToUpper(version+"-"+caseName+"-"+inputName), func(t *testing.T) {
 					assert := assert.New(t)
 					bArray, _ := os.ReadFile(testDataCaseInputPath)
-					isValid, err := isValidJSON(policies.AclPolicySchema, bArray)
+					isValid, err := isValidJSON(policies.ACLPolicySchema, bArray)
 					assert.Nil(err, "wrong result\nshould be nil")
 					assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 				})

@@ -52,7 +52,7 @@ type (
 )
 
 const (
-	PolicyV1 PolicyVersionString = "autenticami1"
+	PolicyV1     PolicyVersionString = "autenticami1"
 	PolicyLatest PolicyVersionString = PolicyV1
 
 	PolicyACLType PolicyTypeString = "ACL"
@@ -79,7 +79,7 @@ type ACLPolicy struct {
 }
 
 //go:embed data/acl-policy-schema.json
-var AclPolicySchema []byte
+var ACLPolicySchema []byte
 
 // A policy statement list actions associated to resources.
 // REF: https://docs.autenticami.com/access-management/permissions-policies/#policy-statement

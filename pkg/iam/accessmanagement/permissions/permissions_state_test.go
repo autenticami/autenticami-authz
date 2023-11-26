@@ -43,10 +43,10 @@ func TestPermissionsStateCreation(t *testing.T) {
 					_ = json.Unmarshal(bArray, &data)
 
 					var err error
-					err = permissionsState.DenyACLPolicyStatements(data.Forbid)
+					err = permissionsState.denyACLPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totAllows += len(data.Permit)
-					err = permissionsState.AllowACLPolicyStatements(data.Permit)
+					err = permissionsState.allowACLPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totDenies += len(data.Forbid)
 				}

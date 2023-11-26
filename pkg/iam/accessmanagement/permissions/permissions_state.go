@@ -70,7 +70,7 @@ func newPermissionsState() *PermissionsState {
 	}
 }
 
-func (b *PermissionsState) DenyACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
+func (b *PermissionsState) denyACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (b *PermissionsState) DenyACLPolicyStatements(policyStatements []policies.P
 	return nil
 }
 
-func (b *PermissionsState) AllowACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
+func (b *PermissionsState) allowACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
