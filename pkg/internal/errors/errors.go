@@ -44,17 +44,17 @@ const (
 
 var (
 	// 1xx
-	GenericBaseError error = newBaseError(errorCodeGeneric)
+	ErrBaseGeneric error = newBaseError(errorCodeGeneric)
 	// 4xx
-	UnsupportedFeatureBaseError error = newBaseError(errorCodeUnsupportedFeature)
-	BadSyntaxBaseError          error = newBaseError(errorCodeBadSyntax)
+	ErrBaseUnsupportedFeature error = newBaseError(errorCodeUnsupportedFeature)
+	ErrBaseBadSyntax          error = newBaseError(errorCodeBadSyntax)
 	// 5xx
-	DataMarshalingBaseError       error = newBaseError(errorCodeDataMarshaling)
-	DataUnmarshalingBaseError     error = newBaseError(errorCodeDataUnmarshaling)
-	JSONSchemaValidationBaseError error = newBaseError(errorCodeJSONSchemaValidation)
-	UnsupportedDataTypeBaseError  error = newBaseError(errorCodeUnsupportedDataType)
-	InvalidDataTypeBaseError      error = newBaseError(errorCodeInvalidDataType)
-	UnsupportedVersionBaseError   error = newBaseError(errorCodeUnsupportedVersion)
+	ErrBaseDataMarshaling       error = newBaseError(errorCodeDataMarshaling)
+	ErrBaseDataUnmarshaling     error = newBaseError(errorCodeDataUnmarshaling)
+	ErrBaseJSONSchemaValidation error = newBaseError(errorCodeJSONSchemaValidation)
+	ErrBaseUnsupportedDataType  error = newBaseError(errorCodeUnsupportedDataType)
+	ErrBaseInvalidDataType      error = newBaseError(errorCodeInvalidDataType)
+	ErrBaseUnsupportedVersion   error = newBaseError(errorCodeUnsupportedVersion)
 )
 
 type errorCode int

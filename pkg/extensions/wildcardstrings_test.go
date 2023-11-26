@@ -26,8 +26,8 @@ func TestWildcardString(t *testing.T) {
 			"Hsdfsdfaslsfasdfasfd",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -37,14 +37,14 @@ func TestWildcardString(t *testing.T) {
 			"a*/*b",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 		values = []string{
 			"*a*/*b*",
 		}
 		for _, value := range values {
-			assert.False(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -54,8 +54,8 @@ func TestWildcardString(t *testing.T) {
 			"*a*/*b*",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -74,8 +74,8 @@ func TestWildcardString(t *testing.T) {
 			"Hsdfsdfaslsfasdfasfd",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -92,8 +92,8 @@ func TestWildcardString(t *testing.T) {
 			"Hsdfsdfaslsfasdfasfd",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 		values = []string{
 			"hl",
@@ -107,8 +107,8 @@ func TestWildcardString(t *testing.T) {
 			"Paperino",
 		}
 		for _, value := range values {
-			assert.False(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.False(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -121,8 +121,8 @@ func TestWildcardString(t *testing.T) {
 			"db-pg/prod-002",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 		values = []string{
 			"",
@@ -131,8 +131,8 @@ func TestWildcardString(t *testing.T) {
 			"adb/prod-001",
 		}
 		for _, value := range values {
-			assert.False(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.False(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 	{
@@ -144,8 +144,8 @@ func TestWildcardString(t *testing.T) {
 			"db-pg/prod-001",
 		}
 		for _, value := range values {
-			assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %swant: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 		values = []string{
 			"",
@@ -156,8 +156,8 @@ func TestWildcardString(t *testing.T) {
 			"db-pg/prod-0012",
 		}
 		for _, value := range values {
-			assert.False(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
-			assert.False(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
+			assert.False(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
 		}
 	}
 }
@@ -217,8 +217,8 @@ func TestWildcardStringCompare(t *testing.T) {
 		value := "hr-app/****Create*"
 		assert.False(WildcardString(pattern).WildcardEqual(value), "wrong result\ngot: %sdon't want: %s", spew.Sdump(pattern), spew.Sdump(value))
 		assert.False(WildcardString(pattern).WildcardInclude(value), "wrong result\ngot: %sdon'tshouldn't be greather then: %s", spew.Sdump(value), spew.Sdump(pattern))
-		assert.True(WildcardString(pattern).WildcardMatch(value, false), "wrong result\ngot: %sshould match %s", spew.Sdump(value), spew.Sdump(pattern))
-		assert.True(WildcardString(pattern).WildcardMatch(value, true), "wrong result\ngot: %sshould match %s", spew.Sdump(value), spew.Sdump(pattern))
+		assert.True(WildcardString(pattern).wildcardMatch(value, false), "wrong result\ngot: %sshould match %s", spew.Sdump(value), spew.Sdump(pattern))
+		assert.True(WildcardString(pattern).wildcardMatch(value, true), "wrong result\ngot: %sshould match %s", spew.Sdump(value), spew.Sdump(pattern))
 	}
 }
 

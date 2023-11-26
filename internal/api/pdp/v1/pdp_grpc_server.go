@@ -8,13 +8,18 @@ import (
 	"errors"
 	"log"
 
-	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
+	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
+type PDPService interface {
+	Setup() error
+	GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error)
+}
+
 type PDPServer struct {
 	UnimplementedPDPServiceServer
-	Service services.PDPService
+	Service PDPService
 }
 
 func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {

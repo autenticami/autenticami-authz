@@ -12,19 +12,20 @@ import (
 	"strings"
 	"time"
 
-	iConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
+
 	"github.com/autenticami/autenticami-authz/internal/agents/extensions"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
-	pdpV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
 
 	log "github.com/sirupsen/logrus"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/reflection"
+	authzIntAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
+	authzIntApiPdpV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
 )
 
 var config = func() *configs.PDPAgentConfig {
-	agentType := extensions.GetEnv(iConfigs.EnvKeyAutenticamiAgentType, configs.AutenticamiPDPAgentTypeLocal)
+	agentType := extensions.GetEnv(authzIntAgentConfigs.EnvKeyAutenticamiAgentType, configs.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == configs.AutenticamiPDPAgentTypeLocal {
 		config, err := configs.NewPDPAgentConfig()
 		if err != nil {
@@ -33,7 +34,7 @@ var config = func() *configs.PDPAgentConfig {
 		}
 		return config
 	}
-	log.Fatalf("%s: %s is an invalid agent type", iConfigs.EnvKeyAutenticamiAgentType, agentType)
+	log.Fatalf("%s: %s is an invalid agent type", authzIntAgentConfigs.EnvKeyAutenticamiAgentType, agentType)
 	panic(1)
 }()
 
@@ -90,7 +91,7 @@ func main() {
 		withServerUnaryInterceptor(),
 	)
 
-	pdpServer := &pdpV1.PDPServer{}
+	pdpServer := &authzIntApiPdpV1.PDPServer{}
 	if isLocalAgent {
 		pdpServer.Service = services.NewPDPLocalService(config)
 	} else {
@@ -104,7 +105,7 @@ func main() {
 	} else {
 		log.Info("pdpservice setup succeded")
 	}
-	pdpV1.RegisterPDPServiceServer(s, pdpServer)
+	authzIntApiPdpV1.RegisterPDPServiceServer(s, pdpServer)
 	if config.IsLocalEnv() {
 		reflection.Register(s)
 		log.Info("grpc server registered the reflection service")
