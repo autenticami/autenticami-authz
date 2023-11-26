@@ -53,6 +53,7 @@ type (
 
 const (
 	PolicyV1 PolicyVersionString = "autenticami1"
+	PolicyLatest PolicyVersionString = PolicyV1
 
 	PolicyACLType PolicyTypeString = "ACL"
 

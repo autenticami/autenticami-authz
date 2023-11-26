@@ -10,8 +10,6 @@ import (
 
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
-
-	"github.com/google/uuid"
 )
 
 type PDPServer struct {
@@ -21,7 +19,7 @@ type PDPServer struct {
 
 func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStateRequest) (*PermissionsStateResponse, error) {
 	identityUUR := policies.UURString(req.Identity.Uur)
-	isValid, err := identityUUR.IsValid(policies.PolicyV1)
+	isValid, err := identityUUR.IsValid(policies.PolicyLatest)
 	if err != nil {
 		log.Fatalf("error while validating identity UUR: %v", err)
 		return nil, errors.New("Identity UUR is not valid")
@@ -55,9 +53,6 @@ func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEval
 				IsExplicitlyDenied: true,
 				IsImplicitlyDenied: false,
 			},
-		}
-		if len(outcome.Evaluation.Id) == 0 {
-			outcome.Evaluation.Id = uuid.New().String()
 		}
 		permissionsEvaluation.Evaluations[i] = outcome
 	}

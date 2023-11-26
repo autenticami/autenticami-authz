@@ -27,10 +27,9 @@ message PolicyStatement {
 }
 
 message PolicyStatementWrapper {
-  string id = 1;
-  PolicyStatement statement = 2;
-  string statmentStringified = 3;
-  string statmentHashed = 4;
+  PolicyStatement statement = 1;
+  string statmentStringified = 2;
+  string statmentHashed = 3;
 }
 
 message PermissionsState {
@@ -46,13 +45,12 @@ message PermissionsStateResponse {
 // Permissions evaluation
 
 message PermissionsEvaluation {
-  string id = 1;
-  string account = 2;
-  string tenant = 3;
-  string project = 4;
-  string domain = 5;
-  string resource = 6;
-  repeated string actions = 7;
+  string account = 1;
+  string tenant = 2;
+  string project = 3;
+  string domain = 4;
+  string resource = 5;
+  repeated string actions = 6;
 }
 
 message PermissionsEvaluationRequest {
