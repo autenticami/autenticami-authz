@@ -110,6 +110,38 @@ func TestPermissionsLoaderRegisterPolicyValid(t *testing.T) {
 	}
 }
 
+func TestPermissionsLoaderRegisterPolicyNotValid(t *testing.T) {
+	tests := map[string]struct {
+		Path string
+	}{
+		string(policies.PolicyV1): {
+			"./testdata/permissions-loader/register-policy/notvalid",
+		},
+	}
+	for version, test := range tests {
+		testDataVersionPath := test.Path + "/" + version
+		cases, _ := os.ReadDir(testDataVersionPath)
+		for _, c := range cases {
+			caseName := c.Name()
+			testDataCasePath := testDataVersionPath + "/" + caseName
+
+			inputs, _ := os.ReadDir(testDataCasePath)
+			for _, input := range inputs {
+				inputName := input.Name()
+				testDataCaseInputPath := testDataCasePath + "/" + inputName
+				t.Run(strings.ToUpper(version+"-"+caseName+"-"+inputName), func(t *testing.T) {
+					assert := assert.New(t)
+					bArray, _ := os.ReadFile(testDataCaseInputPath)
+					permLoader := newPermissionsLoader()
+					registered, err := permLoader.registerPolicy(bArray)
+					assert.NotNil(err, "wrong result\nshould be not nil")
+					assert.False(registered, "wrong result\ngot: %sshouldn't be true", spew.Sdump(registered))
+				})
+			}
+		}
+	}
+}
+
 func TestMiscellaneousPermissionsLoader(t *testing.T) {
 	assert := assert.New(t)
 	var err error
