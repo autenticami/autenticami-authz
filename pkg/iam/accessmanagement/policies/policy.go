@@ -73,7 +73,7 @@ type Policy struct {
 
 type ACLPolicy struct {
 	Policy
-	Name   PolicyLabelString `json:"Name,omitempty"`
+	Name   PolicyLabelString  `json:"Name,omitempty"`
 	Permit []*PolicyStatement `json:"Permit,omitempty"`
 	Forbid []*PolicyStatement `json:"Forbid,omitempty"`
 }

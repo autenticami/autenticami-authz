@@ -12,7 +12,7 @@ type PermissionsEngine struct {
 
 func NewPermissionsEngine() *PermissionsEngine {
 	loader := newPermissionsLoader()
-	return &PermissionsEngine {
+	return &PermissionsEngine{
 		loader: loader,
 	}
 }
@@ -20,7 +20,6 @@ func NewPermissionsEngine() *PermissionsEngine {
 func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	return d.loader.registerPolicy(bData)
 }
-
 
 func (d *PermissionsEngine) BuildPermissions() (*PermissionsState, error) {
 	state, err := d.loader.buildPermissionsState()

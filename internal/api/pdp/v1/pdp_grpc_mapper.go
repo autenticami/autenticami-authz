@@ -29,8 +29,8 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *permissions.PolicyState
 		return nil, err
 	}
 	result := &PolicyStatementWrapper{
-		Statement:           policyStatement,
-		StatmentHashed:      policyStatementWrapper.StatmentHashed,
+		Statement:      policyStatement,
+		StatmentHashed: policyStatementWrapper.StatmentHashed,
 	}
 	return result, nil
 }

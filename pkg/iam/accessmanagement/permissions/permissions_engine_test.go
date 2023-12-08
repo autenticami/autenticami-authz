@@ -43,7 +43,7 @@ func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
 func TestPermissionsEngineRegisterPolicy(t *testing.T) {
 	engine := NewPermissionsEngine()
 	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "person-base-reader"}`
-	engine.RegisterPolicy([]byte(jsonStr))
+	_, _ = engine.RegisterPolicy([]byte(jsonStr))
 	permissionsState, err := engine.BuildPermissions()
 	assert.Nil(t, err, "Err should be nil")
 	assert.Equal(t, len(permissionsState.permit), 0, "Permit list should be empty")

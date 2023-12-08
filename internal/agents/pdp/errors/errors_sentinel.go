@@ -9,7 +9,5 @@ import (
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
 )
 
-var (
-	// ErrPDPAgentGeneric is returned wether there is a generic error.
-	ErrPDPAgentGeneric = errors.Join(errors.New("pdpagent: generic error"), authzErrors.ErrGeneric)
-)
+// ErrPDPAgentGeneric is returned wether there is a generic error.
+var ErrPDPAgentGeneric = errors.Join(errors.New("pdpagent: generic error"), authzErrors.ErrGeneric)

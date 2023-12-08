@@ -19,9 +19,9 @@ import (
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
 
-	log "github.com/sirupsen/logrus"
 	authzIntAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
 	authzIntApiPdpV1 "github.com/autenticami/autenticami-authz/internal/api/pdp/v1"
+	log "github.com/sirupsen/logrus"
 )
 
 var config = func() *configs.PDPAgentConfig {
