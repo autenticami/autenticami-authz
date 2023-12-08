@@ -64,14 +64,14 @@ message PermissionsEvaluationOutcomeExplanation {
 
 message PermissionsEvaluationOutcome {
   PermissionsEvaluation evaluation = 1;
-  bool allowed = 2;
+  bool permitted = 2;
   PermissionsEvaluationOutcomeExplanation explanation = 3;
 }
 
 message PermissionsEvaluationResponse {
   Identity identity = 1;
   repeated PermissionsEvaluationOutcome evaluations = 2;
-  bool allowed = 3;
+  bool permitted = 3;
 }
 
 service PDPService {

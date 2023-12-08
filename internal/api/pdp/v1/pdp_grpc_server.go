@@ -48,12 +48,12 @@ func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEval
 			Uur: req.Identity.GetUur(),
 		},
 		Evaluations: make([]*PermissionsEvaluationOutcome, len(req.Evaluations)),
-		Allowed:     true,
+		Permitted:   true,
 	}
 	for i, evaluation := range req.Evaluations {
 		outcome := &PermissionsEvaluationOutcome{
 			Evaluation: evaluation,
-			Allowed:    true,
+			Permitted:  true,
 			Explanation: &PermissionsEvaluationOutcomeExplanation{
 				IsExplicitlyForbidden: true,
 				IsImplicitlyForbidden: false,
