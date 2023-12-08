@@ -25,7 +25,23 @@ type papDoc struct {
 	Items []map[string]any `json:"items"`
 }
 
-func loadCache(cache *map[string]any, appFolder string, key string, targetKey string, encode bool) error {
+func loadCache(cache *map[string]any, key string, targetKey string, encode bool, data *papDoc) error {
+	for _, item := range data.Items {
+		key := item[key].(string)
+		if !encode {
+			(*cache)[key] = item[targetKey]
+		} else {
+			bytes, err := json.Marshal(item[targetKey])
+			if err != nil {
+				return errors.Join(authzIntAgentErrors.ErrAgentInvalidAppData, err)
+			}
+			(*cache)[key] = bytes
+		}
+	}
+	return nil
+}
+
+func loadCacheFromDisk(cache *map[string]any, appFolder string, key string, targetKey string, encode bool) error {
 	files, err := os.ReadDir(appFolder)
 	if err != nil {
 		return errors.Join(authzIntAgentErrors.ErrAgentInvalidAppData, err)
@@ -41,17 +57,9 @@ func loadCache(cache *map[string]any, appFolder string, key string, targetKey st
 		if err != nil {
 			return errors.Join(authzIntAgentErrors.ErrAgentInvalidAppData, err)
 		}
-		for _, item := range data.Items {
-			key := item[key].(string)
-			if !encode {
-				(*cache)[key] = item[targetKey]
-			} else {
-				bytes, err := json.Marshal(item[targetKey])
-				if err != nil {
-					return errors.Join(authzIntAgentErrors.ErrAgentInvalidAppData, err)
-				}
-				(*cache)[key] = bytes
-			}
+		err = loadCache(cache, key, targetKey, encode, &data)
+		if err != nil {
+			return err
 		}
 	}
 	return nil
@@ -60,11 +68,11 @@ func loadCache(cache *map[string]any, appFolder string, key string, targetKey st
 func (s *PDPLocalService) Setup() error {
 	var err error
 	s.cache = make(map[string]any)
-	err = loadCache(&s.cache, s.config.GetAgentAppData()+"/autenticami1/identities/", "user_uur", "policies", false)
+	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/autenticami1/identities/", "user_uur", "policies", false)
 	if err != nil {
 		return authzIntAgentErrors.ErrAgentInvalidAppData
 	}
-	err = loadCache(&s.cache, s.config.GetAgentAppData()+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
+	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
 	if err != nil {
 		return authzIntAgentErrors.ErrAgentInvalidAppData
 	}
