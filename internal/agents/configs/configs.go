@@ -39,10 +39,13 @@ func NewAgentConfig(agentType string) (*AgentConfig, error) {
 		appPort:   extensions.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
 	}
 	if !extensions.IsValidPath(localConfig.appData) {
-		return nil, errors.ErrAgentLocalInvalidAppData
+		return nil, errors.ErrAgentInvalidAppData
 	}
 	if !extensions.IsValidPort(localConfig.appPort) {
-		return nil, errors.ErrAgentLocalInvalidPort
+		return nil, errors.ErrAgentInvalidPort
+	}
+	if len(localConfig.agentType) == 0 {
+		return nil, errors.ErrAgentInvalidType
 	}
 	return localConfig, nil
 }

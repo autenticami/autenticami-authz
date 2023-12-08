@@ -10,8 +10,10 @@ import (
 )
 
 var (
-	// ErrAgentLocalInvalidAppData is returned wether the appdata is invalid.
-	ErrAgentLocalInvalidAppData = errors.Join(errors.New("agent: application data folder is invalid"), authzErrors.ErrGeneric)
-	// ErrAgentLocalInvalidPort is returned wether the port is invalid.
-	ErrAgentLocalInvalidPort = errors.Join(errors.New("agent: application port is invalid"), authzErrors.ErrGeneric)
+	// ErrAgentInvalidAppData is returned wether the appdata is invalid.
+	ErrAgentInvalidAppData = errors.Join(errors.New("agent: application data folder is invalid"), authzErrors.ErrGeneric)
+	// ErrAgentInvalidPort is returned wether the port is invalid.
+	ErrAgentInvalidPort = errors.Join(errors.New("agent: application port is invalid"), authzErrors.ErrGeneric)
+	// ErrAgentInvalidType is returned wether the agent type is invalid.
+	ErrAgentInvalidType = errors.Join(errors.New("agent: application type is invalid"), authzErrors.ErrGeneric)
 )

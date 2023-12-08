@@ -30,7 +30,6 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *permissions.PolicyState
 	}
 	result := &PolicyStatementWrapper{
 		Statement:           policyStatement,
-		StatmentStringified: policyStatementWrapper.StatmentStringified,
 		StatmentHashed:      policyStatementWrapper.StatmentHashed,
 	}
 	return result, nil

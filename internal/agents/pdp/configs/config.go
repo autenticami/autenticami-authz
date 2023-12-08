@@ -5,6 +5,7 @@ package configs
 
 import (
 	"github.com/autenticami/autenticami-authz/internal/agents/configs"
+	"github.com/autenticami/autenticami-authz/internal/agents/errors"
 )
 
 type PDPAgentConfig struct {
@@ -15,6 +16,10 @@ func NewPDPAgentConfig() (*PDPAgentConfig, error) {
 	config, err := configs.NewAgentConfig(AutenticamiPDPAgentTypeLocal)
 	if err != nil {
 		return nil, err
+	}
+	agentType := config.GetAgentType()
+	if agentType != AutenticamiPDPAgentTypeLocal && agentType != AutenticamiPDPAgentTypeRemote {
+		return nil, errors.ErrAgentInvalidType
 	}
 	localConfig := &PDPAgentConfig{
 		*config,

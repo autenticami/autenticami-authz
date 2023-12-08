@@ -28,8 +28,7 @@ message PolicyStatement {
 
 message PolicyStatementWrapper {
   PolicyStatement statement = 1;
-  string statmentStringified = 2;
-  string statmentHashed = 3;
+  string statmentHashed = 2;
 }
 
 message PermissionsState {
