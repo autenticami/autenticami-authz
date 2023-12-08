@@ -25,16 +25,16 @@ type PolicyStatementWrapper struct {
 }
 
 type PermissionsState struct {
-	duplicates map[uuid.UUID]uuid.UUID
-	forbid     []*PolicyStatementWrapper
-	permit     []*PolicyStatementWrapper
+	// duplicates map[uuid.UUID]uuid.UUID
+	forbid []*PolicyStatementWrapper
+	permit []*PolicyStatementWrapper
 }
 
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
-		duplicates: map[uuid.UUID]uuid.UUID{},
-		forbid:     make([]*PolicyStatementWrapper, 0),
-		permit:     make([]*PolicyStatementWrapper, 0),
+		// duplicates: map[uuid.UUID]uuid.UUID{},
+		forbid: make([]*PolicyStatementWrapper, 0),
+		permit: make([]*PolicyStatementWrapper, 0),
 	}
 }
 
@@ -102,4 +102,25 @@ func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
 		list[i] = *permit
 	}
 	return list
+}
+
+func (b *PermissionsState) Clone() (*PermissionsState, error) {
+	permState := newPermissionsState()
+	for _, psw := range b.forbid {
+		wrapper := &PolicyStatementWrapper{}
+		wrapper.ID = psw.ID
+		wrapper.Statement = psw.Statement
+		wrapper.StatmentHashed = psw.StatmentHashed
+		wrapper.Statement = psw.Statement
+		permState.forbid = append(permState.forbid, wrapper)
+	}
+	for _, psw := range b.permit {
+		wrapper := &PolicyStatementWrapper{}
+		wrapper.ID = psw.ID
+		wrapper.Statement = psw.Statement
+		wrapper.StatmentHashed = psw.StatmentHashed
+		wrapper.Statement = psw.Statement
+		permState.permit = append(permState.forbid, wrapper)
+	}
+	return permState, nil
 }

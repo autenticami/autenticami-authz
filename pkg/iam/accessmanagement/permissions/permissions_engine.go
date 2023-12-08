@@ -22,9 +22,5 @@ func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 }
 
 func (d *PermissionsEngine) BuildPermissions() (*PermissionsState, error) {
-	state, err := d.loader.buildPermissionsState()
-	if err != nil {
-		return nil, err
-	}
-	return &state, nil
+	return d.loader.buildPermissionsState()
 }
