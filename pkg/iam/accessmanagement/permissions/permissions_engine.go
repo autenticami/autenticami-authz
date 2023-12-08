@@ -10,14 +10,11 @@ type PermissionsEngine struct {
 	loader *permissionsLoader
 }
 
-func NewPermissionsEngine() (*PermissionsEngine, error) {
-	loader, err := newPermissionsLoader()
-	if err != nil {
-		return nil, err
-	}
-	return &PermissionsEngine{
+func NewPermissionsEngine() *PermissionsEngine {
+	loader := newPermissionsLoader()
+	return &PermissionsEngine {
 		loader: loader,
-	}, nil
+	}
 }
 
 func (d *PermissionsEngine) BuildPermissions(bData []byte) (*PermissionsState, error) {

@@ -72,19 +72,17 @@ func (s *PDPLocalService) Setup() error {
 }
 
 func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error) {
-	engine, err := permissions.NewPermissionsEngine()
-	if err != nil {
-		return nil, err
-	}
+	engine := permissions.NewPermissionsEngine()
+	var err error
 	var permissionState *permissions.PermissionsState
 	policies := s.cache[string(identityUUR)]
 	if policies != nil {
 		for _, policy := range policies.([]any) {
 			permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
+			if err != nil {
+				return nil, err
+			}
 		}
-	}
-	if err != nil {
-		return nil, err
 	}
 	return permissionState, nil
 }

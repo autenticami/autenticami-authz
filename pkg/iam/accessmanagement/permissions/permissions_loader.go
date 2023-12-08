@@ -35,10 +35,10 @@ func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 	}
 }
 
-func newPermissionsLoader() (*permissionsLoader, error) {
+func newPermissionsLoader() *permissionsLoader {
 	return &permissionsLoader{
 		permissionsState: &PermissionsState{},
-	}, nil
+	}
 }
 
 func (d *permissionsLoader) registerPolicy(bData []byte) (bool, error) {
