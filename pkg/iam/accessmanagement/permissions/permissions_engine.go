@@ -22,5 +22,9 @@ func (d *PermissionsEngine) BuildPermissions(bData []byte) (*PermissionsState, e
 	if err != nil {
 		return nil, err
 	}
-	return d.loader.buildPermissionsState()
+	state, err := d.loader.buildPermissionsState()
+	if err != nil {
+		return nil, err
+	}
+	return &state, nil
 }

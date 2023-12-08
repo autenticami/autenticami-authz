@@ -101,6 +101,6 @@ func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 	return true, nil
 }
 
-func (d *permissionsLoader) buildPermissionsState() (*PermissionsState, error) {
-	return d.permissionsState, nil
+func (d *permissionsLoader) buildPermissionsState() (PermissionsState, error) {
+	return *d.permissionsState, nil
 }
