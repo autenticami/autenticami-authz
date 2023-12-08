@@ -13,16 +13,16 @@ WORKDIR /app
 RUN /bin/bash ./scripts/build.sh
 
 # Build Official Image
-FROM alpine
+FROM alpine:3.19
 LABEL maintainer="Nitro Agility S.r.l. Team <opensource@nitroagility.com>"
 
 ARG USER=nonroot
 ENV HOME /home/$USER
 
 RUN apk add --update sudo
-RUN adduser -D $USER \
-        && echo "$USER ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/$USER \
-        && chmod 0440 /etc/sudoers.d/$USER
+RUN adduser -D "$USER" \
+        && echo "$USER ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/$USER" \
+        && chmod 0440 "/etc/sudoers.d/$USER"
 USER $USER
 
 WORKDIR /home/$USER
