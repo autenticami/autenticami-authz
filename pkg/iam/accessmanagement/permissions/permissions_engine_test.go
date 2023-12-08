@@ -12,38 +12,39 @@ import (
 func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
 	{
 		engine := NewPermissionsEngine()
-		_, err := engine.BuildPermissions(nil)
+		_, err := engine.RegisterPolicy(nil)
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
 	{
 		engine := NewPermissionsEngine()
-		_, err := engine.BuildPermissions([]byte{})
+		_, err := engine.RegisterPolicy([]byte{})
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
 	{
 		engine := NewPermissionsEngine()
 		jsonStr := `{"Syntax":"2022-08-08", "Type":"ACL"}`
-		_, err := engine.BuildPermissions([]byte(jsonStr))
+		_, err := engine.RegisterPolicy([]byte(jsonStr))
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
 	{
 		engine := NewPermissionsEngine()
 		jsonStr := `{"Syntax":"autenticami1", "Type":"ABC"}`
-		_, err := engine.BuildPermissions([]byte(jsonStr))
+		_, err := engine.RegisterPolicy([]byte(jsonStr))
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
 	{
 		engine := NewPermissionsEngine()
 		jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "12 3465 "}`
-		_, err := engine.BuildPermissions([]byte(jsonStr))
+		_, err := engine.RegisterPolicy([]byte(jsonStr))
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
 }
 
-func TestPermissionsEngineBuildPermissions(t *testing.T) {
+func TestPermissionsEngineRegisterPolicy(t *testing.T) {
 	engine := NewPermissionsEngine()
 	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "person-base-reader"}`
-	permissionsState, err := engine.BuildPermissions([]byte(jsonStr))
+	engine.RegisterPolicy([]byte(jsonStr))
+	permissionsState, err := engine.BuildPermissions()
 	assert.Nil(t, err, "Err should be nil")
 	assert.Equal(t, len(permissionsState.permit), 0, "Permit list should be empty")
 	assert.Equal(t, len(permissionsState.forbid), 0, "Forbid list should be empty")

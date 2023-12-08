@@ -17,11 +17,12 @@ func NewPermissionsEngine() *PermissionsEngine {
 	}
 }
 
-func (d *PermissionsEngine) BuildPermissions(bData []byte) (*PermissionsState, error) {
-	_, err := d.loader.registerPolicy(bData)
-	if err != nil {
-		return nil, err
-	}
+func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
+	return d.loader.registerPolicy(bData)
+}
+
+
+func (d *PermissionsEngine) BuildPermissions() (*PermissionsState, error) {
 	state, err := d.loader.buildPermissionsState()
 	if err != nil {
 		return nil, err

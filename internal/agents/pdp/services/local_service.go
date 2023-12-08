@@ -14,6 +14,7 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
 	authzIntAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/errors"
+	authzIntPdpAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/pdp/errors"
 )
 
 type PDPLocalService struct {
@@ -81,18 +82,19 @@ func (s *PDPLocalService) Setup() error {
 
 func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error) {
 	engine := permissions.NewPermissionsEngine()
-	var err error
-	var permissionState *permissions.PermissionsState
 	policies := s.cache[string(identityUUR)]
 	if policies != nil {
 		for _, policy := range policies.([]any) {
-			permissionState, err = engine.BuildPermissions(s.cache[policy.(string)].([]byte))
+			registered, err := engine.RegisterPolicy(s.cache[policy.(string)].([]byte))
 			if err != nil {
 				return nil, err
 			}
+			if !registered {
+				return nil, authzIntPdpAgentErrors.ErrPDPAgentGeneric
+			}
 		}
 	}
-	return permissionState, nil
+	return engine.BuildPermissions()
 }
 
 func NewPDPLocalService(config *configs.PDPAgentConfig) *PDPLocalService {
