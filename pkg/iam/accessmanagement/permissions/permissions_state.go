@@ -70,7 +70,7 @@ func createPolicyStatementWrappers(policyStatements []*policies.PolicyStatement)
 	return wrappers, nil
 }
 
-func (b *PermissionsState) denyACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
+func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (b *PermissionsState) denyACLPolicyStatements(policyStatements []*policies.
 	return nil
 }
 
-func (b *PermissionsState) allowACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
+func (b *PermissionsState) permitACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -105,22 +105,25 @@ func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
 }
 
 func (b *PermissionsState) Clone() (*PermissionsState, error) {
-	permState := newPermissionsState()
-	for _, psw := range b.forbid {
-		wrapper := &PolicyStatementWrapper{}
-		wrapper.ID = psw.ID
-		wrapper.Statement = psw.Statement
-		wrapper.StatmentHashed = psw.StatmentHashed
-		wrapper.Statement = psw.Statement
-		permState.forbid = append(permState.forbid, wrapper)
+	permState := &PermissionsState{
+		forbid: make([]*PolicyStatementWrapper, len(b.forbid)),
+		permit: make([]*PolicyStatementWrapper, len(b.permit)),
 	}
-	for _, psw := range b.permit {
+	for i, psw := range b.forbid {
 		wrapper := &PolicyStatementWrapper{}
 		wrapper.ID = psw.ID
 		wrapper.Statement = psw.Statement
 		wrapper.StatmentHashed = psw.StatmentHashed
 		wrapper.Statement = psw.Statement
-		permState.permit = append(permState.forbid, wrapper)
+		permState.forbid[i] = wrapper
+	}
+	for i, psw := range b.permit {
+		wrapper := &PolicyStatementWrapper{}
+		wrapper.ID = psw.ID
+		wrapper.Statement = psw.Statement
+		wrapper.StatmentHashed = psw.StatmentHashed
+		wrapper.Statement = psw.Statement
+		permState.permit[i] = wrapper
 	}
 	return permState, nil
 }

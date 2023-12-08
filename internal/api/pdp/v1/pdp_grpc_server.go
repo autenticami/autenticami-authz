@@ -55,8 +55,8 @@ func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEval
 			Evaluation: evaluation,
 			Allowed:    true,
 			Explanation: &PermissionsEvaluationOutcomeExplanation{
-				IsExplicitlyDenied: true,
-				IsImplicitlyDenied: false,
+				IsExplicitlyForbidden: true,
+				IsImplicitlyForbidden: false,
 			},
 		}
 		permissionsEvaluation.Evaluations[i] = outcome

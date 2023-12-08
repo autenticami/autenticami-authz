@@ -87,13 +87,13 @@ func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 		return false, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
 	if len(policy.Permit) > 0 {
-		err := d.permissionsState.allowACLPolicyStatements(policy.Permit)
+		err := d.permissionsState.permitACLPolicyStatements(policy.Permit)
 		if err != nil {
 			return false, err
 		}
 	}
 	if len(policy.Forbid) > 0 {
-		err := d.permissionsState.denyACLPolicyStatements(policy.Forbid)
+		err := d.permissionsState.fobidACLPolicyStatements(policy.Forbid)
 		if err != nil {
 			return false, err
 		}

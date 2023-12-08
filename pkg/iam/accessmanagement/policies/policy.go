@@ -60,7 +60,7 @@ const (
 	PolicyTrustIdentityType PolicyTypeString = "PTI"
 )
 
-// A Policy defines a list of policy statements that can be allowed or denied.
+// A Policy defines a list of policy statements that can be permited or forbidden.
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type Policy struct {

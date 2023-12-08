@@ -36,29 +36,29 @@ func TestPermissionsStateCreation(t *testing.T) {
 				assert := assert.New(t)
 				permissionsState := newPermissionsState()
 
-				totAllows, totDenies := 0, 0
+				totPermitted, totFobidden := 0, 0
 				for _, input := range test.InputFiles() {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
 					data := policies.ACLPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 
 					var err error
-					err = permissionsState.denyACLPolicyStatements(data.Forbid)
+					err = permissionsState.fobidACLPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
-					totAllows += len(data.Permit)
-					err = permissionsState.allowACLPolicyStatements(data.Permit)
+					totPermitted += len(data.Permit)
+					err = permissionsState.permitACLPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
-					totDenies += len(data.Forbid)
+					totFobidden += len(data.Forbid)
 				}
 
 				var got, want int
 
 				got = len(permissionsState.forbid)
-				want = totAllows
+				want = totPermitted
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 
 				got = len(permissionsState.forbid)
-				want = totDenies
+				want = totFobidden
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 			})
 		}

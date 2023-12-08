@@ -58,8 +58,8 @@ message PermissionsEvaluationRequest {
 }
 
 message PermissionsEvaluationOutcomeExplanation {
-  bool isExplicitlyDenied = 1;
-  bool isImplicitlyDenied = 2;
+  bool isExplicitlyForbidden = 1;
+  bool isImplicitlyForbidden = 2;
 }
 
 message PermissionsEvaluationOutcome {
