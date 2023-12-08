@@ -26,5 +26,15 @@
             ]
         }
     ],
-    "Forbid": []
+    "Forbid": [
+      {
+          "Name": "forbid-hr/person/reader/johon",
+          "Actions": [
+              "person:ReadEmployee"
+          ],
+          "Resources": [
+              "uur:581616507495:default:hr-app:organisation:person/johon"
+          ]
+      }
+    ]
 }

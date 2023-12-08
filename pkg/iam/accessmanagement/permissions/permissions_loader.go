@@ -21,6 +21,12 @@ type permissionsLoader struct {
 	permissionsState *PermissionsState
 }
 
+func newPermissionsLoader() *permissionsLoader {
+	return &permissionsLoader{
+		permissionsState: &PermissionsState{},
+	}
+}
+
 func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 	schemaLoader := gojsonschema.NewBytesLoader(jsonSchme)
 	documentLoader := gojsonschema.NewBytesLoader(json)
@@ -32,12 +38,6 @@ func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 		return true, nil
 	} else {
 		return false, nil
-	}
-}
-
-func newPermissionsLoader() *permissionsLoader {
-	return &permissionsLoader{
-		permissionsState: &PermissionsState{},
 	}
 }
 

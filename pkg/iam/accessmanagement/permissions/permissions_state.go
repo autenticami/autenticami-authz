@@ -30,6 +30,14 @@ type PermissionsState struct {
 	permit     []*PolicyStatementWrapper
 }
 
+func newPermissionsState() *PermissionsState {
+	return &PermissionsState{
+		duplicates: map[uuid.UUID]uuid.UUID{},
+		forbid:     make([]*PolicyStatementWrapper, 0),
+		permit:     make([]*PolicyStatementWrapper, 0),
+	}
+}
+
 func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*PolicyStatementWrapper, error) {
 	if policyStatement == nil {
 		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
@@ -60,14 +68,6 @@ func createPolicyStatementWrappers(policyStatements []*policies.PolicyStatement)
 		wrappers[i] = wrapper
 	}
 	return wrappers, nil
-}
-
-func newPermissionsState() *PermissionsState {
-	return &PermissionsState{
-		duplicates: map[uuid.UUID]uuid.UUID{},
-		forbid:     make([]*PolicyStatementWrapper, 0),
-		permit:     make([]*PolicyStatementWrapper, 0),
-	}
 }
 
 func (b *PermissionsState) denyACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
