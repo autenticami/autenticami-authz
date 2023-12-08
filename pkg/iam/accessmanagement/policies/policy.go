@@ -69,7 +69,7 @@ type Policy struct {
 }
 
 // An Access Control List Policy (ACL) lists the actions that can/cannot be performed and the resourcers those actions can affect.
-// REF: https://docs.autenticami.com/access-management/permissions-policies/#access-control-list-policy
+// REF: https://docs.autenticami.com/access-management/policies/#access-control-list-policy
 
 type ACLPolicy struct {
 	Policy
@@ -82,7 +82,7 @@ type ACLPolicy struct {
 var ACLPolicySchema []byte
 
 // A policy statement list actions associated to resources.
-// REF: https://docs.autenticami.com/access-management/permissions-policies/#policy-statement
+// REF: https://docs.autenticami.com/access-management/policies/#policy-statement
 
 type PolicyStatement struct {
 	Name      PolicyLabelString `json:"Name,omitempty"`

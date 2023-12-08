@@ -15,7 +15,7 @@ import (
 )
 
 // Permissions permit identities to access a resource or execute a specific action and they are granted through the association of policies.
-// REF: https://docs.autenticami.com/access-management/permissions-policies/
+// REF: https://docs.autenticami.com/access-management/policies/
 
 type permissionsLoader struct {
 	permissionsState *PermissionsState
