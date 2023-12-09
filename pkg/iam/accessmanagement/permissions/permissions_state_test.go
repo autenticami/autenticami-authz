@@ -5,6 +5,7 @@ package permissions
 
 import (
 	"encoding/json"
+	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -14,16 +15,45 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func helperToComparePolicyStatementWrappers(file string, inputList []*PolicyStatementWrapper) error {
+	uniqueFobid := make(map[string]bool)
+	for _, forbid := range inputList {
+		key := forbid.StatmentHashed
+		if uniqueFobid[key] {
+			return errors.New("duplicated key: " + spew.Sdump(key))
+		}
+		uniqueFobid[key] = true
+	}
+	bArray, _ := os.ReadFile(file)
+	data := []policies.PolicyStatement{}
+	_ = json.Unmarshal(bArray, &data)
+	if len(data) != len(inputList) {
+		return errors.New("missing key as size does not match")
+	}
+	for _, forbid := range data {
+		fobidWrapper, _ := createPolicyStatementWrapper(&forbid)
+		key := fobidWrapper.StatmentHashed
+		if !uniqueFobid[key] {
+			return errors.New("missing key: " + spew.Sdump(key))
+		}
+	}
+	return nil
+}
+
 func TestPermissionsStateCreation(t *testing.T) {
 	tests := map[string]struct {
 		Path       string
 		InputFiles func() []string
+		OutputFobidFile string
+		OutputPermitFile string
 	}{
 		string(policies.PolicyV1): {
 			"./testdata/permissions-states/creation",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
 			},
+			"output-forbid.json",
+			"output-permit.json",
 		},
 	}
 	for version, test := range tests {
@@ -50,14 +80,25 @@ func TestPermissionsStateCreation(t *testing.T) {
 				}
 
 				var got, want int
+				var err error
 
-				got = len(permState.GetPermitList())
+				forbidList := permState.GetForbidList()
+				got = len(forbidList)
+				want = totFobidden
+				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
+
+				err = helperToComparePolicyStatementWrappers(testDataCasePath + "/" + test.OutputFobidFile, forbidList)
+				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+
+
+				permitList := permState.GetPermitList()
+				got = len(permitList)
 				want = totPermitted
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 
-				got = len(permState.GetForbidList())
-				want = totFobidden
-				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
+				err = helperToComparePolicyStatementWrappers(testDataCasePath + "/" + test.OutputPermitFile, permitList)
+				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+
 			})
 		}
 	}
