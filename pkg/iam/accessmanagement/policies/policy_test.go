@@ -531,6 +531,8 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		var policyTypeString PolicyTypeString
 		isValid, _ := policyTypeString.IsValid(PolicyV1)
 		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+		isValid, _ = policyTypeString.IsValid("0000-00-00")
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
 	}
 	{
 		var policyTypeString PolicyTypeString
@@ -540,6 +542,8 @@ func TestMiscellaneousPolicies(t *testing.T) {
 	{
 		var policyTypeString PolicyTypeString = "Sample value"
 		isValid, _ := policyTypeString.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+		isValid, _ = policyTypeString.IsValid("0000-00-00")
 		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
 	}
 	{
@@ -561,6 +565,8 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		var uur UURString = "Sample value"
 		isValid, _ := uur.IsValid(PolicyV1)
 		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+		isValid, _ = uur.IsValid("0000-00-00")
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
 	}
 	{
 		var policyLable PolicyLabelString
@@ -570,6 +576,8 @@ func TestMiscellaneousPolicies(t *testing.T) {
 	{
 		var policyLable PolicyLabelString = "Sample value"
 		isValid, _ := policyLable.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+		isValid, _ = policyLable.IsValid("0000-00-00")
 		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
 	}
 }
