@@ -42,9 +42,9 @@ func helperToComparePolicyStatementWrappers(checkDuplicated bool, file string, i
 
 func TestPermissionsStateCreation(t *testing.T) {
 	tests := map[string]struct {
-		Name			 string
-		Path       		 string
-		InputFiles 		 func() []string
+		Name             string
+		Path             string
+		InputFiles       func() []string
 		OutputFobidFile  string
 		OutputPermitFile string
 	}{
@@ -89,18 +89,16 @@ func TestPermissionsStateCreation(t *testing.T) {
 				want = totFobidden
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 
-				err = helperToComparePolicyStatementWrappers(false, testDataCasePath + "/" + test.OutputFobidFile, forbidList)
+				err = helperToComparePolicyStatementWrappers(false, testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
-
 
 				permitList := permState.GetPermitList()
 				got = len(permitList)
 				want = totPermitted
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 
-				err = helperToComparePolicyStatementWrappers(false, testDataCasePath + "/" + test.OutputPermitFile, permitList)
+				err = helperToComparePolicyStatementWrappers(false, testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
-
 			})
 		}
 	}
