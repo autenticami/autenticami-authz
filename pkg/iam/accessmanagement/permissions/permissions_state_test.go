@@ -42,13 +42,15 @@ func helperToComparePolicyStatementWrappers(file string, inputList []*PolicyStat
 
 func TestPermissionsStateCreation(t *testing.T) {
 	tests := map[string]struct {
-		Path       string
-		InputFiles func() []string
-		OutputFobidFile string
+		Name			 string
+		Path       		 string
+		InputFiles 		 func() []string
+		OutputFobidFile  string
 		OutputPermitFile string
 	}{
 		string(policies.PolicyV1): {
-			"./testdata/permissions-states/creation",
+			"NOT-COMPRESSED",
+			"./testdata/permissions-states/not-compressed",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
 			},
@@ -62,7 +64,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 		for _, c := range cases {
 			name := c.Name()
 			testDataCasePath := testDataVersionPath + "/" + name
-			t.Run(strings.ToUpper(version+"-"+name), func(t *testing.T) {
+			t.Run(strings.ToUpper(version+"-"+test.Name+"-"+name), func(t *testing.T) {
 				assert := assert.New(t)
 				permState := newPermissionsState()
 				totPermitted, totFobidden := 0, 0
