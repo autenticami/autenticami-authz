@@ -48,14 +48,14 @@ func mapToPermissionsStateResponse(identityUUR string, permissionsState *permiss
 		},
 	}
 	for i, wrapper := range forbidList {
-		policyStatementWrapper, err := mapToPolicyStatementWrapper(&wrapper)
+		policyStatementWrapper, err := mapToPolicyStatementWrapper(wrapper)
 		if err != nil {
 			return nil, err
 		}
 		result.PermissionsState.Forbid[i] = policyStatementWrapper
 	}
 	for i, wrapper := range permitList {
-		policyStatementWrapper, err := mapToPolicyStatementWrapper(&wrapper)
+		policyStatementWrapper, err := mapToPolicyStatementWrapper(wrapper)
 		if err != nil {
 			return nil, err
 		}

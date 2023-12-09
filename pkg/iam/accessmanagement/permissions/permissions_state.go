@@ -88,42 +88,32 @@ func (b *PermissionsState) permitACLPolicyStatements(policyStatements []*policie
 	return nil
 }
 
-func (b *PermissionsState) GetForbidList() []PolicyStatementWrapper {
-	list := make([]PolicyStatementWrapper, len(b.forbid))
-	for i, forbid := range b.forbid {
-		list[i] = *forbid
-	}
-	return list
+func (b *PermissionsState) GetForbidList() []*PolicyStatementWrapper {
+	return b.clonePolicyStatementWrapper(b.forbid)
 }
 
-func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
-	list := make([]PolicyStatementWrapper, len(b.permit))
-	for i, permit := range b.permit {
-		list[i] = *permit
-	}
-	return list
+func (b *PermissionsState) GetPermitList() []*PolicyStatementWrapper {
+	return b.clonePolicyStatementWrapper(b.permit)
 }
 
-func (b *PermissionsState) Clone() (*PermissionsState, error) {
+func (b *PermissionsState) clonePolicyStatementWrapper(policyStatements []*PolicyStatementWrapper) []*PolicyStatementWrapper {
+	output := make([]*PolicyStatementWrapper, len(policyStatements))
+	for i, psw := range policyStatements {
+		wrapper := &PolicyStatementWrapper{}
+		wrapper.ID = psw.ID
+		wrapper.Statement = psw.Statement
+		wrapper.StatmentStringified = psw.StatmentStringified
+		wrapper.StatmentHashed = psw.StatmentHashed
+		wrapper.Statement = psw.Statement
+		output[i] = wrapper
+	}
+	return output
+}
+
+func (b *PermissionsState) Clone() *PermissionsState {
 	permState := &PermissionsState{
-		forbid: make([]*PolicyStatementWrapper, len(b.forbid)),
-		permit: make([]*PolicyStatementWrapper, len(b.permit)),
+		forbid: b.clonePolicyStatementWrapper(b.forbid),
+		permit: b.clonePolicyStatementWrapper(b.permit),
 	}
-	for i, psw := range b.forbid {
-		wrapper := &PolicyStatementWrapper{}
-		wrapper.ID = psw.ID
-		wrapper.Statement = psw.Statement
-		wrapper.StatmentHashed = psw.StatmentHashed
-		wrapper.Statement = psw.Statement
-		permState.forbid[i] = wrapper
-	}
-	for i, psw := range b.permit {
-		wrapper := &PolicyStatementWrapper{}
-		wrapper.ID = psw.ID
-		wrapper.Statement = psw.Statement
-		wrapper.StatmentHashed = psw.StatmentHashed
-		wrapper.Statement = psw.Statement
-		permState.permit[i] = wrapper
-	}
-	return permState, nil
+	return permState
 }

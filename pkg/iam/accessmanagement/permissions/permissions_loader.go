@@ -102,5 +102,5 @@ func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 }
 
 func (d *permissionsLoader) buildPermissionsState() (*PermissionsState, error) {
-	return d.permissionsState.Clone()
+	return d.permissionsState.Clone(), nil
 }
