@@ -34,33 +34,45 @@ func TestPermissionsStateCreation(t *testing.T) {
 			testDataCasePath := testDataVersionPath + "/" + name
 			t.Run(strings.ToUpper(version+"-"+name), func(t *testing.T) {
 				assert := assert.New(t)
-				permissionsState := newPermissionsState()
-
+				permState := newPermissionsState()
 				totPermitted, totFobidden := 0, 0
 				for _, input := range test.InputFiles() {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
 					data := policies.ACLPolicy{}
 					_ = json.Unmarshal(bArray, &data)
-
 					var err error
-					err = permissionsState.fobidACLPolicyStatements(data.Forbid)
+					err = permState.fobidACLPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totPermitted += len(data.Permit)
-					err = permissionsState.permitACLPolicyStatements(data.Permit)
+					err = permState.permitACLPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totFobidden += len(data.Forbid)
 				}
 
 				var got, want int
 
-				got = len(permissionsState.forbid)
+				got = len(permState.GetPermitList())
 				want = totPermitted
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 
-				got = len(permissionsState.forbid)
+				got = len(permState.GetForbidList())
 				want = totFobidden
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
 			})
 		}
+	}
+}
+
+func TestMiscellaneousPermissionsState(t *testing.T) {
+	assert := assert.New(t)
+	{
+		permState := newPermissionsState()
+		err := permState.fobidACLPolicyStatements([]*policies.PolicyStatement{ nil})
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+	{
+		permState := newPermissionsState()
+		err := permState.permitACLPolicyStatements([]*policies.PolicyStatement{ nil})
+		assert.NotNil(err, "wrong result\nshould be not nil")
 	}
 }

@@ -76,7 +76,7 @@ func (d *permissionsLoader) registerPolicy(bData []byte) (bool, error) {
 }
 
 func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool, error) {
-	if policy.Type != policies.PolicyACLType {
+	if policy == nil || policy.Type != policies.PolicyACLType {
 		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
 	}
 	isValid, err := policies.ValidateACLPolicy(policy)

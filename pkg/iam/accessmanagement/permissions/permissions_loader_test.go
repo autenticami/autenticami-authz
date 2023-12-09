@@ -155,4 +155,43 @@ func TestMiscellaneousPermissionsLoader(t *testing.T) {
 		_, err = permissionsLoader.registerPolicy([]byte("\\)[\\S ]+\\s((?:(?"))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementInvalidDataType", spew.Sdump(err))
 	}
+	{
+		permissionsLoader := newPermissionsLoader()
+		_, err = permissionsLoader.registerACLPolicy(nil)
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+	{
+		permissionsLoader := newPermissionsLoader()
+		aclPolicy := &policies.ACLPolicy{}
+		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+	{
+		permissionsLoader := newPermissionsLoader()
+		aclPolicy := &policies.ACLPolicy{}
+		aclPolicy.Syntax = policies.PolicyV1
+		aclPolicy.Type = policies.PolicyACLType
+		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+	{
+		permissionsLoader := newPermissionsLoader()
+		aclPolicy := &policies.ACLPolicy{}
+		aclPolicy.Syntax = policies.PolicyV1
+		aclPolicy.Type = policies.PolicyACLType
+		aclPolicy.Forbid = []*policies.PolicyStatement{ nil }
+		aclPolicy.Name = "valid-name"
+		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+	{
+		permissionsLoader := newPermissionsLoader()
+		aclPolicy := &policies.ACLPolicy{}
+		aclPolicy.Syntax = policies.PolicyV1
+		aclPolicy.Type = policies.PolicyACLType
+		aclPolicy.Permit = []*policies.PolicyStatement{ nil }
+		aclPolicy.Name = "valid-name"
+		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
 }

@@ -136,6 +136,9 @@ func (a UURString) getRegex(version PolicyVersionString) (string, error) {
 }
 
 func (a UURString) IsValid(version PolicyVersionString) (bool, error) {
+	if len(a) == 0 {
+		return false, nil
+	}
 	switch version {
 	case PolicyV1:
 		pattern, err := a.getRegex(version)
@@ -183,6 +186,9 @@ func (a ActionString) getRegex(version PolicyVersionString) (string, error) {
 }
 
 func (a ActionString) IsValid(version PolicyVersionString) (bool, error) {
+	if len(a) == 0 {
+		return false, nil
+	}
 	switch version {
 	case PolicyV1:
 		pattern, err := a.getRegex(version)
@@ -219,6 +225,9 @@ func (p PolicyVersionString) IsValid() bool {
 }
 
 func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
+	if len(p) == 0 {
+		return false, nil
+	}
 	switch version {
 	case PolicyV1:
 		return p == PolicyACLType || p == PolicyTrustIdentityType, nil
@@ -240,6 +249,9 @@ func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error)
 }
 
 func (p PolicyLabelString) IsValid(version PolicyVersionString) (bool, error) {
+	if len(p) == 0 {
+		return false, nil
+	}
 	switch version {
 	case PolicyV1:
 		pattern, err := p.getRegex(version)

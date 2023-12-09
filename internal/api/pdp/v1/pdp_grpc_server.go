@@ -32,14 +32,14 @@ func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStat
 	if !isValid {
 		return nil, errors.New("Identity UUR is not valid")
 	}
-	permissionsState, err := s.Service.GetPermissionsState(identityUUR)
+	permState, err := s.Service.GetPermissionsState(identityUUR)
 	if err != nil {
 		log.Fatalf("error while getting permissions state: %v", err)
 	}
-	if permissionsState == nil {
+	if permState == nil {
 		return nil, errors.New("permission state cannot be built for the given identity")
 	}
-	return mapToPermissionsStateResponse(req.Identity.GetUur(), permissionsState)
+	return mapToPermissionsStateResponse(req.Identity.GetUur(), permState)
 }
 
 func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEvaluationRequest) (*PermissionsEvaluationResponse, error) {
