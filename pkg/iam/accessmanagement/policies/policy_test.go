@@ -527,4 +527,49 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		_, err = policyLabel.IsValid(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
+	{
+		var policyTypeString PolicyTypeString
+		isValid, _ := policyTypeString.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyTypeString PolicyTypeString
+		isValid, _ := policyTypeString.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyTypeString PolicyTypeString = "Sample value"
+		isValid, _ := policyTypeString.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyVersion PolicyVersionString
+		isValid := policyVersion.IsValid()
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyVersion PolicyVersionString = "Sample value"
+		isValid := policyVersion.IsValid()
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var uur UURString
+		isValid, _ := uur.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var uur UURString = "Sample value"
+		isValid, _ := uur.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyLable PolicyLabelString
+		isValid, _ := policyLable.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
+	{
+		var policyLable PolicyLabelString = "Sample value"
+		isValid, _ := policyLable.IsValid(PolicyV1)
+		assert.False(isValid, "wrong result\ngot: %sshould be not valid", isValid)
+	}
 }
