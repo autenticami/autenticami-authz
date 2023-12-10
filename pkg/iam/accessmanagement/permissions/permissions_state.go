@@ -26,15 +26,15 @@ type PolicyStatementWrapper struct {
 
 type PermissionsState struct {
 	// duplicates map[uuid.UUID]uuid.UUID
-	forbid []*PolicyStatementWrapper
-	permit []*PolicyStatementWrapper
+	forbid []PolicyStatementWrapper
+	permit []PolicyStatementWrapper
 }
 
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
 		// duplicates: map[uuid.UUID]uuid.UUID{},
-		forbid: make([]*PolicyStatementWrapper, 0),
-		permit: make([]*PolicyStatementWrapper, 0),
+		forbid: make([]PolicyStatementWrapper, 0),
+		permit: make([]PolicyStatementWrapper, 0),
 	}
 }
 
@@ -58,14 +58,14 @@ func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*P
 	}, nil
 }
 
-func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) ([]*PolicyStatementWrapper, error) {
-	wrappers := make([]*PolicyStatementWrapper, len(policyStatements))
+func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) ([]PolicyStatementWrapper, error) {
+	wrappers := make([]PolicyStatementWrapper, len(policyStatements))
 	for i, policyStatement := range policyStatements {
 		wrapper, err := createPolicyStatementWrapper(&policyStatement)
 		if err != nil {
 			return nil, err
 		}
-		wrappers[i] = wrapper
+		wrappers[i] = *wrapper
 	}
 	return wrappers, nil
 }
@@ -88,18 +88,18 @@ func (b *PermissionsState) permitACLPolicyStatements(policyStatements []policies
 	return nil
 }
 
-func (b *PermissionsState) GetForbidList() []*PolicyStatementWrapper {
+func (b *PermissionsState) GetForbidList() []PolicyStatementWrapper {
 	return b.clonePolicyStatementWrapper(b.forbid)
 }
 
-func (b *PermissionsState) GetPermitList() []*PolicyStatementWrapper {
+func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
 	return b.clonePolicyStatementWrapper(b.permit)
 }
 
-func (b *PermissionsState) clonePolicyStatementWrapper(policyStatements []*PolicyStatementWrapper) []*PolicyStatementWrapper {
-	output := make([]*PolicyStatementWrapper, len(policyStatements))
+func (b *PermissionsState) clonePolicyStatementWrapper(policyStatements []PolicyStatementWrapper) []PolicyStatementWrapper {
+	output := make([]PolicyStatementWrapper, len(policyStatements))
 	for i, psw := range policyStatements {
-		wrapper := &PolicyStatementWrapper{}
+		wrapper := PolicyStatementWrapper{}
 		wrapper.ID = psw.ID
 		wrapper.Statement = psw.Statement
 		wrapper.StatmentStringified = psw.StatmentStringified

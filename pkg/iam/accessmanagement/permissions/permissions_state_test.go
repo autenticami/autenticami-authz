@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func helperToComparePolicyStatementWrappers(checkDuplicated bool, file string, inputList []*PolicyStatementWrapper) error {
+func helperToComparePolicyStatementWrappers(checkDuplicated bool, file string, inputList []PolicyStatementWrapper) error {
 	uniqueFobid := make(map[string]bool)
 	for _, forbid := range inputList {
 		key := forbid.StatmentHashed
