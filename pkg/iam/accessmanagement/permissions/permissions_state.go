@@ -65,7 +65,7 @@ func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) 
 	return wrappers, nil
 }
 
-func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
+func fobidACLPolicyStatements(b *PermissionsState, policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -74,7 +74,7 @@ func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []policies.
 	return nil
 }
 
-func (b *PermissionsState) permitACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
+func permitACLPolicyStatements(b *PermissionsState, policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -83,15 +83,7 @@ func (b *PermissionsState) permitACLPolicyStatements(policyStatements []policies
 	return nil
 }
 
-func (b *PermissionsState) GetForbidList() []PolicyStatementWrapper {
-	return b.clonePolicyStatementWrapper(b.forbid)
-}
-
-func (b *PermissionsState) GetPermitList() []PolicyStatementWrapper {
-	return b.clonePolicyStatementWrapper(b.permit)
-}
-
-func (b *PermissionsState) clonePolicyStatementWrapper(policyStatements []PolicyStatementWrapper) []PolicyStatementWrapper {
+func clonePolicyStatementWrapper(policyStatements []PolicyStatementWrapper) []PolicyStatementWrapper {
 	output := make([]PolicyStatementWrapper, len(policyStatements))
 	for i, psw := range policyStatements {
 		wrapper := PolicyStatementWrapper{}
@@ -105,10 +97,18 @@ func (b *PermissionsState) clonePolicyStatementWrapper(policyStatements []Policy
 	return output
 }
 
-func (b *PermissionsState) Clone() *PermissionsState {
+func clonePermissionsState(b *PermissionsState) *PermissionsState {
 	permState := &PermissionsState{
-		forbid: b.clonePolicyStatementWrapper(b.forbid),
-		permit: b.clonePolicyStatementWrapper(b.permit),
+		forbid: clonePolicyStatementWrapper(b.forbid),
+		permit: clonePolicyStatementWrapper(b.permit),
 	}
 	return permState
+}
+
+func (b *PermissionsState) GetForbidItems() []PolicyStatementWrapper {
+	return clonePolicyStatementWrapper(b.forbid)
+}
+
+func (b *PermissionsState) GetPermitItems() []PolicyStatementWrapper {
+	return clonePolicyStatementWrapper(b.permit)
 }

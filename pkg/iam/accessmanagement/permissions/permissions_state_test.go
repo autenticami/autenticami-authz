@@ -73,10 +73,10 @@ func TestPermissionsStateCreation(t *testing.T) {
 					data := policies.ACLPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 					var err error
-					err = permState.fobidACLPolicyStatements(data.Forbid)
+					err = fobidACLPolicyStatements(permState, data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totPermitted += len(data.Permit)
-					err = permState.permitACLPolicyStatements(data.Permit)
+					err = permitACLPolicyStatements(permState, data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totFobidden += len(data.Forbid)
 				}
@@ -84,7 +84,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 				var got, want int
 				var err error
 
-				forbidList := permState.GetForbidList()
+				forbidList := permState.GetForbidItems()
 				got = len(forbidList)
 				want = totFobidden
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
@@ -92,7 +92,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 				err = helperToComparePolicyStatementWrappers(false, testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList := permState.GetPermitList()
+				permitList := permState.GetPermitItems()
 				got = len(permitList)
 				want = totPermitted
 				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
