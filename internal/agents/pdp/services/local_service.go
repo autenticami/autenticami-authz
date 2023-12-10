@@ -94,7 +94,7 @@ func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString) (*
 			}
 		}
 	}
-	return engine.BuildPermissions()
+	return engine.BuildPermissions(false)
 }
 
 func NewPDPLocalService(config *configs.PDPAgentConfig) *PDPLocalService {

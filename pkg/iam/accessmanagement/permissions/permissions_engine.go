@@ -21,6 +21,6 @@ func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	return d.loader.registerPolicy(bData)
 }
 
-func (d *PermissionsEngine) BuildPermissions() (*PermissionsState, error) {
-	return d.loader.buildPermissionsState()
+func (d *PermissionsEngine) BuildPermissions(enableVirtualState bool) (*PermissionsState, error) {
+	return d.loader.buildPermissionsState(enableVirtualState)
 }
