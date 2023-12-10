@@ -174,24 +174,4 @@ func TestMiscellaneousPermissionsLoader(t *testing.T) {
 		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
 		assert.NotNil(err, "wrong result\nshould be not nil")
 	}
-	{
-		permissionsLoader := newPermissionsLoader()
-		aclPolicy := &policies.ACLPolicy{}
-		aclPolicy.Syntax = policies.PolicyV1
-		aclPolicy.Type = policies.PolicyACLType
-		aclPolicy.Forbid = []*policies.PolicyStatement{nil}
-		aclPolicy.Name = "valid-name"
-		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
-		assert.NotNil(err, "wrong result\nshould be not nil")
-	}
-	{
-		permissionsLoader := newPermissionsLoader()
-		aclPolicy := &policies.ACLPolicy{}
-		aclPolicy.Syntax = policies.PolicyV1
-		aclPolicy.Type = policies.PolicyACLType
-		aclPolicy.Permit = []*policies.PolicyStatement{nil}
-		aclPolicy.Name = "valid-name"
-		_, err = permissionsLoader.registerACLPolicy(aclPolicy)
-		assert.NotNil(err, "wrong result\nshould be not nil")
-	}
 }

@@ -74,8 +74,8 @@ type Policy struct {
 type ACLPolicy struct {
 	Policy
 	Name   PolicyLabelString  `json:"Name,omitempty"`
-	Permit []*PolicyStatement `json:"Permit,omitempty"`
-	Forbid []*PolicyStatement `json:"Forbid,omitempty"`
+	Permit []PolicyStatement `json:"Permit,omitempty"`
+	Forbid []PolicyStatement `json:"Forbid,omitempty"`
 }
 
 //go:embed data/acl-policy-schema.json
@@ -311,10 +311,10 @@ func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
 	if !isValid {
 		return false, nil
 	}
-	lists := [][]*PolicyStatement{policy.Permit, policy.Forbid}
+	lists := [][]PolicyStatement{policy.Permit, policy.Forbid}
 	for _, list := range lists {
 		for _, policyStatement := range list {
-			isValid, err = validatePolicyStatement(policy.Syntax, policyStatement)
+			isValid, err = validatePolicyStatement(policy.Syntax, &policyStatement)
 			if err != nil {
 				return false, err
 			}

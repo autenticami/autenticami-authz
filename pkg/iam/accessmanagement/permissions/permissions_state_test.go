@@ -103,17 +103,3 @@ func TestPermissionsStateCreation(t *testing.T) {
 		}
 	}
 }
-
-func TestMiscellaneousPermissionsState(t *testing.T) {
-	assert := assert.New(t)
-	{
-		permState := newPermissionsState()
-		err := permState.fobidACLPolicyStatements([]*policies.PolicyStatement{nil})
-		assert.NotNil(err, "wrong result\nshould be not nil")
-	}
-	{
-		permState := newPermissionsState()
-		err := permState.permitACLPolicyStatements([]*policies.PolicyStatement{nil})
-		assert.NotNil(err, "wrong result\nshould be not nil")
-	}
-}

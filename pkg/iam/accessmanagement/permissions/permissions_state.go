@@ -58,10 +58,10 @@ func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*P
 	}, nil
 }
 
-func createPolicyStatementWrappers(policyStatements []*policies.PolicyStatement) ([]*PolicyStatementWrapper, error) {
+func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) ([]*PolicyStatementWrapper, error) {
 	wrappers := make([]*PolicyStatementWrapper, len(policyStatements))
 	for i, policyStatement := range policyStatements {
-		wrapper, err := createPolicyStatementWrapper(policyStatement)
+		wrapper, err := createPolicyStatementWrapper(&policyStatement)
 		if err != nil {
 			return nil, err
 		}
@@ -70,7 +70,7 @@ func createPolicyStatementWrappers(policyStatements []*policies.PolicyStatement)
 	return wrappers, nil
 }
 
-func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
+func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
@@ -79,7 +79,7 @@ func (b *PermissionsState) fobidACLPolicyStatements(policyStatements []*policies
 	return nil
 }
 
-func (b *PermissionsState) permitACLPolicyStatements(policyStatements []*policies.PolicyStatement) error {
+func (b *PermissionsState) permitACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
 	wrappers, err := createPolicyStatementWrappers(policyStatements)
 	if err != nil {
 		return err
