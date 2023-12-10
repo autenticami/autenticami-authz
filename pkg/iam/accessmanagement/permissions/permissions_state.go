@@ -19,20 +19,15 @@ type PolicyStatementWrapper struct {
 	Statement           policies.PolicyStatement
 	StatmentStringified string
 	StatmentHashed      string
-	// sanitizedStatement           *PolicyStatement
-	// sanitizedStatmentStringified string
-	// sanitizedStatmentHashed      string
 }
 
 type PermissionsState struct {
-	// duplicates map[uuid.UUID]uuid.UUID
 	forbid []PolicyStatementWrapper
 	permit []PolicyStatementWrapper
 }
 
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
-		// duplicates: map[uuid.UUID]uuid.UUID{},
 		forbid: make([]PolicyStatementWrapper, 0),
 		permit: make([]PolicyStatementWrapper, 0),
 	}
