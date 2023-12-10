@@ -6,6 +6,7 @@ package permissions
 import (
 	"crypto/sha256"
 	"fmt"
+	"sort"
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions"
 	"github.com/google/uuid"
@@ -22,14 +23,14 @@ type PolicyStatementWrapper struct {
 }
 
 type PermissionsState struct {
-	forbid []PolicyStatementWrapper
-	permit []PolicyStatementWrapper
+	forbid map[string]PolicyStatementWrapper
+	permit map[string]PolicyStatementWrapper
 }
 
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
-		forbid: make([]PolicyStatementWrapper, 0),
-		permit: make([]PolicyStatementWrapper, 0),
+		forbid: map[string]PolicyStatementWrapper{},
+		permit: map[string]PolicyStatementWrapper{},
 	}
 }
 
@@ -53,46 +54,47 @@ func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*P
 	}, nil
 }
 
-func createPolicyStatementWrappers(policyStatements []policies.PolicyStatement) ([]PolicyStatementWrapper, error) {
-	wrappers := make([]PolicyStatementWrapper, len(policyStatements))
-	for i, policyStatement := range policyStatements {
+func createPolicyStatementWrappers(wrappers map[string]PolicyStatementWrapper, policyStatements []policies.PolicyStatement) error {
+	for _, policyStatement := range policyStatements {
 		wrapper, err := createPolicyStatementWrapper(&policyStatement)
 		if err != nil {
-			return nil, err
+			return err
 		}
-		wrappers[i] = *wrapper
+		_, exists := wrappers[wrapper.StatmentHashed]
+		if  exists {
+			continue
+		}
+		wrappers[wrapper.StatmentHashed] = *wrapper
 	}
-	return wrappers, nil
+	return nil
 }
 
 func fobidACLPolicyStatements(b *PermissionsState, policyStatements []policies.PolicyStatement) error {
-	wrappers, err := createPolicyStatementWrappers(policyStatements)
+	err := createPolicyStatementWrappers(b.forbid, policyStatements)
 	if err != nil {
 		return err
 	}
-	b.forbid = append(b.forbid, wrappers...)
 	return nil
 }
 
 func permitACLPolicyStatements(b *PermissionsState, policyStatements []policies.PolicyStatement) error {
-	wrappers, err := createPolicyStatementWrappers(policyStatements)
+	err := createPolicyStatementWrappers(b.permit, policyStatements)
 	if err != nil {
 		return err
 	}
-	b.permit = append(b.permit, wrappers...)
 	return nil
 }
 
-func clonePolicyStatementWrapper(policyStatements []PolicyStatementWrapper) []PolicyStatementWrapper {
-	output := make([]PolicyStatementWrapper, len(policyStatements))
-	for i, psw := range policyStatements {
+func clonePolicyStatementWrapper(policyStatements map[string]PolicyStatementWrapper) map[string]PolicyStatementWrapper {
+	output := map[string]PolicyStatementWrapper{}
+	for key, psw := range policyStatements {
 		wrapper := PolicyStatementWrapper{}
 		wrapper.ID = psw.ID
 		wrapper.Statement = psw.Statement
 		wrapper.StatmentStringified = psw.StatmentStringified
 		wrapper.StatmentHashed = psw.StatmentHashed
 		wrapper.Statement = psw.Statement
-		output[i] = wrapper
+		output[key] = wrapper
 	}
 	return output
 }
@@ -105,10 +107,29 @@ func clonePermissionsState(b *PermissionsState) *PermissionsState {
 	return permState
 }
 
+func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper) []PolicyStatementWrapper {
+	if source == nil {
+		return []PolicyStatementWrapper{}
+	}
+	keys := make([]string, 0, len(source))
+	for k := range source {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	items := make([]PolicyStatementWrapper, len(source))
+	for i, key := range keys {
+		items[i] = source[key]
+	}
+	return items
+}
+
 func (b *PermissionsState) GetForbidItems() []PolicyStatementWrapper {
-	return clonePolicyStatementWrapper(b.forbid)
+	wrappers := clonePolicyStatementWrapper(b.forbid)
+	return convertMapOfPolicyStatementWrapper(wrappers)
 }
 
 func (b *PermissionsState) GetPermitItems() []PolicyStatementWrapper {
-	return clonePolicyStatementWrapper(b.permit)
+	wrappers := clonePolicyStatementWrapper(b.permit)
+	return convertMapOfPolicyStatementWrapper(wrappers)
 }

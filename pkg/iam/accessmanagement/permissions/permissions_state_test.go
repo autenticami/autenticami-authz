@@ -15,11 +15,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func helperToComparePolicyStatementWrappers(checkDuplicated bool, file string, inputList []PolicyStatementWrapper) error {
+func helperToComparePolicyStatementWrappers(file string, inputList []PolicyStatementWrapper) error {
 	uniqueFobid := make(map[string]bool)
 	for _, forbid := range inputList {
 		key := forbid.StatmentHashed
-		if checkDuplicated && uniqueFobid[key] {
+		if uniqueFobid[key] {
 			return errors.New("duplicated key: " + spew.Sdump(key))
 		}
 		uniqueFobid[key] = true
@@ -81,23 +81,14 @@ func TestPermissionsStateCreation(t *testing.T) {
 					totFobidden += len(data.Forbid)
 				}
 
-				var got, want int
 				var err error
 
 				forbidList := permState.GetForbidItems()
-				got = len(forbidList)
-				want = totFobidden
-				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-
-				err = helperToComparePolicyStatementWrappers(false, testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
 				permitList := permState.GetPermitItems()
-				got = len(permitList)
-				want = totPermitted
-				assert.Equal(got, want, "wrong result\ngot: %swant: %s", spew.Sdump(got), spew.Sdump(want))
-
-				err = helperToComparePolicyStatementWrappers(false, testDataCasePath+"/"+test.OutputPermitFile, permitList)
+				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})
 		}
