@@ -11,7 +11,7 @@ import (
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
 )
 
-func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
+func IsValidJSON(jsonSchme []byte, json []byte) (bool, error) {
 	schemaLoader := gojsonschema.NewBytesLoader(jsonSchme)
 	documentLoader := gojsonschema.NewBytesLoader(json)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)

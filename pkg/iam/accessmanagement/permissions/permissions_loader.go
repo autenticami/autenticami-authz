@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/autenticami/autenticami-authz/pkg/extensions/files"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
@@ -42,8 +43,15 @@ func (d *permissionsLoader) registerPolicy(bData []byte) (bool, error) {
 	}
 	switch policy.Type {
 	case policies.PolicyACLType:
+		isValid, err = files.IsValidJSON(policies.ACLPolicySchema, bData)
+		if err != nil {
+			return false, err
+		}
+		if !isValid {
+			return false, authzErrors.ErrJSONSchemaValidation
+		}
 		aclPolicy := policies.ACLPolicy{}
-		err := json.Unmarshal(bData, &aclPolicy)
+		err = json.Unmarshal(bData, &aclPolicy)
 		if err != nil {
 			return false, errors.Join(authzErrors.ErrJSONDataMarshaling, err)
 		}
