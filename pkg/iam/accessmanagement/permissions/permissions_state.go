@@ -116,7 +116,6 @@ func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-
 	items := make([]PolicyStatementWrapper, len(source))
 	for i, key := range keys {
 		items[i] = source[key]
