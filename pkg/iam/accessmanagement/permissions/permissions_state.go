@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"sort"
 
-	"github.com/autenticami/autenticami-authz/pkg/extensions"
+	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
 	"github.com/google/uuid"
 
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
@@ -38,7 +38,7 @@ func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*P
 	if policyStatement == nil {
 		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
-	policyStatementString, err := extensions.Stringify(policyStatement, []string{"Name"})
+	policyStatementString, err := text.Stringify(policyStatement, []string{"Name"})
 	if err != nil {
 		return nil, err
 	}

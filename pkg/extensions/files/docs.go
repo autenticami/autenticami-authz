@@ -1,5 +1,5 @@
 // Copyright (c) Nitro Agility S.r.l.
 // SPDX-License-Identifier: Apache-2.0
 
-// Package extensions implement the agent extensions.
-package extensions
+// Package files implement the agent files.
+package files

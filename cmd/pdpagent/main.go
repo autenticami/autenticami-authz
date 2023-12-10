@@ -15,7 +15,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/reflection"
 
-	"github.com/autenticami/autenticami-authz/internal/agents/extensions"
+	"github.com/autenticami/autenticami-authz/internal/agents/extensions/environments"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/services"
 
@@ -25,7 +25,7 @@ import (
 )
 
 var config = func() *configs.PDPAgentConfig {
-	agentType := extensions.GetEnv(authzIntAgentConfigs.EnvKeyAutenticamiAgentType, configs.AutenticamiPDPAgentTypeLocal)
+	agentType := environments.GetEnv(authzIntAgentConfigs.EnvKeyAutenticamiAgentType, configs.AutenticamiPDPAgentTypeLocal)
 	if strings.ToUpper(agentType) == configs.AutenticamiPDPAgentTypeLocal {
 		config, err := configs.NewPDPAgentConfig()
 		if err != nil {

@@ -5,7 +5,8 @@ package configs
 
 import (
 	"github.com/autenticami/autenticami-authz/internal/agents/errors"
-	"github.com/autenticami/autenticami-authz/internal/agents/extensions"
+	"github.com/autenticami/autenticami-authz/internal/agents/extensions/environments"
+	"github.com/autenticami/autenticami-authz/internal/agents/extensions/validations"
 )
 
 type AgentConfig struct {
@@ -33,15 +34,15 @@ func (c *AgentConfig) GetAgentAppData() string {
 
 func NewAgentConfig(agentType string) (*AgentConfig, error) {
 	localConfig := &AgentConfig{
-		isLocal:   extensions.GetEnv(EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
+		isLocal:   environments.GetEnv(EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		agentType: agentType,
-		appData:   extensions.GetEnv(EnvKeyAutenticamiAgentAppData, "."),
-		appPort:   extensions.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
+		appData:   environments.GetEnv(EnvKeyAutenticamiAgentAppData, "."),
+		appPort:   environments.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
 	}
-	if !extensions.IsValidPath(localConfig.appData) {
+	if !validations.IsValidPath(localConfig.appData) {
 		return nil, errors.ErrAgentInvalidAppData
 	}
-	if !extensions.IsValidPort(localConfig.appPort) {
+	if !validations.IsValidPort(localConfig.appPort) {
 		return nil, errors.ErrAgentInvalidPort
 	}
 	if len(localConfig.agentType) == 0 {
