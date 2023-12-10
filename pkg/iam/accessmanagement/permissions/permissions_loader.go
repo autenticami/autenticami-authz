@@ -8,7 +8,6 @@ import (
 	"errors"
 
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
-	"github.com/xeipuuv/gojsonschema"
 
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
@@ -24,20 +23,6 @@ type permissionsLoader struct {
 func newPermissionsLoader() *permissionsLoader {
 	return &permissionsLoader{
 		permissionsState: newPermissionsState(),
-	}
-}
-
-func isValidJSON(jsonSchme []byte, json []byte) (bool, error) {
-	schemaLoader := gojsonschema.NewBytesLoader(jsonSchme)
-	documentLoader := gojsonschema.NewBytesLoader(json)
-	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
-	if err != nil {
-		return false, errors.Join(authzAMErrors.ErrAccessManagementJSONSchemaValidation, err)
-	}
-	if result.Valid() {
-		return true, nil
-	} else {
-		return false, nil
 	}
 }
 
