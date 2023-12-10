@@ -50,7 +50,7 @@ func TestPermissionsStateCreation(t *testing.T) {
 	}{
 		string(policies.PolicyV1): {
 			"NOT-COMPRESSED",
-			"./testdata/permissions-states/not-compressed",
+			"./testdata/permissions-states/creation",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
 			},
