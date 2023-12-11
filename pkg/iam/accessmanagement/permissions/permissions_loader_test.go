@@ -122,7 +122,7 @@ func TestBuildPermissionsState(t *testing.T) {
 	tests := map[string][]TestStruct{
 		string(policies.PolicyV1): {
 			{
-				"NOT-COMPRESSED",
+				"RAW-STATE",
 				"./testdata/permissions-loader/build-raw-state",
 				func() []string {
 					return []string{"input-policy-1.json", "input-policy-2.json"}
@@ -130,6 +130,16 @@ func TestBuildPermissionsState(t *testing.T) {
 				"output-forbid.json",
 				"output-permit.json",
 				false,
+			},
+			{
+				"VIRTUAL-STATE",
+				"./testdata/permissions-loader/build-virtual-state",
+				func() []string {
+					return []string{"input-policy-1.json", "input-policy-2.json"}
+				},
+				"output-forbid.json",
+				"output-permit.json",
+				true,
 			},
 		},
 	}

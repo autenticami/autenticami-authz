@@ -49,7 +49,7 @@ func TestCreatePermissionsState(t *testing.T) {
 		OutputPermitFile 	string
 	}{
 		string(policies.PolicyV1): {
-			"NOT-COMPRESSED",
+			"RAW-STATE",
 			"./testdata/permissions-states/create-state",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
