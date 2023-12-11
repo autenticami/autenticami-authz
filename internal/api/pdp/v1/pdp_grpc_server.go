@@ -14,7 +14,7 @@ import (
 
 type PDPService interface {
 	Setup() error
-	GetPermissionsState(identityUUR policies.UURString) (*permissions.PermissionsState, error)
+	GetPermissionsState(identityUUR policies.UURString, settings ...permissions.PermissionsEngineSetting) (*permissions.PermissionsState, error)
 }
 
 type PDPServer struct {
@@ -32,7 +32,15 @@ func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStat
 	if !isValid {
 		return nil, errors.New("Identity UUR is not valid")
 	}
-	permState, err := s.Service.GetPermissionsState(identityUUR)
+	var permState *permissions.PermissionsState
+	if req.PermissionsEngineSettings != nil {
+		settings := []permissions.PermissionsEngineSetting {
+			permissions.PermissionsEngineWithVirtualState(req.PermissionsEngineSettings.EnableVirtualState),
+		}
+		permState, err = s.Service.GetPermissionsState(identityUUR, settings[:]...)
+	} else {
+		permState, err = s.Service.GetPermissionsState(identityUUR)
+	}
 	if err != nil {
 		log.Fatalf("error while getting permissions state: %v", err)
 	}

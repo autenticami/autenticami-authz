@@ -10,6 +10,19 @@ type PermissionsEngine struct {
 	loader *permissionsLoader
 }
 
+type PermissionsEngineSettings struct {
+	enableVirtualState *bool
+}
+
+type PermissionsEngineSetting func(permEngineSetting *PermissionsEngineSettings) error
+
+func PermissionsEngineWithVirtualState(enableVirtualState bool) PermissionsEngineSetting {
+	return func(options *PermissionsEngineSettings) error {
+		options.enableVirtualState = &enableVirtualState
+		return nil
+	}
+}
+
 func NewPermissionsEngine() *PermissionsEngine {
 	loader := newPermissionsLoader()
 	return &PermissionsEngine{
@@ -21,6 +34,16 @@ func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	return d.loader.registerPolicy(bData)
 }
 
-func (d *PermissionsEngine) BuildPermissions(enableVirtualState bool) (*PermissionsState, error) {
-	return d.loader.buildPermissionsState(enableVirtualState)
+func (d *PermissionsEngine) BuildPermissions(settings ...PermissionsEngineSetting) (*PermissionsState, error) {
+	b := true
+	var permEngineSettings = PermissionsEngineSettings{
+		enableVirtualState: &b,
+	}
+	for _, setting := range settings {
+		err := setting(&permEngineSettings)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return d.loader.buildPermissionsState(*permEngineSettings.enableVirtualState)
 }
