@@ -18,13 +18,10 @@ clean:
 
 
 init-dependency:
-	go get -u github.com/antonfisher/nested-logrus-formatter
-	go get -u golang.org/x/crypto
-	# go get -u github.com/gin-gonic/gin
-	# go get -u gorm.io/gorm
-	# go get -u gorm.io/driver/postgres
-	go get -u github.com/sirupsen/
-	go get -u github.com/joho/godotenv
+	go get -u github.com/antonfisher/nested-logrus-formatter@v1.3.1
+	go get -u golang.org/x/crypto@v0.16.0
+	#go get -u github.com/sirupsen/logrus@v1.9.3
+	go get -u github.com/joho/godotenv@v1.5.1
 	go get -u github.com/go-playground/validator/v10@v10.15.1
 	go get -u github.com/stretchr/testify@v1.8.4
 	go get -u github.com/google/uuid@v1.3.1
