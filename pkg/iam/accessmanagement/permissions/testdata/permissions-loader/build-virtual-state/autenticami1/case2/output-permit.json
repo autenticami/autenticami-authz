@@ -13,15 +13,7 @@
     "Name": "permit-hr/person/reader/any",
     "Actions": [
       "person:ListEmployee",
-      "person:ReadEmployee"
-    ],
-    "Resources": [
-      "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
-    ]
-  },
-  {
-    "Name": "permit-hr/person/reader/any",
-    "Actions": [
+      "person:ReadEmployee",
       "person:ReadEmployee",
       "person:WriteEmployee"
     ],

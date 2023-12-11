@@ -140,7 +140,29 @@ func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper
 
 // Permissions Virtual State functions
 
-func virualizePolicyStatements(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
+func virualizePolicyStatementsWithASingleResource(statements []*policies.PolicyStatement) ([]*policies.PolicyStatement, error) {
+	cache := map[string]*policies.PolicyStatement{}
+	for _, statement := range statements {
+		policyStatement := *statement
+		resource := string(policyStatement.Resources[0])
+		val, ok := cache[resource]
+		if !ok {
+			cache[resource] = &policyStatement
+			continue
+		}
+		val.Actions = append(val.Actions, policyStatement.Actions...)
+	}
+	cleanedStatements := make([]*policies.PolicyStatement, len(cache))
+	counter := 0
+	for _, cacheItem := range cache {
+		policyStatement := cacheItem
+		cleanedStatements[counter] = policyStatement
+		counter++
+	}
+	return cleanedStatements, nil
+}
+
+func virualizePolicyStatementsWrappers(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
 	statements := make([]*policies.PolicyStatement, 0)
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
@@ -157,14 +179,14 @@ func virualizePolicyStatements(wrappers map[string]PolicyStatementWrapper) ([]*p
 			}
 		}
 	}
-	return statements, nil
+	return virualizePolicyStatementsWithASingleResource(statements)
 }
 
 func newPermissionsVirtualState(permState *PermissionsState) (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
 	var fobidItems []*policies.PolicyStatement
-	fobidItems, err = virualizePolicyStatements(permState.forbid)
+	fobidItems, err = virualizePolicyStatementsWrappers(permState.forbid)
 	if err != nil {
 		return nil, err
 	}
@@ -175,7 +197,7 @@ func newPermissionsVirtualState(permState *PermissionsState) (*PermissionsState,
 		}
 	}
 	var permitItems []*policies.PolicyStatement
-	permitItems, err = virualizePolicyStatements(permState.permit)
+	permitItems, err = virualizePolicyStatementsWrappers(permState.permit)
 	if err != nil {
 		return nil, err
 	}
