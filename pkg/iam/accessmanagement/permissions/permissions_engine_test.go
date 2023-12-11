@@ -44,7 +44,7 @@ func TestPermissionsEngineRegisterPolicy(t *testing.T) {
 	engine := NewPermissionsEngine()
 	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "person-base-reader"}`
 	_, _ = engine.RegisterPolicy([]byte(jsonStr))
-	permState, err := engine.BuildPermissions(false)
+	permState, err := engine.BuildPermissions(PermissionsEngineWithVirtualState(false))
 	assert.Nil(t, err, "Err should be nil")
 	assert.Equal(t, len(permState.permit), 0, "Permit list should be empty")
 	assert.Equal(t, len(permState.forbid), 0, "Forbid list should be empty")
