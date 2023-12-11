@@ -7,6 +7,7 @@ import (
 	"crypto/sha256"
 	"fmt"
 	"sort"
+	"strings"
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
 	"github.com/google/uuid"
@@ -174,7 +175,7 @@ func virualizePolicyStatementsWrappers(wrappers map[string]PolicyStatementWrappe
 				if err != nil {
 					return nil, err
 				}
-				dest.Name = policies.PolicyLabelString(uuid.NewString())
+				dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
 				dest.Resources = []policies.UURString{resource}
 				statements = append(statements, &dest)
 			}
