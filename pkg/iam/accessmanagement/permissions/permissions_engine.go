@@ -16,7 +16,7 @@ type PermissionsEngineSettings struct {
 
 type PermissionsEngineSetting func(permEngineSetting *PermissionsEngineSettings) error
 
-func PermissionsEngineWithVirtualState(enableVirtualState bool) PermissionsEngineSetting {
+func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngineSetting {
 	return func(options *PermissionsEngineSettings) error {
 		options.enableVirtualState = &enableVirtualState
 		return nil
