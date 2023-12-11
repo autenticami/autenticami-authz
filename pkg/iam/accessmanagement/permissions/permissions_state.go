@@ -99,25 +99,15 @@ func permitACLPolicyStatements(b *PermissionsState, policyStatements []policies.
 }
 
 func clonePolicyStatementWrapper(policyStatements map[string]PolicyStatementWrapper) map[string]PolicyStatementWrapper {
-	output := map[string]PolicyStatementWrapper{}
-	for key, psw := range policyStatements {
-		wrapper := PolicyStatementWrapper{}
-		wrapper.ID = psw.ID
-		wrapper.Statement = psw.Statement
-		wrapper.StatmentStringified = psw.StatmentStringified
-		wrapper.StatmentHashed = psw.StatmentHashed
-		wrapper.Statement = psw.Statement
-		output[key] = wrapper
-	}
-	return output
+	dest := map[string]PolicyStatementWrapper{}
+	copier.Copy(&dest, policyStatements)
+	return dest
 }
 
 func clonePermissionsState(b *PermissionsState) *PermissionsState {
-	permState := &PermissionsState{
-		forbid: clonePolicyStatementWrapper(b.forbid),
-		permit: clonePolicyStatementWrapper(b.permit),
-	}
-	return permState
+	dest := PermissionsState{}
+	copier.Copy(&dest, b)
+	return &dest
 }
 
 func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper) []PolicyStatementWrapper {
