@@ -174,6 +174,7 @@ func virualizePolicyStatementsWrappers(wrappers map[string]PolicyStatementWrappe
 				if err != nil {
 					return nil, err
 				}
+				dest.Name = policies.PolicyLabelString(uuid.NewString())
 				dest.Resources = []policies.UURString{resource}
 				statements = append(statements, &dest)
 			}
