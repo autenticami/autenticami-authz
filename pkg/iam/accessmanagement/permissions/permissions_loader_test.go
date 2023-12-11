@@ -172,7 +172,7 @@ func TestBuildPermissionsState(t *testing.T) {
 
 					var err error
 
-					permState, _ := permissionsLoader.buildPermissionsState(true)
+					permState, _ := permissionsLoader.buildPermissionsState(test.VirtualStateEnabled)
 
 					forbidList := permState.GetForbidItems()
 					err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
