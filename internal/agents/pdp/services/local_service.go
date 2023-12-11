@@ -80,7 +80,7 @@ func (s *PDPLocalService) Setup() error {
 	return nil
 }
 
-func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString, settings ...permissions.PermissionsEngineSetting) (*permissions.PermissionsState, error) {
+func (s *PDPLocalService) GetPermissionsState(identityUUR policies.UURString, settings ...permissions.PermissionsEngineOption) (*permissions.PermissionsState, error) {
 	engine := permissions.NewPermissionsEngine()
 	policies := s.cache[string(identityUUR)]
 	if policies != nil {

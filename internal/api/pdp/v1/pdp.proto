@@ -14,14 +14,18 @@ message Identity {
   repeated Attribute attributes = 2;
 }
 
-message PermissionsEngineSettings {
-  bool enableVirtualState = 1;
+message VirtualState {
+  bool enabled = 1;
+}
+
+message PermissionsEngine {
+  VirtualState virtualState = 1;
 }
 
 // Permission state
 
 message PermissionsStateRequest {
-  optional PermissionsEngineSettings permissionsEngineSettings = 1;
+  optional PermissionsEngine permissionsEngine = 1;
 	Identity identity = 2;
 }
 
