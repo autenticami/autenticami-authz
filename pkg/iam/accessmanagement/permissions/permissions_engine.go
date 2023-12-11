@@ -36,7 +36,7 @@ func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 
 func (d *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption) (*PermissionsState, error) {
 	b := true
-	var permEngineSettings = PermissionsEngineOptions{
+	permEngineSettings := PermissionsEngineOptions{
 		enableVirtualState: &b,
 	}
 	for _, option := range options {

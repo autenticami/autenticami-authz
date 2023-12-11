@@ -98,5 +98,5 @@ func (d *permissionsLoader) buildPermissionsState(enableVirtualState bool) (*Per
 	if enableVirtualState {
 		return newPermissionsVirtualState(d.permissionsState)
 	}
-	return clonePermissionsState(d.permissionsState), nil
+	return clonePermissionsState(d.permissionsState)
 }

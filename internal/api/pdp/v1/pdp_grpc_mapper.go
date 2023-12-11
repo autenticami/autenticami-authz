@@ -36,8 +36,17 @@ func mapToPolicyStatementWrapper(policyStatementWrapper *permissions.PolicyState
 }
 
 func mapToPermissionsStateResponse(identityUUR string, permState *permissions.PermissionsState) (*PermissionsStateResponse, error) {
-	forbidList := permState.GetForbidItems()
-	permitList := permState.GetPermitItems()
+	var err error
+	var forbidList []permissions.PolicyStatementWrapper
+	forbidList, err = permState.GetForbidItems()
+	if err != nil {
+		return nil, err
+	}
+	var permitList []permissions.PolicyStatementWrapper
+	permitList, err = permState.GetPermitItems()
+	if err != nil {
+		return nil, err
+	}
 	result := &PermissionsStateResponse{
 		Identity: &Identity{
 			Uur: identityUUR,

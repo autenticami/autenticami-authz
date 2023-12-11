@@ -112,11 +112,11 @@ func TestMiscellaneousPermissionsLoader(t *testing.T) {
 
 func TestBuildPermissionsState(t *testing.T) {
 	type TestStruct struct {
-		Name             	string
-		Path             	string
-		InputFiles       	func() []string
-		OutputFobidFile  	string
-		OutputPermitFile 	string
+		Name                string
+		Path                string
+		InputFiles          func() []string
+		OutputFobidFile     string
+		OutputPermitFile    string
 		VirtualStateEnabled bool
 	}
 	tests := map[string][]TestStruct{
@@ -174,11 +174,11 @@ func TestBuildPermissionsState(t *testing.T) {
 
 					permState, _ := permissionsLoader.buildPermissionsState(test.VirtualStateEnabled)
 
-					forbidList := permState.GetForbidItems()
+					forbidList, _ := permState.GetForbidItems()
 					err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-					permitList := permState.GetPermitItems()
+					permitList, _ := permState.GetPermitItems()
 					err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 				})

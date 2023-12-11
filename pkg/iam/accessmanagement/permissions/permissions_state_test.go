@@ -42,11 +42,11 @@ func helperToComparePolicyStatementWrappers(file string, inputList []PolicyState
 
 func TestCreatePermissionsState(t *testing.T) {
 	tests := map[string]struct {
-		Name             	string
-		Path             	string
-		InputFiles       	func() []string
-		OutputFobidFile  	string
-		OutputPermitFile 	string
+		Name             string
+		Path             string
+		InputFiles       func() []string
+		OutputFobidFile  string
+		OutputPermitFile string
 	}{
 		string(policies.PolicyV1): {
 			"RAW-STATE",
@@ -86,11 +86,11 @@ func TestCreatePermissionsState(t *testing.T) {
 
 				var err error
 
-				forbidList := permState.GetForbidItems()
+				forbidList, _ := permState.GetForbidItems()
 				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList := permState.GetPermitItems()
+				permitList, _ := permState.GetPermitItems()
 				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})

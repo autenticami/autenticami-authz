@@ -35,14 +35,20 @@ func newPermissionsState() *PermissionsState {
 	}
 }
 
-func (b *PermissionsState) GetForbidItems() []PolicyStatementWrapper {
-	wrappers := clonePolicyStatementWrapper(b.forbid)
-	return convertMapOfPolicyStatementWrapper(wrappers)
+func (b *PermissionsState) GetForbidItems() ([]PolicyStatementWrapper, error) {
+	wrappers, err := clonePolicyStatementWrapper(b.forbid)
+	if err != nil {
+		return nil, err
+	}
+	return convertMapOfPolicyStatementWrapper(wrappers), nil
 }
 
-func (b *PermissionsState) GetPermitItems() []PolicyStatementWrapper {
-	wrappers := clonePolicyStatementWrapper(b.permit)
-	return convertMapOfPolicyStatementWrapper(wrappers)
+func (b *PermissionsState) GetPermitItems() ([]PolicyStatementWrapper, error) {
+	wrappers, err := clonePolicyStatementWrapper(b.permit)
+	if err != nil {
+		return nil, err
+	}
+	return convertMapOfPolicyStatementWrapper(wrappers), nil
 }
 
 // Permissions State functions
@@ -74,7 +80,7 @@ func createPolicyStatementWrappers(wrappers map[string]PolicyStatementWrapper, p
 			return err
 		}
 		_, exists := wrappers[wrapper.StatmentHashed]
-		if  exists {
+		if exists {
 			continue
 		}
 		wrappers[wrapper.StatmentHashed] = *wrapper
@@ -98,16 +104,22 @@ func permitACLPolicyStatements(b *PermissionsState, policyStatements []policies.
 	return nil
 }
 
-func clonePolicyStatementWrapper(policyStatements map[string]PolicyStatementWrapper) map[string]PolicyStatementWrapper {
+func clonePolicyStatementWrapper(policyStatements map[string]PolicyStatementWrapper) (map[string]PolicyStatementWrapper, error) {
 	dest := map[string]PolicyStatementWrapper{}
-	copier.Copy(&dest, policyStatements)
-	return dest
+	err := copier.Copy(&dest, policyStatements)
+	if err != nil {
+		return nil, err
+	}
+	return dest, nil
 }
 
-func clonePermissionsState(b *PermissionsState) *PermissionsState {
+func clonePermissionsState(b *PermissionsState) (*PermissionsState, error) {
 	dest := PermissionsState{}
-	copier.Copy(&dest, b)
-	return &dest
+	err := copier.Copy(&dest, b)
+	if err != nil {
+		return nil, err
+	}
+	return &dest, nil
 }
 
 func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper) []PolicyStatementWrapper {
@@ -128,7 +140,7 @@ func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper
 
 // Permissions Virtual State functions
 
-func virualizePolicyStatements(wrappers []PolicyStatementWrapper) []*policies.PolicyStatement {
+func virualizePolicyStatements(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
 	statements := make([]*policies.PolicyStatement, 0)
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
@@ -136,27 +148,39 @@ func virualizePolicyStatements(wrappers []PolicyStatementWrapper) []*policies.Po
 		} else {
 			for _, resource := range wrapper.Statement.Resources {
 				dest := policies.PolicyStatement{}
-				copier.Copy(&dest, &wrapper.Statement)
-				dest.Resources = []policies.UURString { resource }
+				err := copier.Copy(&dest, &wrapper.Statement)
+				if err != nil {
+					return nil, err
+				}
+				dest.Resources = []policies.UURString{resource}
 				statements = append(statements, &dest)
 			}
 		}
 	}
-	return statements
+	return statements, nil
 }
 
 func newPermissionsVirtualState(permState *PermissionsState) (*PermissionsState, error) {
 	newPermState := newPermissionsState()
-	fobidItems := virualizePolicyStatements(permState.GetForbidItems())
+	var err error
+	var fobidItems []*policies.PolicyStatement
+	fobidItems, err = virualizePolicyStatements(permState.forbid)
+	if err != nil {
+		return nil, err
+	}
 	for _, fobidItem := range fobidItems {
-		err := fobidACLPolicyStatements(newPermState, []policies.PolicyStatement{ *fobidItem })
+		err := fobidACLPolicyStatements(newPermState, []policies.PolicyStatement{*fobidItem})
 		if err != nil {
 			return nil, err
 		}
 	}
-	permitItems := virualizePolicyStatements(permState.GetPermitItems())
+	var permitItems []*policies.PolicyStatement
+	permitItems, err = virualizePolicyStatements(permState.permit)
+	if err != nil {
+		return nil, err
+	}
 	for _, permitItem := range permitItems {
-		err := permitACLPolicyStatements(newPermState, []policies.PolicyStatement{ *permitItem })
+		err := permitACLPolicyStatements(newPermState, []policies.PolicyStatement{*permitItem})
 		if err != nil {
 			return nil, err
 		}
