@@ -38,6 +38,9 @@ func TestJSONUnmarshaling(t *testing.T) {
 		cases, _ := os.ReadDir(testDataVersionPath)
 		for _, c := range cases {
 			name := c.Name()
+			if strings.ToLower(name) == ".ds_store" {
+				continue
+			}
 			testDataCasePath := testDataVersionPath + "/" + name
 			t.Run(strings.ToUpper(version+"-"+name), func(t *testing.T) {
 				assert := assert.New(t)
