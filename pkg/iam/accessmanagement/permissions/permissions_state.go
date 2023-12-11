@@ -10,6 +10,7 @@ import (
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
 	"github.com/google/uuid"
+	"github.com/jinzhu/copier"
 
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
@@ -137,7 +138,38 @@ func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper
 
 // Permissions Virtual State functions
 
-func newPermissionsVirtualState(permState *PermissionsState) *PermissionsState {
-	newPermState := clonePermissionsState(permState)
-	return newPermState
+func virualizePolicyStatements(wrappers []PolicyStatementWrapper) []*policies.PolicyStatement {
+	statements := make([]*policies.PolicyStatement, 0)
+	for _, wrapper := range wrappers {
+		if len(wrapper.Statement.Resources) == 0 {
+			continue
+		} else {
+			for _, resource := range wrapper.Statement.Resources {
+				dest := policies.PolicyStatement{}
+				copier.Copy(&dest, &wrapper.Statement)
+				dest.Resources = []policies.UURString { resource }
+				statements = append(statements, &dest)
+			}
+		}
+	}
+	return statements
+}
+
+func newPermissionsVirtualState(permState *PermissionsState) (*PermissionsState, error) {
+	newPermState := newPermissionsState()
+	fobidItems := virualizePolicyStatements(permState.GetForbidItems())
+	for _, fobidItem := range fobidItems {
+		err := fobidACLPolicyStatements(newPermState, []policies.PolicyStatement{ *fobidItem })
+		if err != nil {
+			return nil, err
+		}
+	}
+	permitItems := virualizePolicyStatements(permState.GetPermitItems())
+	for _, permitItem := range permitItems {
+		err := permitACLPolicyStatements(newPermState, []policies.PolicyStatement{ *permitItem })
+		if err != nil {
+			return nil, err
+		}
+	}
+	return newPermState, nil
 }

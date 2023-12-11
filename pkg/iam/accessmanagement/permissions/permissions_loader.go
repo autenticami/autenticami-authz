@@ -96,7 +96,7 @@ func (d *permissionsLoader) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 
 func (d *permissionsLoader) buildPermissionsState(enableVirtualState bool) (*PermissionsState, error) {
 	if enableVirtualState {
-		return newPermissionsVirtualState(d.permissionsState), nil
+		return newPermissionsVirtualState(d.permissionsState)
 	}
 	return clonePermissionsState(d.permissionsState), nil
 }

@@ -1,7 +1,0 @@
-{
-    "Syntax": "autenticami1",
-    "Type": "ACL",
-    "Name": "personBaseForbidSpecificDataEntry",
-    "Permit": [],
-    "Forbid": []
-}

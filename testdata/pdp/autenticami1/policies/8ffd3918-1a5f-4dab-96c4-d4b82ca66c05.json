@@ -4,7 +4,7 @@
       "policy_uur": "uur:581616507495:default:autenticami:iam:policy/person-reader",
       "policy_payload": {
         "Syntax": "autenticami1",
-        "Name": "person-reader",
+        "Name": "person-manager",
         "Type": "ACL",
         "Permit": [
           {
@@ -14,7 +14,17 @@
               "person:ReadEmployee"
             ],
             "Resources": [
-              "uur:581616507495:default:hr-app:organisation:person/*"
+              "uur:581616507495:default:hr-app:organisation:person/*",
+              "uur:581616507495:default:hr-app:organisation:person/mario.rossi"
+            ]
+          },
+          {
+            "Name": "permit-hr/person/writer/any",
+            "Actions": [
+              "person:WriteEmployee"
+            ],
+            "Resources": [
+              "uur:581616507495:default:hr-app:organisation:person/mario.rossi"
             ]
           },
           {

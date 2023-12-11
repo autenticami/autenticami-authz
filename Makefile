@@ -32,6 +32,7 @@ init-dependency:
 	go get -u github.com/xeipuuv/gojsonschema@v1.2.0
 	go get -u google.golang.org/grpc@v1.59.0
 	go get -u get github.com/dgraph-io/badger/v4
+	go get -u github.com/jinzhu/copier@v0.4.0
 
 
 mod:
