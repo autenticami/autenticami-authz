@@ -34,6 +34,18 @@ func newPermissionsState() *PermissionsState {
 	}
 }
 
+func (b *PermissionsState) GetForbidItems() []PolicyStatementWrapper {
+	wrappers := clonePolicyStatementWrapper(b.forbid)
+	return convertMapOfPolicyStatementWrapper(wrappers)
+}
+
+func (b *PermissionsState) GetPermitItems() []PolicyStatementWrapper {
+	wrappers := clonePolicyStatementWrapper(b.permit)
+	return convertMapOfPolicyStatementWrapper(wrappers)
+}
+
+// Permissions State functions
+
 func createPolicyStatementWrapper(policyStatement *policies.PolicyStatement) (*PolicyStatementWrapper, error) {
 	if policyStatement == nil {
 		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
@@ -123,12 +135,9 @@ func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper
 	return items
 }
 
-func (b *PermissionsState) GetForbidItems() []PolicyStatementWrapper {
-	wrappers := clonePolicyStatementWrapper(b.forbid)
-	return convertMapOfPolicyStatementWrapper(wrappers)
-}
+// Permissions Virtual State functions
 
-func (b *PermissionsState) GetPermitItems() []PolicyStatementWrapper {
-	wrappers := clonePolicyStatementWrapper(b.permit)
-	return convertMapOfPolicyStatementWrapper(wrappers)
+func newPermissionsVirtualState(permState *PermissionsState) *PermissionsState {
+	newPermState := clonePermissionsState(permState)
+	return newPermState
 }

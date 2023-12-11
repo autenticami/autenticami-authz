@@ -34,13 +34,13 @@ func (d *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	return d.loader.registerPolicy(bData)
 }
 
-func (d *PermissionsEngine) BuildPermissions(settings ...PermissionsEngineOption) (*PermissionsState, error) {
+func (d *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption) (*PermissionsState, error) {
 	b := true
 	var permEngineSettings = PermissionsEngineOptions{
 		enableVirtualState: &b,
 	}
-	for _, setting := range settings {
-		err := setting(&permEngineSettings)
+	for _, option := range options {
+		err := option(&permEngineSettings)
 		if err != nil {
 			return nil, err
 		}

@@ -40,17 +40,17 @@ func helperToComparePolicyStatementWrappers(file string, inputList []PolicyState
 	return nil
 }
 
-func TestPermissionsStateCreation(t *testing.T) {
+func TestBuildPermissionsState(t *testing.T) {
 	tests := map[string]struct {
-		Name             string
-		Path             string
-		InputFiles       func() []string
-		OutputFobidFile  string
-		OutputPermitFile string
+		Name             	string
+		Path             	string
+		InputFiles       	func() []string
+		OutputFobidFile  	string
+		OutputPermitFile 	string
 	}{
 		string(policies.PolicyV1): {
 			"NOT-COMPRESSED",
-			"./testdata/permissions-states/creation",
+			"./testdata/permissions-states/create-state",
 			func() []string {
 				return []string{"input-policy-1.json", "input-policy-2.json"}
 			},
