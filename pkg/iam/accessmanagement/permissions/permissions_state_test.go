@@ -40,7 +40,7 @@ func helperToComparePolicyStatementWrappers(file string, inputList []PolicyState
 	return nil
 }
 
-func TestBuildPermissionsState(t *testing.T) {
+func TestCreatePermissionsState(t *testing.T) {
 	tests := map[string]struct {
 		Name             	string
 		Path             	string
