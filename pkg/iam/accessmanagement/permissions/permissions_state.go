@@ -36,20 +36,54 @@ func newPermissionsState() *PermissionsState {
 	}
 }
 
-func (b *PermissionsState) GetForbidItems() ([]PolicyStatementWrapper, error) {
-	wrappers, err := clonePolicyStatementWrapper(b.forbid)
+func (b *PermissionsState) convertPolicyStatementsMapToArray(source map[string]PolicyStatementWrapper) []PolicyStatementWrapper {
+	if source == nil {
+		return []PolicyStatementWrapper{}
+	}
+	keys := make([]string, 0)
+	for k := range source {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+	items := make([]PolicyStatementWrapper, len(source))
+	for i, key := range keys {
+		items[i] = source[key]
+	}
+	return items
+}
+
+func (b *PermissionsState) clonePolicyStatements(policyStatements map[string]PolicyStatementWrapper) (map[string]PolicyStatementWrapper, error) {
+	dest := map[string]PolicyStatementWrapper{}
+	err := copier.Copy(&dest, policyStatements)
 	if err != nil {
 		return nil, err
 	}
-	return convertMapOfPolicyStatementWrapper(wrappers), nil
+	return dest, nil
+}
+
+func (b *PermissionsState) clone() (*PermissionsState, error) {
+	dest := PermissionsState{}
+	err := copier.Copy(&dest, b)
+	if err != nil {
+		return nil, err
+	}
+	return &dest, nil
+}
+
+func (b *PermissionsState) GetForbidItems() ([]PolicyStatementWrapper, error) {
+	wrappers, err := b.clonePolicyStatements(b.forbid)
+	if err != nil {
+		return nil, err
+	}
+	return b.convertPolicyStatementsMapToArray(wrappers), nil
 }
 
 func (b *PermissionsState) GetPermitItems() ([]PolicyStatementWrapper, error) {
-	wrappers, err := clonePolicyStatementWrapper(b.permit)
+	wrappers, err := b.clonePolicyStatements(b.permit)
 	if err != nil {
 		return nil, err
 	}
-	return convertMapOfPolicyStatementWrapper(wrappers), nil
+	return b.convertPolicyStatementsMapToArray(wrappers), nil
 }
 
 // Permissions State functions
@@ -105,40 +139,6 @@ func permitACLPolicyStatements(b *PermissionsState, policyStatements []policies.
 	return nil
 }
 
-func clonePolicyStatementWrapper(policyStatements map[string]PolicyStatementWrapper) (map[string]PolicyStatementWrapper, error) {
-	dest := map[string]PolicyStatementWrapper{}
-	err := copier.Copy(&dest, policyStatements)
-	if err != nil {
-		return nil, err
-	}
-	return dest, nil
-}
-
-func clonePermissionsState(b *PermissionsState) (*PermissionsState, error) {
-	dest := PermissionsState{}
-	err := copier.Copy(&dest, b)
-	if err != nil {
-		return nil, err
-	}
-	return &dest, nil
-}
-
-func convertMapOfPolicyStatementWrapper(source map[string]PolicyStatementWrapper) []PolicyStatementWrapper {
-	if source == nil {
-		return []PolicyStatementWrapper{}
-	}
-	keys := make([]string, 0, len(source))
-	for k := range source {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-	items := make([]PolicyStatementWrapper, len(source))
-	for i, key := range keys {
-		items[i] = source[key]
-	}
-	return items
-}
-
 // Permissions Virtual State functions
 
 func virualizePolicyStatementsWithASingleResource(statements []*policies.PolicyStatement) ([]*policies.PolicyStatement, error) {
@@ -156,8 +156,8 @@ func virualizePolicyStatementsWithASingleResource(statements []*policies.PolicyS
 	cleanedStatements := make([]*policies.PolicyStatement, len(cache))
 	counter := 0
 	for _, cacheItem := range cache {
-		policyStatement := cacheItem
-		cleanedStatements[counter] = policyStatement
+		//policyStatement := cacheItem
+		cleanedStatements[counter] = cacheItem
 		counter++
 	}
 	return cleanedStatements, nil
