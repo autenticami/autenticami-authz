@@ -29,7 +29,7 @@ func TestJSONUnmarshaling(t *testing.T) {
 				return []string{"input-policy-1.json"}
 			},
 			func(policy *ACLPolicy) bool {
-				return policy.Syntax == PolicyV1
+				return policy.SyntaxVersion == PolicyV1
 			},
 		},
 	}
@@ -390,7 +390,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Syntax = PolicyV1
+		policy.SyntaxVersion = PolicyV1
 		policy.Type = PolicyTypeString("X")
 		isValid, err = ValidateACLPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
@@ -404,7 +404,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Syntax = PolicyV1
+		policy.SyntaxVersion = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
 		policy.Permit = []ACLPolicyStatement{
@@ -418,7 +418,7 @@ func TestPolicyNotValid(t *testing.T) {
 	}
 	{
 		policy := ACLPolicy{}
-		policy.Syntax = PolicyV1
+		policy.SyntaxVersion = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
 		policy.Permit = []ACLPolicyStatement{

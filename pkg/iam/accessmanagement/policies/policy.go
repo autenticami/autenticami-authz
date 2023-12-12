@@ -64,8 +64,8 @@ const (
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type Policy struct {
-	Syntax PolicyVersionString `json:"Syntax"`
-	Type   PolicyTypeString    `json:"Type"`
+	SyntaxVersion PolicyVersionString `json:"Syntax"`
+	Type          PolicyTypeString    `json:"Type"`
 }
 
 // An Access Control List Policy (ACL) lists the actions that can/cannot be performed and the resourcers those actions can affect.
@@ -299,12 +299,12 @@ func validateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement 
 }
 
 func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
-	if policy == nil || !policy.Syntax.IsValid() || policy.Type != PolicyACLType {
+	if policy == nil || !policy.SyntaxVersion.IsValid() || policy.Type != PolicyACLType {
 		return false, nil
 	}
 	var isValid bool
 	var err error
-	isValid, err = policy.Name.IsValid(policy.Syntax)
+	isValid, err = policy.Name.IsValid(policy.SyntaxVersion)
 	if err != nil {
 		return false, err
 	}
@@ -314,7 +314,7 @@ func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
 	lists := [][]ACLPolicyStatement{policy.Permit, policy.Forbid}
 	for _, list := range lists {
 		for _, aclPolicyStatement := range list {
-			isValid, err = validateACLPolicyStatement(policy.Syntax, &aclPolicyStatement)
+			isValid, err = validateACLPolicyStatement(policy.SyntaxVersion, &aclPolicyStatement)
 			if err != nil {
 				return false, err
 			}

@@ -46,13 +46,13 @@ func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngin
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type PermissionsEngine struct {
-	syntax policies.PolicyVersionString
+	syntax           policies.PolicyVersionString
 	permissionsState *PermissionsState
 }
 
 func NewPermissionsEngine() *PermissionsEngine {
 	permEngine := &PermissionsEngine{
-		syntax: policies.PolicyLatest,
+		syntax:           policies.PolicyLatest,
 		permissionsState: newPermissionsState(),
 	}
 	return permEngine
@@ -69,7 +69,7 @@ func (e *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	if err != nil {
 		return false, errors.Join(authzAMErrors.ErrAccessManagementInvalidDataType, err)
 	}
-	if !policy.Syntax.IsValid() {
+	if !policy.SyntaxVersion.IsValid() {
 		return false, errors.Join(authzAMErrors.ErrAccessManagementUnsupportedVersion, err)
 	}
 	switch policy.Type {

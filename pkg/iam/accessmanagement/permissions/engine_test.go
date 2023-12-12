@@ -144,7 +144,7 @@ func TestMiscellaneousPermissionsEngine(t *testing.T) {
 	{
 		permissionsEngine := NewPermissionsEngine()
 		aclPolicy := &policies.ACLPolicy{}
-		aclPolicy.Syntax = policies.PolicyV1
+		aclPolicy.SyntaxVersion = policies.PolicyV1
 		aclPolicy.Type = policies.PolicyACLType
 		_, err = permissionsEngine.registerACLPolicy(aclPolicy)
 		assert.NotNil(err, "wrong result\nshould be not nil")
