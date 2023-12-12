@@ -13,7 +13,7 @@ import (
 )
 
 type permissionsStateVirtualizer struct {
-    permissionState *PermissionsState
+	permissionState *PermissionsState
 }
 
 func newPermissionsStateVirtualizer(permsState *PermissionsState) *permissionsStateVirtualizer {
@@ -44,7 +44,7 @@ func (v *permissionsStateVirtualizer) virualizePolicyStatementsWithASingleResour
 	return cleanedStatements, nil
 }
 
-func (v *permissionsStateVirtualizer) virualizePolicyStatementsWrappers(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
+func (v *permissionsStateVirtualizer) virualizePolicyStatements(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
 	statements := make([]*policies.PolicyStatement, 0)
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
@@ -57,7 +57,9 @@ func (v *permissionsStateVirtualizer) virualizePolicyStatementsWrappers(wrappers
 					return nil, err
 				}
 				dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
-				dest.Resources = []policies.UURString{resource}
+				if len(dest.Resources) > 1 {
+					dest.Resources = []policies.UURString{resource}
+				}
 				statements = append(statements, &dest)
 			}
 		}
@@ -65,11 +67,11 @@ func (v *permissionsStateVirtualizer) virualizePolicyStatementsWrappers(wrappers
 	return v.virualizePolicyStatementsWithASingleResource(statements)
 }
 
-func (v *permissionsStateVirtualizer) newPermissionsVirtualState() (*PermissionsState, error) {
+func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
 	var fobidItems []*policies.PolicyStatement
-	fobidItems, err = v.virualizePolicyStatementsWrappers(v.permissionState.forbid)
+	fobidItems, err = v.virualizePolicyStatements(v.permissionState.forbid)
 	if err != nil {
 		return nil, err
 	}
@@ -81,7 +83,7 @@ func (v *permissionsStateVirtualizer) newPermissionsVirtualState() (*Permissions
 		}
 	}
 	var permitItems []*policies.PolicyStatement
-	permitItems, err = v.virualizePolicyStatementsWrappers(v.permissionState.permit)
+	permitItems, err = v.virualizePolicyStatements(v.permissionState.permit)
 	if err != nil {
 		return nil, err
 	}

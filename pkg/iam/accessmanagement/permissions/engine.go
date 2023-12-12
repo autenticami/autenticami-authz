@@ -46,11 +46,13 @@ func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngin
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type PermissionsEngine struct {
+	syntax policies.PolicyVersionString
 	permissionsState *PermissionsState
 }
 
 func NewPermissionsEngine() *PermissionsEngine {
 	permEngine := &PermissionsEngine{
+		syntax: policies.PolicyLatest,
 		permissionsState: newPermissionsState(),
 	}
 	return permEngine
@@ -131,7 +133,7 @@ func (e *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption)
 	}
 	if permEngineSettings.enableVirtualState {
 		virtualizer := newPermissionsStateVirtualizer(e.permissionsState)
-		return virtualizer.newPermissionsVirtualState()
+		return virtualizer.virtualize()
 	}
 	return e.permissionsState.clone()
 }
