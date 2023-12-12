@@ -76,10 +76,11 @@ func TestCreatePermissionsState(t *testing.T) {
 					data := policies.ACLPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 					var err error
-					err = fobidACLPolicyStatements(permState, data.Forbid)
+					extPermsState := newExtendedPermissionsState(permState)
+					err = extPermsState.fobidACLPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totPermitted += len(data.Permit)
-					err = permitACLPolicyStatements(permState, data.Permit)
+					err = extPermsState.permitACLPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totFobidden += len(data.Forbid)
 				}

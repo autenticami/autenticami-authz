@@ -17,14 +17,27 @@ import (
 // Permission options
 
 type PermissionsEngineOptions struct {
-	enableVirtualState *bool
+	enableVirtualState bool
 }
 
 type PermissionsEngineOption func(permEngineSetting *PermissionsEngineOptions) error
 
+func buildPermissionsEngineOptions(options ...PermissionsEngineOption) (*PermissionsEngineOptions, error) {
+	permEngineSettings := PermissionsEngineOptions{
+		enableVirtualState: true,
+	}
+	for _, option := range options {
+		err := option(&permEngineSettings)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return &permEngineSettings, nil
+}
+
 func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngineOption {
 	return func(options *PermissionsEngineOptions) error {
-		options.enableVirtualState = &enableVirtualState
+		options.enableVirtualState = enableVirtualState
 		return nil
 	}
 }
@@ -33,16 +46,13 @@ func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngin
 // REF: https://docs.autenticami.com/access-management/policies/
 
 type PermissionsEngine struct {
-	permissionsStateBuilder *PermissionsStateBuilder
 	permissionsState *PermissionsState
 }
 
 func NewPermissionsEngine() *PermissionsEngine {
 	permEngine := &PermissionsEngine{
-		permissionsStateBuilder: newPermissionsStateBuilder(),
 		permissionsState: newPermissionsState(),
 	}
-	permEngine.permissionsStateBuilder.setInstance(permEngine.permissionsState)
 	return permEngine
 }
 
@@ -98,14 +108,15 @@ func (e *PermissionsEngine) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 	if !isValid {
 		return false, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
+	extPermsState := newExtendedPermissionsState(e.permissionsState)
 	if len(policy.Permit) > 0 {
-		err := permitACLPolicyStatements(e.permissionsState, policy.Permit)
+		err := extPermsState.permitACLPolicyStatements(policy.Permit)
 		if err != nil {
 			return false, err
 		}
 	}
 	if len(policy.Forbid) > 0 {
-		err := fobidACLPolicyStatements(e.permissionsState, policy.Forbid)
+		err := extPermsState.fobidACLPolicyStatements(policy.Forbid)
 		if err != nil {
 			return false, err
 		}
@@ -114,15 +125,13 @@ func (e *PermissionsEngine) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 }
 
 func (e *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption) (*PermissionsState, error) {
-	b := true
-	permEngineSettings := PermissionsEngineOptions{
-		enableVirtualState: &b,
+	permEngineSettings, err := buildPermissionsEngineOptions(options...)
+	if err != nil {
+		return nil, err
 	}
-	for _, option := range options {
-		err := option(&permEngineSettings)
-		if err != nil {
-			return nil, err
-		}
+	if permEngineSettings.enableVirtualState {
+		virtualizer := newPermissionsStateVirtualizer(e.permissionsState)
+		return virtualizer.newPermissionsVirtualState()
 	}
-	return e.permissionsStateBuilder.build(*permEngineSettings.enableVirtualState)
+	return e.permissionsState.clone()
 }
