@@ -29,20 +29,20 @@ message PermissionsStateRequest {
 	Identity identity = 2;
 }
 
-message PolicyStatement {
+message ACLPolicyStatement {
   string name = 1;
   repeated string actions = 2;
   repeated string resources = 3;
 }
 
-message PolicyStatementWrapper {
-  PolicyStatement statement = 1;
+message ACLPolicyStatementWrapper {
+  ACLPolicyStatement statement = 1;
   string statmentHashed = 2;
 }
 
 message PermissionsState {
-  repeated PolicyStatementWrapper forbid = 1;
-  repeated PolicyStatementWrapper permit = 2;
+  repeated ACLPolicyStatementWrapper forbid = 1;
+  repeated ACLPolicyStatementWrapper permit = 2;
 }
 
 message PermissionsStateResponse {

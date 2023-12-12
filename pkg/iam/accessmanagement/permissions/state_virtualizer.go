@@ -22,19 +22,19 @@ func newPermissionsStateVirtualizer(permsState *PermissionsState) *permissionsSt
 	}
 }
 
-func (v *permissionsStateVirtualizer) virualizePolicyStatementsWithASingleResource(statements []*policies.PolicyStatement) ([]*policies.PolicyStatement, error) {
-	cache := map[string]*policies.PolicyStatement{}
-	for _, statement := range statements {
-		policyStatement := *statement
-		resource := string(policyStatement.Resources[0])
+func (v *permissionsStateVirtualizer) virualizeACLPolicyStatementsWithASingleResource(aclPolicyStatements []*policies.ACLPolicyStatement) ([]*policies.ACLPolicyStatement, error) {
+	cache := map[string]*policies.ACLPolicyStatement{}
+	for _, aclPolicyStatement := range aclPolicyStatements {
+		statement := *aclPolicyStatement
+		resource := string(statement.Resources[0])
 		val, ok := cache[resource]
 		if !ok {
-			cache[resource] = &policyStatement
+			cache[resource] = &statement
 			continue
 		}
-		val.Actions = append(val.Actions, policyStatement.Actions...)
+		val.Actions = append(val.Actions, statement.Actions...)
 	}
-	cleanedStatements := make([]*policies.PolicyStatement, len(cache))
+	cleanedStatements := make([]*policies.ACLPolicyStatement, len(cache))
 	counter := 0
 	for _, cacheItem := range cache {
 		//policyStatement := cacheItem
@@ -44,14 +44,14 @@ func (v *permissionsStateVirtualizer) virualizePolicyStatementsWithASingleResour
 	return cleanedStatements, nil
 }
 
-func (v *permissionsStateVirtualizer) virualizePolicyStatements(wrappers map[string]PolicyStatementWrapper) ([]*policies.PolicyStatement, error) {
-	statements := make([]*policies.PolicyStatement, 0)
+func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[string]ACLPolicyStatementWrapper) ([]*policies.ACLPolicyStatement, error) {
+	statements := make([]*policies.ACLPolicyStatement, 0)
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
 			continue
 		} else {
 			for _, resource := range wrapper.Statement.Resources {
-				dest := policies.PolicyStatement{}
+				dest := policies.ACLPolicyStatement{}
 				err := copier.Copy(&dest, &wrapper.Statement)
 				if err != nil {
 					return nil, err
@@ -64,31 +64,31 @@ func (v *permissionsStateVirtualizer) virualizePolicyStatements(wrappers map[str
 			}
 		}
 	}
-	return v.virualizePolicyStatementsWithASingleResource(statements)
+	return v.virualizeACLPolicyStatementsWithASingleResource(statements)
 }
 
 func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
-	var fobidItems []*policies.PolicyStatement
-	fobidItems, err = v.virualizePolicyStatements(v.permissionState.forbid)
+	var fobidItems []*policies.ACLPolicyStatement
+	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.forbid)
 	if err != nil {
 		return nil, err
 	}
 	extPermsState := newExtendedPermissionsState(newPermState)
 	for _, fobidItem := range fobidItems {
-		err := extPermsState.fobidACLPolicyStatements([]policies.PolicyStatement{*fobidItem})
+		err := extPermsState.fobidACLPolicyStatements([]policies.ACLPolicyStatement{*fobidItem})
 		if err != nil {
 			return nil, err
 		}
 	}
-	var permitItems []*policies.PolicyStatement
-	permitItems, err = v.virualizePolicyStatements(v.permissionState.permit)
+	var permitItems []*policies.ACLPolicyStatement
+	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permit)
 	if err != nil {
 		return nil, err
 	}
 	for _, permitItem := range permitItems {
-		err := extPermsState.permitACLPolicyStatements([]policies.PolicyStatement{*permitItem})
+		err := extPermsState.permitACLPolicyStatements([]policies.ACLPolicyStatement{*permitItem})
 		if err != nil {
 			return nil, err
 		}

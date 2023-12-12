@@ -15,7 +15,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func helperToComparePolicyStatementWrappers(file string, inputList []PolicyStatementWrapper) error {
+func helperToCompareACLPolicyStatementWrappers(file string, inputList []ACLPolicyStatementWrapper) error {
 	uniqueFobid := make(map[string]bool)
 	for _, forbid := range inputList {
 		key := forbid.StatmentHashed
@@ -25,13 +25,13 @@ func helperToComparePolicyStatementWrappers(file string, inputList []PolicyState
 		uniqueFobid[key] = true
 	}
 	bArray, _ := os.ReadFile(file)
-	data := []policies.PolicyStatement{}
+	data := []policies.ACLPolicyStatement{}
 	_ = json.Unmarshal(bArray, &data)
 	if len(data) != len(inputList) {
 		return errors.New("missing key as size does not match")
 	}
 	for _, forbid := range data {
-		fobidWrapper, _ := createPolicyStatementWrapper(&forbid)
+		fobidWrapper, _ := createACLPolicyStatementWrapper(&forbid)
 		key := fobidWrapper.StatmentHashed
 		if !uniqueFobid[key] {
 			return errors.New("missing key: " + spew.Sdump(key))
@@ -87,12 +87,12 @@ func TestCreatePermissionsState(t *testing.T) {
 
 				var err error
 
-				forbidList, _ := permState.GetForbidItems()
-				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+				forbidList, _ := permState.GetACLForbidItems()
+				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList, _ := permState.GetPermitItems()
-				err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
+				permitList, _ := permState.GetACLPermitItems()
+				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})
 		}

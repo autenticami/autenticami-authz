@@ -73,9 +73,9 @@ type Policy struct {
 
 type ACLPolicy struct {
 	Policy
-	Name   PolicyLabelString `json:"Name,omitempty"`
-	Permit []PolicyStatement `json:"Permit,omitempty"`
-	Forbid []PolicyStatement `json:"Forbid,omitempty"`
+	Name   PolicyLabelString    `json:"Name,omitempty"`
+	Permit []ACLPolicyStatement `json:"Permit,omitempty"`
+	Forbid []ACLPolicyStatement `json:"Forbid,omitempty"`
 }
 
 //go:embed data/acl-policy-schema.json
@@ -84,7 +84,7 @@ var ACLPolicySchema []byte
 // A policy statement list actions associated to resources.
 // REF: https://docs.autenticami.com/access-management/policies/#policy-statement
 
-type PolicyStatement struct {
+type ACLPolicyStatement struct {
 	Name      PolicyLabelString `json:"Name,omitempty"`
 	Actions   []ActionString    `json:"Actions"`
 	Resources []UURString       `json:"Resources"`
@@ -264,20 +264,20 @@ func (p PolicyLabelString) IsValid(version PolicyVersionString) (bool, error) {
 	}
 }
 
-func validatePolicyStatement(version PolicyVersionString, policyStatement *PolicyStatement) (bool, error) {
-	if !version.IsValid() || policyStatement == nil {
+func validateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) (bool, error) {
+	if !version.IsValid() || aclPolicyStatement == nil {
 		return false, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
 	var isValid bool
 	var err error
-	isValid, err = policyStatement.Name.IsValid(version)
+	isValid, err = aclPolicyStatement.Name.IsValid(version)
 	if err != nil {
 		return false, err
 	}
 	if !isValid {
 		return false, nil
 	}
-	for _, action := range policyStatement.Actions {
+	for _, action := range aclPolicyStatement.Actions {
 		isValid, err = action.IsValid(version)
 		if err != nil {
 			return false, err
@@ -286,7 +286,7 @@ func validatePolicyStatement(version PolicyVersionString, policyStatement *Polic
 			return false, nil
 		}
 	}
-	for _, resource := range policyStatement.Resources {
+	for _, resource := range aclPolicyStatement.Resources {
 		isValid, err = resource.IsValid(version)
 		if err != nil {
 			return false, err
@@ -311,10 +311,10 @@ func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
 	if !isValid {
 		return false, nil
 	}
-	lists := [][]PolicyStatement{policy.Permit, policy.Forbid}
+	lists := [][]ACLPolicyStatement{policy.Permit, policy.Forbid}
 	for _, list := range lists {
-		for _, policyStatement := range list {
-			isValid, err = validatePolicyStatement(policy.Syntax, &policyStatement)
+		for _, aclPolicyStatement := range list {
+			isValid, err = validateACLPolicyStatement(policy.Syntax, &aclPolicyStatement)
 			if err != nil {
 				return false, err
 			}

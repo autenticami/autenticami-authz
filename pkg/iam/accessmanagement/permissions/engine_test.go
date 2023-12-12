@@ -215,12 +215,12 @@ func TestBuildPermissionsState(t *testing.T) {
 
 					permState, _ := permissionsEngine.BuildPermissions(WithPermissionsEngineVirtualState(test.VirtualStateEnabled))
 
-					forbidList, _ := permState.GetForbidItems()
-					err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+					forbidList, _ := permState.GetACLForbidItems()
+					err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-					permitList, _ := permState.GetPermitItems()
-					err = helperToComparePolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
+					permitList, _ := permState.GetACLPermitItems()
+					err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 				})
 			}

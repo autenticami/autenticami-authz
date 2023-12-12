@@ -8,23 +8,23 @@ import (
 )
 
 type extendedPermissionsState struct {
-    *PermissionsState
+	*PermissionsState
 }
 
 func newExtendedPermissionsState(permsState *PermissionsState) *extendedPermissionsState {
 	return &extendedPermissionsState{permsState}
 }
 
-func (b *extendedPermissionsState) fobidACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
-	err := createPolicyStatementWrappers(b.forbid, policyStatements)
+func (b *extendedPermissionsState) fobidACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
+	err := createACLPolicyStatementWrappers(b.forbid, aclPolicyStatements)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *extendedPermissionsState) permitACLPolicyStatements(policyStatements []policies.PolicyStatement) error {
-	err := createPolicyStatementWrappers(b.permit, policyStatements)
+func (b *extendedPermissionsState) permitACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
+	err := createACLPolicyStatementWrappers(b.permit, aclPolicyStatements)
 	if err != nil {
 		return err
 	}

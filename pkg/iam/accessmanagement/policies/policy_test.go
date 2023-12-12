@@ -407,7 +407,7 @@ func TestPolicyNotValid(t *testing.T) {
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
-		policy.Permit = []PolicyStatement{
+		policy.Permit = []ACLPolicyStatement{
 			{
 				Name: "person Base Reader",
 			},
@@ -421,7 +421,7 @@ func TestPolicyNotValid(t *testing.T) {
 		policy.Syntax = PolicyV1
 		policy.Type = PolicyACLType
 		policy.Name = "person-base-reader"
-		policy.Permit = []PolicyStatement{
+		policy.Permit = []ACLPolicyStatement{
 			{
 				Name: "person-base-reader",
 				Actions: []ActionString{
@@ -438,12 +438,12 @@ func TestPolicyNotValid(t *testing.T) {
 		assert.True(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(isValid))
 	}
 	{
-		isValid, err = validatePolicyStatement(PolicyVersionString("0000-00-00"), nil)
+		isValid, err = validateACLPolicyStatement(PolicyVersionString("0000-00-00"), nil)
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policyStatement := PolicyStatement{
+		aclPolicyStatement := ACLPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"person:ListEmployee",
@@ -453,12 +453,12 @@ func TestPolicyNotValid(t *testing.T) {
 				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
-		isValid, err = validatePolicyStatement(PolicyVersionString("0000-00-00"), &policyStatement)
+		isValid, err = validateACLPolicyStatement(PolicyVersionString("0000-00-00"), &aclPolicyStatement)
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policyStatement := PolicyStatement{
+		aclPolicyStatement := ACLPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"not a valid action",
@@ -467,12 +467,12 @@ func TestPolicyNotValid(t *testing.T) {
 				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
-		isValid, err = validatePolicyStatement(PolicyV1, &policyStatement)
+		isValid, err = validateACLPolicyStatement(PolicyV1, &aclPolicyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policyStatement := PolicyStatement{
+		aclPolicyStatement := ACLPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"person:ListEmployee",
@@ -482,7 +482,7 @@ func TestPolicyNotValid(t *testing.T) {
 				"not a valid uur",
 			},
 		}
-		isValid, err = validatePolicyStatement(PolicyV1, &policyStatement)
+		isValid, err = validateACLPolicyStatement(PolicyV1, &aclPolicyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
