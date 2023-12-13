@@ -52,8 +52,10 @@ func mapToPermissionsStateResponse(identityUUR string, permState *permissions.Pe
 			Uur: identityUUR,
 		},
 		PermissionsState: &PermissionsState{
-			Forbid: make([]*ACLPolicyStatementWrapper, len(forbidList)),
-			Permit: make([]*ACLPolicyStatementWrapper, len(permitList)),
+			Permissions: &ACLPermissions{
+				Forbid: make([]*ACLPolicyStatementWrapper, len(forbidList)),
+				Permit: make([]*ACLPolicyStatementWrapper, len(permitList)),
+			},
 		},
 	}
 	for i, wrapper := range forbidList {
@@ -61,14 +63,14 @@ func mapToPermissionsStateResponse(identityUUR string, permState *permissions.Pe
 		if err != nil {
 			return nil, err
 		}
-		result.PermissionsState.Forbid[i] = aclPolicyStatementWrapper
+		result.PermissionsState.Permissions.Forbid[i] = aclPolicyStatementWrapper
 	}
 	for i, wrapper := range permitList {
 		aclPolicyStatementWrapper, err := mapToACLPolicyStatementWrapper(&wrapper)
 		if err != nil {
 			return nil, err
 		}
-		result.PermissionsState.Permit[i] = aclPolicyStatementWrapper
+		result.PermissionsState.Permissions.Permit[i] = aclPolicyStatementWrapper
 	}
 	return result, nil
 }

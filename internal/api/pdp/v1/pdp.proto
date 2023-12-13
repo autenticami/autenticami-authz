@@ -40,9 +40,13 @@ message ACLPolicyStatementWrapper {
   string statmentHashed = 2;
 }
 
-message PermissionsState {
+message ACLPermissions {
   repeated ACLPolicyStatementWrapper forbid = 1;
   repeated ACLPolicyStatementWrapper permit = 2;
+}
+
+message PermissionsState {
+  ACLPermissions permissions = 1;
 }
 
 message PermissionsStateResponse {
