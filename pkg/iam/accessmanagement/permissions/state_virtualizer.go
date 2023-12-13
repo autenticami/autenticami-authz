@@ -31,26 +31,25 @@ func (v *permissionsStateVirtualizer) splitByResource(wrappers map[string]ACLPol
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
 			continue
-		} else {
-			for _, resource := range wrapper.Statement.Resources {
-				dest := policies.ACLPolicyStatement{}
-				err := copier.Copy(&dest, &wrapper.Statement)
-				if err != nil {
-					return nil, err
-				}
-				dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
-				if len(dest.Resources) > 1 {
-					dest.Resources = []policies.UURString{resource}
-				}
-				wrapper, err := createACLPolicyStatementWrapper(&dest)
-				if err != nil {
-					return nil, err
-				}
-				if _, ok := output[wrapper.StatmentHashed]; ok {
-					continue
-				}
-				output[wrapper.StatmentHashed] = *wrapper
+		}
+		for _, resource := range wrapper.Statement.Resources {
+			dest := policies.ACLPolicyStatement{}
+			err := copier.Copy(&dest, &wrapper.Statement)
+			if err != nil {
+				return nil, err
 			}
+			dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
+			if len(dest.Resources) > 1 {
+				dest.Resources = []policies.UURString{resource}
+			}
+			wrapper, err := createACLPolicyStatementWrapper(&dest)
+			if err != nil {
+				return nil, err
+			}
+			if _, ok := output[wrapper.StatmentHashed]; ok {
+				continue
+			}
+			output[wrapper.StatmentHashed] = *wrapper
 		}
 	}
 	return output, nil
