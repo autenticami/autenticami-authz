@@ -28,14 +28,15 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatementsWithASingleRes
 	cache := map[string]*policies.ACLPolicyStatement{}
 	for _, aclPolicyStatement := range aclPolicyStatements {
 		statement := *aclPolicyStatement
-		policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
 		resource := string(statement.Resources[0])
 		val, ok := cache[resource]
 		if !ok {
+			policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
 			cache[resource] = &statement
 			continue
 		}
 		val.Actions = append(val.Actions, statement.Actions...)
+		policies.SanitizeACLPolicyStatement(v.syntaxVersion, val)
 	}
 	cleanedStatements := make([]*policies.ACLPolicyStatement, len(cache))
 	counter := 0
