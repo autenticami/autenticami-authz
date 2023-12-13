@@ -63,7 +63,7 @@ func TestPermissionsEngineRegisterPolicyValid(t *testing.T) {
 		Path string
 	}{
 		string(policies.PolicyV1): {
-			"./testdata/permissions-engine/register-policy/valid",
+			"./testdata/permissions-engine/register-policy/valid/without-conditions",
 		},
 	}
 	for version, test := range tests {
@@ -95,7 +95,7 @@ func TestPermissionsEngineRegisterPolicyNotValid(t *testing.T) {
 		Path string
 	}{
 		string(policies.PolicyV1): {
-			"./testdata/permissions-engine/register-policy/notvalid",
+			"./testdata/permissions-engine/register-policy/notvalid/without-conditions",
 		},
 	}
 	for version, test := range tests {
@@ -164,7 +164,7 @@ func TestBuildPermissionsState(t *testing.T) {
 		string(policies.PolicyV1): {
 			{
 				"RAW-STATE",
-				"./testdata/permissions-engine/build-raw-state",
+				"./testdata/permissions-engine/build-raw-state/without-conditions",
 				func() []string {
 					return []string{"input-policy-1.json", "input-policy-2.json"}
 				},
@@ -174,7 +174,7 @@ func TestBuildPermissionsState(t *testing.T) {
 			},
 			{
 				"VIRTUAL-STATE",
-				"./testdata/permissions-engine/build-virtual-state",
+				"./testdata/permissions-engine/build-virtual-state/without-conditions",
 				func() []string {
 					return []string{"input-policy-1.json", "input-policy-2.json"}
 				},
