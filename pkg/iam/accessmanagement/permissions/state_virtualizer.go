@@ -37,7 +37,7 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatementsWithASingleRes
 	cleanedStatements := make([]*policies.ACLPolicyStatement, len(cache))
 	counter := 0
 	for _, cacheItem := range cache {
-		//policyStatement := cacheItem
+		// policyStatement := cacheItem
 		cleanedStatements[counter] = cacheItem
 		counter++
 	}
