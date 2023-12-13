@@ -26,36 +26,44 @@ func newPermissionsStateVirtualizer(syntaxVersion policies.PolicyVersionString, 
 	}
 }
 
-func (v *permissionsStateVirtualizer) splitByResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
+func (v *permissionsStateVirtualizer) splitWrapperByResource(output map[string]ACLPolicyStatementWrapper, wrapper *ACLPolicyStatementWrapper) error {
+	for _, resource := range wrapper.Statement.Resources {
+		dest := policies.ACLPolicyStatement{}
+		err := copier.Copy(&dest, &wrapper.Statement)
+		if err != nil {
+			return err
+		}
+		dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
+		if len(dest.Resources) > 1 {
+			dest.Resources = []policies.UURString{resource}
+		}
+		wrapper, err := createACLPolicyStatementWrapper(&dest)
+		if err != nil {
+			return err
+		}
+		if _, ok := output[wrapper.StatmentHashed]; ok {
+			continue
+		}
+		output[wrapper.StatmentHashed] = *wrapper
+	}
+	return nil
+}
+
+func (v *permissionsStateVirtualizer) splitWrappersByResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
 	output := map[string]ACLPolicyStatementWrapper{}
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
 			continue
 		}
-		for _, resource := range wrapper.Statement.Resources {
-			dest := policies.ACLPolicyStatement{}
-			err := copier.Copy(&dest, &wrapper.Statement)
-			if err != nil {
-				return nil, err
-			}
-			dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
-			if len(dest.Resources) > 1 {
-				dest.Resources = []policies.UURString{resource}
-			}
-			wrapper, err := createACLPolicyStatementWrapper(&dest)
-			if err != nil {
-				return nil, err
-			}
-			if _, ok := output[wrapper.StatmentHashed]; ok {
-				continue
-			}
-			output[wrapper.StatmentHashed] = *wrapper
+		err := v.splitWrapperByResource(output, &wrapper)
+		if err != nil {
+			return nil, err
 		}
 	}
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) groupByConditionalUniqeResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
+func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
 	cache := map[string]*policies.ACLPolicyStatement{}
 	for _, wrapper := range wrappers {
 		statement := wrapper.Statement
@@ -92,11 +100,11 @@ func (v *permissionsStateVirtualizer) groupByConditionalUniqeResource(wrappers m
 func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[string]ACLPolicyStatementWrapper) ([]ACLPolicyStatementWrapper, error) {
 	var err error
 	var outputMap map[string]ACLPolicyStatementWrapper
-	outputMap, err = v.splitByResource(wrappers)
+	outputMap, err = v.splitWrappersByResource(wrappers)
 	if err != nil {
 		return nil, err
 	}
-	outputMap, err = v.groupByConditionalUniqeResource(outputMap)
+	outputMap, err = v.groupWrappersByConditionalUniqeResource(outputMap)
 	if err != nil {
 		return nil, err
 	}
