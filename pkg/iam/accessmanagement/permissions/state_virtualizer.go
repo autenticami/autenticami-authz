@@ -71,7 +71,7 @@ func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
 	var fobidItems []*policies.ACLPolicyStatement
-	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.forbid)
+	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.forbid)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +83,7 @@ func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
 		}
 	}
 	var permitItems []*policies.ACLPolicyStatement
-	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permit)
+	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.permit)
 	if err != nil {
 		return nil, err
 	}

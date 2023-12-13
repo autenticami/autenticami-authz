@@ -59,15 +59,21 @@ func createACLPolicyStatementWrappers(wrappers map[string]ACLPolicyStatementWrap
 	return nil
 }
 
-type PermissionsState struct {
+type ACLPermissions struct {
 	forbid map[string]ACLPolicyStatementWrapper
 	permit map[string]ACLPolicyStatementWrapper
 }
 
+type PermissionsState struct {
+	permissions ACLPermissions
+}
+
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
-		forbid: map[string]ACLPolicyStatementWrapper{},
-		permit: map[string]ACLPolicyStatementWrapper{},
+		permissions: ACLPermissions{
+			forbid: map[string]ACLPolicyStatementWrapper{},
+			permit: map[string]ACLPolicyStatementWrapper{},
+		},
 	}
 }
 
@@ -106,7 +112,7 @@ func (b *PermissionsState) clone() (*PermissionsState, error) {
 }
 
 func (b *PermissionsState) GetACLForbidItems() ([]ACLPolicyStatementWrapper, error) {
-	wrappers, err := b.cloneACLPolicyStatements(b.forbid)
+	wrappers, err := b.cloneACLPolicyStatements(b.permissions.forbid)
 	if err != nil {
 		return nil, err
 	}
@@ -114,7 +120,7 @@ func (b *PermissionsState) GetACLForbidItems() ([]ACLPolicyStatementWrapper, err
 }
 
 func (b *PermissionsState) GetACLPermitItems() ([]ACLPolicyStatementWrapper, error) {
-	wrappers, err := b.cloneACLPolicyStatements(b.permit)
+	wrappers, err := b.cloneACLPolicyStatements(b.permissions.permit)
 	if err != nil {
 		return nil, err
 	}

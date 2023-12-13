@@ -16,7 +16,7 @@ func newExtendedPermissionsState(permsState *PermissionsState) *extendedPermissi
 }
 
 func (b *extendedPermissionsState) fobidACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
-	err := createACLPolicyStatementWrappers(b.forbid, aclPolicyStatements)
+	err := createACLPolicyStatementWrappers(b.permissions.forbid, aclPolicyStatements)
 	if err != nil {
 		return err
 	}
@@ -24,7 +24,7 @@ func (b *extendedPermissionsState) fobidACLPolicyStatements(aclPolicyStatements 
 }
 
 func (b *extendedPermissionsState) permitACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
-	err := createACLPolicyStatementWrappers(b.permit, aclPolicyStatements)
+	err := createACLPolicyStatementWrappers(b.permissions.permit, aclPolicyStatements)
 	if err != nil {
 		return err
 	}
