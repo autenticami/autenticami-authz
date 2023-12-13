@@ -13,11 +13,13 @@ import (
 )
 
 type permissionsStateVirtualizer struct {
+	syntaxVersion		policies.PolicyVersionString
 	permissionState *PermissionsState
 }
 
-func newPermissionsStateVirtualizer(permsState *PermissionsState) *permissionsStateVirtualizer {
+func newPermissionsStateVirtualizer(syntaxVersion policies.PolicyVersionString,permsState *PermissionsState) *permissionsStateVirtualizer {
 	return &permissionsStateVirtualizer{
+		syntaxVersion: syntaxVersion,
 		permissionState: permsState,
 	}
 }
@@ -26,6 +28,7 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatementsWithASingleRes
 	cache := map[string]*policies.ACLPolicyStatement{}
 	for _, aclPolicyStatement := range aclPolicyStatements {
 		statement := *aclPolicyStatement
+		policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
 		resource := string(statement.Resources[0])
 		val, ok := cache[resource]
 		if !ok {

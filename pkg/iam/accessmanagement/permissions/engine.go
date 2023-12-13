@@ -132,7 +132,7 @@ func (e *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption)
 		return nil, err
 	}
 	if permEngineSettings.enableVirtualState {
-		virtualizer := newPermissionsStateVirtualizer(e.permissionsState)
+		virtualizer := newPermissionsStateVirtualizer(e.syntaxVersion, e.permissionsState)
 		return virtualizer.virtualize()
 	}
 	return e.permissionsState.clone()
