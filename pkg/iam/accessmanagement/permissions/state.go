@@ -111,7 +111,7 @@ func (b *PermissionsState) clone() (*PermissionsState, error) {
 	return &dest, nil
 }
 
-func (b *PermissionsState) GetACLForbidItems() ([]ACLPolicyStatementWrapper, error) {
+func (b *PermissionsState) GetACLForbiddenPermissions() ([]ACLPolicyStatementWrapper, error) {
 	wrappers, err := b.cloneACLPolicyStatements(b.permissions.forbid)
 	if err != nil {
 		return nil, err
@@ -119,7 +119,7 @@ func (b *PermissionsState) GetACLForbidItems() ([]ACLPolicyStatementWrapper, err
 	return b.convertACLPolicyStatementsMapToArray(wrappers), nil
 }
 
-func (b *PermissionsState) GetACLPermitItems() ([]ACLPolicyStatementWrapper, error) {
+func (b *PermissionsState) GetACLPermittedPermissions() ([]ACLPolicyStatementWrapper, error) {
 	wrappers, err := b.cloneACLPolicyStatements(b.permissions.permit)
 	if err != nil {
 		return nil, err

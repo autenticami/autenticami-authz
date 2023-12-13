@@ -87,11 +87,11 @@ func TestCreatePermissionsState(t *testing.T) {
 
 				var err error
 
-				forbidList, _ := permState.GetACLForbidItems()
+				forbidList, _ := permState.GetACLForbiddenPermissions()
 				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList, _ := permState.GetACLPermitItems()
+				permitList, _ := permState.GetACLPermittedPermissions()
 				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})

@@ -38,12 +38,12 @@ func mapToACLPolicyStatementWrapper(aclPolicyStatementWrapper *permissions.ACLPo
 func mapToPermissionsStateResponse(identityUUR string, permState *permissions.PermissionsState) (*PermissionsStateResponse, error) {
 	var err error
 	var forbidList []permissions.ACLPolicyStatementWrapper
-	forbidList, err = permState.GetACLForbidItems()
+	forbidList, err = permState.GetACLForbiddenPermissions()
 	if err != nil {
 		return nil, err
 	}
 	var permitList []permissions.ACLPolicyStatementWrapper
-	permitList, err = permState.GetACLPermitItems()
+	permitList, err = permState.GetACLPermittedPermissions()
 	if err != nil {
 		return nil, err
 	}
