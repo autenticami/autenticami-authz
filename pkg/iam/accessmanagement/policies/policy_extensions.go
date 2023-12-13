@@ -63,7 +63,7 @@ func sanitizeSlice[K ~string](source []K) []K {
 	return items
 }
 
-func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) (error) {
+func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) error {
 	if !version.IsValid() || aclPolicyStatement == nil {
 		return authzAMErrors.ErrAccessManagementInvalidDataType
 	}

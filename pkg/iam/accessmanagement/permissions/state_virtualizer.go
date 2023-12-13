@@ -15,13 +15,13 @@ import (
 )
 
 type permissionsStateVirtualizer struct {
-	syntaxVersion		policies.PolicyVersionString
+	syntaxVersion   policies.PolicyVersionString
 	permissionState *PermissionsState
 }
 
-func newPermissionsStateVirtualizer(syntaxVersion policies.PolicyVersionString,permsState *PermissionsState) *permissionsStateVirtualizer {
+func newPermissionsStateVirtualizer(syntaxVersion policies.PolicyVersionString, permsState *PermissionsState) *permissionsStateVirtualizer {
 	return &permissionsStateVirtualizer{
-		syntaxVersion: syntaxVersion,
+		syntaxVersion:   syntaxVersion,
 		permissionState: permsState,
 	}
 }
@@ -65,13 +65,19 @@ func (v *permissionsStateVirtualizer) groupByConditionalUniqeResource(wrappers m
 		}
 		resource := string(statement.Resources[0])
 		if _, ok := cache[resource]; !ok {
-			policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
+			err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
+			if err != nil {
+				return nil, err
+			}
 			cache[resource] = &statement
 			continue
 		}
 		cachedStatement := cache[resource]
 		cachedStatement.Actions = append(cachedStatement.Actions, statement.Actions...)
-		policies.SanitizeACLPolicyStatement(v.syntaxVersion, cachedStatement)
+		err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, cachedStatement)
+		if err != nil {
+			return nil, err
+		}
 	}
 	output := map[string]ACLPolicyStatementWrapper{}
 	for _, statement := range cache {
