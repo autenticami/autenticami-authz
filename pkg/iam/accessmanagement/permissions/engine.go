@@ -25,7 +25,7 @@ type PermissionsEngineOption func(permEngineSetting *PermissionsEngineOptions) e
 
 func buildPermissionsEngineOptions(options ...PermissionsEngineOption) (*PermissionsEngineOptions, error) {
 	permEngineSettings := PermissionsEngineOptions{
-		enableVirtualState: true,
+		enableVirtualState:       true,
 		virtualStateViewCombined: true,
 	}
 	for _, option := range options {

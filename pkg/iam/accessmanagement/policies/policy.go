@@ -88,7 +88,7 @@ type ACLPolicyStatement struct {
 	Name      PolicyLabelString `json:"Name,omitempty"`
 	Actions   []ActionString    `json:"Actions"`
 	Resources []UURString       `json:"Resources"`
-	Condition string  			`json:"Conditions,omitempty"`
+	Condition string            `json:"Conditions,omitempty"`
 }
 
 func isValidPattern(pattern string, s string) (bool, error) {
