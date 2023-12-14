@@ -13,6 +13,7 @@ func mapToACLPolicyStatement(aclPolicyStatement *policies.ACLPolicyStatement) (*
 		Name:      string(aclPolicyStatement.Name),
 		Actions:   make([]string, len(aclPolicyStatement.Actions)),
 		Resources: make([]string, len(aclPolicyStatement.Resources)),
+		Condition: aclPolicyStatement.Condition,
 	}
 	for i, action := range aclPolicyStatement.Actions {
 		result.Actions[i] = string(action)
