@@ -97,7 +97,35 @@ func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wr
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[string]ACLPolicyStatementWrapper) ([]ACLPolicyStatementWrapper, error) {
+func (v *permissionsStateVirtualizer) organiseWrappersByViewType(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
+	output := map[string]ACLPolicyStatementWrapper{}
+	for key := range wrappers {
+		wrapper := wrappers[key]
+		if len(wrapper.Statement.Resources) > 1 {
+			return nil, authzErrors.ErrGeneric
+		}
+		for _, action := range wrapper.Statement.Actions {
+			dest := policies.ACLPolicyStatement{}
+			err := copier.Copy(&dest, &wrapper.Statement)
+			if err != nil {
+				return nil, err
+			}
+			dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
+			dest.Actions = []policies.ActionString{action}
+			wrapper, err := createACLPolicyStatementWrapper(&dest)
+			if err != nil {
+				return nil, err
+			}
+			if _, ok := output[wrapper.StatmentHashed]; ok {
+				continue
+			}
+			output[wrapper.StatmentHashed] = *wrapper
+		}
+	}
+	return output, nil
+}
+
+func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[string]ACLPolicyStatementWrapper, isCombined bool) ([]ACLPolicyStatementWrapper, error) {
 	var err error
 	var outputMap map[string]ACLPolicyStatementWrapper
 	outputMap, err = v.splitWrappersByResource(wrappers)
@@ -108,6 +136,12 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[
 	if err != nil {
 		return nil, err
 	}
+	if !isCombined {
+		outputMap, err = v.organiseWrappersByViewType(outputMap)
+		if err != nil {
+			return nil, err
+		}
+	}
 	output := make([]ACLPolicyStatementWrapper, len(outputMap))
 	counter := 0
 	for key := range outputMap {
@@ -117,11 +151,11 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
+func (v *permissionsStateVirtualizer) virtualize(isCombined bool) (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
 	var fobidItems []ACLPolicyStatementWrapper
-	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.forbid)
+	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.forbid, isCombined)
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +167,7 @@ func (v *permissionsStateVirtualizer) virtualize() (*PermissionsState, error) {
 		}
 	}
 	var permitItems []ACLPolicyStatementWrapper
-	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.permit)
+	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.permit, isCombined)
 	if err != nil {
 		return nil, err
 	}

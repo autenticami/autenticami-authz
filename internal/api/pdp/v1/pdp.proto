@@ -15,7 +15,12 @@ message Identity {
 }
 
 message VirtualState {
+   enum VirtualStateView{
+      COMBINED = 0;
+      UNCOMBINED = 1;
+   }
   bool enabled = 1;
+	VirtualStateView view = 2;
 }
 
 message PermissionsEngine {

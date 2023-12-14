@@ -34,8 +34,11 @@ func (s PDPServer) GetPermissionsState(ctx context.Context, req *PermissionsStat
 	}
 	var permState *permissions.PermissionsState
 	if req.PermissionsEngine != nil {
+		virtualState := req.PermissionsEngine.VirtualState
+		virtualStateViewIsCombinded := virtualState.View == VirtualState_COMBINED
 		settings := []permissions.PermissionsEngineOption{
-			permissions.WithPermissionsEngineVirtualState(req.PermissionsEngine.VirtualState.Enabled),
+			permissions.WithPermissionsEngineVirtualState(virtualState.Enabled),
+			permissions.WithPermissionsEngineVirtualStateViewCombined(virtualStateViewIsCombinded),
 		}
 		permState, err = s.Service.GetPermissionsState(identityUUR, settings[:]...)
 	} else {

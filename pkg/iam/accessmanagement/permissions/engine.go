@@ -17,7 +17,8 @@ import (
 // Permission options
 
 type PermissionsEngineOptions struct {
-	enableVirtualState bool
+	enableVirtualState       bool
+	virtualStateViewCombined bool
 }
 
 type PermissionsEngineOption func(permEngineSetting *PermissionsEngineOptions) error
@@ -38,6 +39,13 @@ func buildPermissionsEngineOptions(options ...PermissionsEngineOption) (*Permiss
 func WithPermissionsEngineVirtualState(enableVirtualState bool) PermissionsEngineOption {
 	return func(options *PermissionsEngineOptions) error {
 		options.enableVirtualState = enableVirtualState
+		return nil
+	}
+}
+
+func WithPermissionsEngineVirtualStateViewCombined(combined bool) PermissionsEngineOption {
+	return func(options *PermissionsEngineOptions) error {
+		options.virtualStateViewCombined = combined
 		return nil
 	}
 }
@@ -133,7 +141,7 @@ func (e *PermissionsEngine) BuildPermissions(options ...PermissionsEngineOption)
 	}
 	if permEngineSettings.enableVirtualState {
 		virtualizer := newPermissionsStateVirtualizer(e.syntaxVersion, e.permissionsState)
-		return virtualizer.virtualize()
+		return virtualizer.virtualize(permEngineSettings.virtualStateViewCombined)
 	}
 	return e.permissionsState.clone()
 }
