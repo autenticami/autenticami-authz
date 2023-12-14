@@ -1,7 +1,5 @@
 syntax="proto3";
 
-import "google/protobuf/any.proto";
-
 package policydecisionpoint;
 
 option go_package = "github.com/autenticami/autenticami-authz/internal/api/pdp/v1";
