@@ -1,5 +1,7 @@
 syntax="proto3";
 
+import "google/protobuf/any.proto";
+
 package policydecisionpoint;
 
 option go_package = "github.com/autenticami/autenticami-authz/internal/api/pdp/v1";
@@ -38,6 +40,7 @@ message ACLPolicyStatement {
   string name = 1;
   repeated string actions = 2;
   repeated string resources = 3;
+	string condition = 4;
 }
 
 message ACLPolicyStatementWrapper {
