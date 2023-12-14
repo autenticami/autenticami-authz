@@ -64,7 +64,7 @@ func (s PDPServer) EvaluatePermissions(ctx context.Context, req *PermissionsEval
 	for i, evaluation := range req.Evaluations {
 		outcome := &PermissionsEvaluationOutcome{
 			Evaluation: evaluation,
-			Permitted:  true,
+			Permitted:  false,
 			Explanation: &PermissionsEvaluationOutcomeExplanation{
 				IsExplicitlyForbidden: true,
 				IsImplicitlyForbidden: false,

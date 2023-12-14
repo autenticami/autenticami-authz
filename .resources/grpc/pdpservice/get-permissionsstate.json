@@ -1,7 +1,8 @@
 {
   "permissionsEngine": {
     "virtualState": {
-      "enabled": false
+      "enabled": true,
+      "view": "COMBINED"
     }
   },
   "identity": {
