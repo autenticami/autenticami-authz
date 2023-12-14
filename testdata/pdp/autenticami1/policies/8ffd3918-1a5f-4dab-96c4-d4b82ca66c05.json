@@ -17,7 +17,7 @@
               "uur:581616507495:default:hr-app:organisation:person/*",
               "uur:581616507495:default:hr-app:organisation:person/mario.rossi"
             ],
-            "Condition": "CurrentUser({{.Autenticami.UserId}})' && DateLessThan('{{.Autenticami.UserId}}': '2020-06-30T23:59:59Z')"
+            "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
           },
           {
             "Name": "permit-hr/person/writer/any",
@@ -27,7 +27,7 @@
             "Resources": [
               "uur:581616507495:default:hr-app:organisation:person/mario.rossi"
             ],
-            "Condition": "CurrentUser({{.Autenticami.UserId}})' && DateLessThan('{{.Autenticami.UserId}}': '2020-06-30T23:59:59Z')"
+            "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
           },
           {
             "Name": "permit-hr/timesheet/writer/any",

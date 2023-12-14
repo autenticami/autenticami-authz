@@ -182,6 +182,16 @@ func TestBuildPermissionsState(t *testing.T) {
 				"output-permit.json",
 				true,
 			},
+			{
+				"VIRTUAL-STATE",
+				"./testdata/permissions-engine/build-virtual-state/with-conditions",
+				func() []string {
+					return []string{"input-policy-1.json", "input-policy-2.json"}
+				},
+				"output-forbid.json",
+				"output-permit.json",
+				true,
+			},
 		},
 	}
 	for version, testGroup := range tests {

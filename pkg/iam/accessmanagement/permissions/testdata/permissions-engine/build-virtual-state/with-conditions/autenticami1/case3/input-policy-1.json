@@ -1,0 +1,41 @@
+{
+  "Syntax": "autenticami1",
+  "Type": "ACL",
+  "Name": "person-base-reader",
+  "Permit": [
+    {
+      "Name": "permit-hr/person/reader/any",
+      "Actions": [
+        "person:ListEmployee",
+        "person:ReadEmployee"
+      ],
+      "Resources": [
+        "uur:581616507495:default:hr-app:organisation:person/mario.rossi",
+        "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+      ],
+      "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
+    },
+    {
+      "Name": "permit-hr/person/writer/any",
+      "Actions": [
+        "person:ReadEmployee",
+        "person:WriteEmployee"
+      ],
+      "Resources": [
+        "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+      ]
+    },
+    {
+      "Name": "permit-hr/person/delete/any",
+      "Actions": [
+        "person:DeleteEmployee"
+      ],
+      "Resources": [
+        "uur:581616507495:default:hr-app:organisation:person/giovanni.bianchi",
+        "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+      ],
+      "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})'"
+    }
+  ],
+  "Forbid": []
+}
