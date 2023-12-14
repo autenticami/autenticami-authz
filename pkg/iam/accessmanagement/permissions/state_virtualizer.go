@@ -10,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 
+	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
@@ -75,7 +76,7 @@ func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wr
 		if err != nil {
 			return nil, err
 		}
-		resourceKey := fmt.Sprintf("%s-%s", string(statement.Resources[0]), createTextHash(statement.Condition))
+		resourceKey := fmt.Sprintf("%s-%s", string(statement.Resources[0]), text.CreateStringHash(statement.Condition))
 		if _, ok := cache[resourceKey]; !ok {
 			cache[resourceKey] = &statement
 			continue

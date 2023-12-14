@@ -4,8 +4,6 @@
 package permissions
 
 import (
-	"crypto/sha256"
-	"fmt"
 	"sort"
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
@@ -24,13 +22,6 @@ type ACLPolicyStatementWrapper struct {
 	StatmentHashed      string
 }
 
-func createTextHash(text string) string {
-	h := sha256.New()
-	h.Write([]byte(text))
-	bs := h.Sum(nil)
-	return fmt.Sprintf("%x", bs)
-}
-
 func createACLPolicyStatementWrapper(aclPolicyStatement *policies.ACLPolicyStatement) (*ACLPolicyStatementWrapper, error) {
 	if aclPolicyStatement == nil {
 		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
@@ -39,7 +30,7 @@ func createACLPolicyStatementWrapper(aclPolicyStatement *policies.ACLPolicyState
 	if err != nil {
 		return nil, err
 	}
-	aclPolicyStatementHash := createTextHash(aclPolicyStatementString)
+	aclPolicyStatementHash := text.CreateStringHash(aclPolicyStatementString)
 	return &ACLPolicyStatementWrapper{
 		ID:                  uuid.New(),
 		Statement:           *aclPolicyStatement,
