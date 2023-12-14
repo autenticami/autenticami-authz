@@ -15,7 +15,8 @@ resource "autenticami_acl_policy_statement" "permit_hr_timesheet_writer_any" {
   ]
   resources = [
       "uur:581616507495:default:hr-app:organisation:person/*"
-  ]
+  ],
+	condition = "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
 }
 
 resource "autenticami_acl_policy_statement" "forbid-write-hr-timesheet-writer-bc182146-1598-4fde-99aa-b2d4d08bc1e2" {
