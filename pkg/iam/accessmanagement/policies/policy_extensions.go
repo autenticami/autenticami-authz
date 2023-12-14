@@ -10,6 +10,36 @@ import (
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
+func sanitizeSlice[K ~string](source []K) []K {
+	outputMap := map[K]struct{}{}
+	for _, item := range source {
+		if _, ok := outputMap[item]; ok {
+			continue
+		}
+		outputMap[item] = struct{}{}
+	}
+	keys := make([]string, 0)
+	for k := range outputMap {
+		keys = append(keys, string(k))
+	}
+	sort.Strings(keys)
+	items := make([]K, len(keys))
+	for i, key := range keys {
+		items[i] = K(key)
+	}
+	return items
+}
+
+func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) error {
+	if !version.IsValid() || aclPolicyStatement == nil {
+		return authzAMErrors.ErrAccessManagementInvalidDataType
+	}
+	aclPolicyStatement.Resources = sanitizeSlice(aclPolicyStatement.Resources)
+	aclPolicyStatement.Actions = sanitizeSlice(aclPolicyStatement.Actions)
+	aclPolicyStatement.Condition = strings.TrimSpace(aclPolicyStatement.Condition)
+	return nil
+}
+
 func ValidateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) (bool, error) {
 	if !version.IsValid() || aclPolicyStatement == nil {
 		return false, authzAMErrors.ErrAccessManagementInvalidDataType
@@ -42,36 +72,6 @@ func ValidateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement 
 		}
 	}
 	return true, nil
-}
-
-func sanitizeSlice[K ~string](source []K) []K {
-	outputMap := map[K]struct{}{}
-	for _, item := range source {
-		if _, ok := outputMap[item]; ok {
-			continue
-		}
-		outputMap[item] = struct{}{}
-	}
-	keys := make([]string, 0)
-	for k := range outputMap {
-		keys = append(keys, string(k))
-	}
-	sort.Strings(keys)
-	items := make([]K, len(keys))
-	for i, key := range keys {
-		items[i] = K(key)
-	}
-	return items
-}
-
-func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) error {
-	if !version.IsValid() || aclPolicyStatement == nil {
-		return authzAMErrors.ErrAccessManagementInvalidDataType
-	}
-	aclPolicyStatement.Resources = sanitizeSlice(aclPolicyStatement.Resources)
-	aclPolicyStatement.Actions = sanitizeSlice(aclPolicyStatement.Actions)
-	aclPolicyStatement.Condition = strings.TrimSpace(aclPolicyStatement.Condition)
-	return nil
 }
 
 func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
