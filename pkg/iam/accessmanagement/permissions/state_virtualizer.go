@@ -4,6 +4,7 @@
 package permissions
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/google/uuid"
@@ -70,18 +71,18 @@ func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wr
 		if len(statement.Resources) > 1 {
 			return nil, authzErrors.ErrGeneric
 		}
-		resource := string(statement.Resources[0])
-		if _, ok := cache[resource]; !ok {
-			err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
-			if err != nil {
-				return nil, err
-			}
-			cache[resource] = &statement
+		err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
+		if err != nil {
+			return nil, err
+		}
+		resourceKey := fmt.Sprintf("%s-%s", string(statement.Resources[0]), createTextHash(statement.Condition))
+		if _, ok := cache[resourceKey]; !ok {
+			cache[resourceKey] = &statement
 			continue
 		}
-		cachedStatement := cache[resource]
+		cachedStatement := cache[resourceKey]
 		cachedStatement.Actions = append(cachedStatement.Actions, statement.Actions...)
-		err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, cachedStatement)
+		err = policies.SanitizeACLPolicyStatement(v.syntaxVersion, cachedStatement)
 		if err != nil {
 			return nil, err
 		}

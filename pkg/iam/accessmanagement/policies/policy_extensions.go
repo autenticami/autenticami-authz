@@ -5,6 +5,7 @@ package policies
 
 import (
 	"sort"
+	"strings"
 
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
@@ -69,6 +70,7 @@ func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement 
 	}
 	aclPolicyStatement.Resources = sanitizeSlice(aclPolicyStatement.Resources)
 	aclPolicyStatement.Actions = sanitizeSlice(aclPolicyStatement.Actions)
+	aclPolicyStatement.Condition = strings.TrimSpace(aclPolicyStatement.Condition)
 	return nil
 }
 
