@@ -4,13 +4,14 @@
 package validations
 
 import (
-	"path/filepath"
+	"os"
 	"strconv"
 )
 
 func IsValidPath(path string) bool {
-	cleanPath := filepath.Clean(path)
-	return cleanPath == path
+    _, err := os.Stat(path)
+    if err == nil { return true }
+    return !os.IsNotExist(err)
 }
 
 func IsValidPort(portStr string) bool {
