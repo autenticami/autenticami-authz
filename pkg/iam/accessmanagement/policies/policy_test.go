@@ -507,6 +507,16 @@ func TestSanitizeACLPolicyStatement(t *testing.T) {
 		assert.Equal(UURString("uur:581616507495:default:hr-app:organisation:person/B"), aclPolicyStatement.Resources[1], "wrong result\npolicy resource value")
 		assert.Equal("DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')", aclPolicyStatement.Condition, "wrong result\npolicy condition value")
 	}
+	{
+		aclPolicyStatement := ACLPolicyStatement{
+			Name: "Sample",
+			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
+			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
+		}
+		err := SanitizeACLPolicyStatement("WRONG", &aclPolicyStatement)
+		assert.NotNil(err, "wrong result\nerr should be not nil")
+	}
 }
 
 func TestMiscellaneousPolicies(t *testing.T) {
