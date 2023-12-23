@@ -4,6 +4,7 @@
 package services
 
 import (
+	"errors"
 	"os"
 	"strings"
 	"testing"
@@ -11,10 +12,12 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 
-	authzIntAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
-	authzIntPdpAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+
+	authzIntAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
+	authzIntAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/errors"
+	authzIntPdpAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
 )
 
 func TestBuildPermissionsState(t *testing.T) {
@@ -71,4 +74,15 @@ func TestBuildPermissionsState(t *testing.T) {
 			assert.Equal(test.LenOfPermit, len(permit), "wrong result\nforbidden shold be equale to 0")
 		})
 	}
+}
+
+
+func TestBuildPermissionsStateInvalidPath(t *testing.T) {
+	assert := assert.New(t)
+	os.Setenv(authzIntAgentConfigs.EnvKeyAutenticamiAgentAppData, "./testdata/none")
+	config, err := authzIntPdpAgentConfigs.NewPDPAgentConfig()
+	assert.Nil(err, "wrong result\nerr shold be nil and not % s", spew.Sdump(err))
+	service := NewPDPLocalService(config)
+	err = service.Setup()
+	assert.True(errors.Is(err, authzIntAgentErrors.ErrAgentInvalidAppData), "wrong result\nerr should not be equale to %s", spew.Sdump(err))
 }

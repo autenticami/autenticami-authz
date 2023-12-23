@@ -17,10 +17,7 @@ func IsValidPath(path string) bool {
 		return true
 	}
 	cleanPath := filepath.Clean(path)
-	cleanPath, err := filepath.Abs(cleanPath)
-	if err != nil {
-		return false
-	}
+	cleanPath, _ = filepath.Abs(cleanPath)
 	isAbs := filepath.IsAbs(cleanPath)
 	return isAbs
 }
