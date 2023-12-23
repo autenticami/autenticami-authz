@@ -1,0 +1,11 @@
+{
+  "items": [
+    {
+      "user_uur": "uur:581616507495:default:autenticami:iam:user/nicola.gallo@nitroagility.com",
+      "policies": [
+        "uur:581616507495:default:autenticami:iam:policy/person-reader",
+        "uur:581616507495:default:autenticami:iam:policy/person-not-reader"
+      ]
+    }
+  ]
+}

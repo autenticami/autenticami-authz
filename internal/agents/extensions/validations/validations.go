@@ -4,28 +4,25 @@
 package validations
 
 import (
-	"os"
 	"path/filepath"
-	"regexp"
-	"runtime"
 	"strconv"
+	"strings"
 )
 
 func IsValidPath(path string) bool {
-	path = os.ExpandEnv(path)
+	if len(strings.ReplaceAll(path, " ", "")) == 0 {
+		return false
+	}
 	if path == "." || path == "./" {
 		return true
 	}
 	cleanPath := filepath.Clean(path)
-	var regexString string
-	switch runtime.GOOS {
-	case "windows":
-		regexString = `^[a-zA-Z]:\\(?:[^\\/:*?"<>|\r\n]+\\)*[^\\/:*?"<>|\r\n]*$`
-	default:
-		regexString = `^(~/(?:[^/]+(/[^/]+)*)?|/([^/]+(/[^/]+)*)?)$`
+	cleanPath, err := filepath.Abs(cleanPath)
+	if err != nil {
+		return false
 	}
-	regex := regexp.MustCompile(regexString)
-	return regex.MatchString(cleanPath)
+	isAbs := filepath.IsAbs(cleanPath)
+	return isAbs
 }
 
 func IsValidPort(portStr string) bool {

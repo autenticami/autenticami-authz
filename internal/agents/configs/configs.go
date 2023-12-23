@@ -4,6 +4,8 @@
 package configs
 
 import (
+	"os"
+
 	"github.com/autenticami/autenticami-authz/internal/agents/errors"
 	"github.com/autenticami/autenticami-authz/internal/agents/extensions/environments"
 	"github.com/autenticami/autenticami-authz/internal/agents/extensions/validations"
@@ -36,7 +38,7 @@ func NewAgentConfig(agentType string) (*AgentConfig, error) {
 	localConfig := &AgentConfig{
 		isLocal:   environments.GetEnv(EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		agentType: environments.GetEnv(EnvKeyAutenticamiAgentType, agentType),
-		appData:   environments.GetEnv(EnvKeyAutenticamiAgentAppData, "./"),
+		appData:   os.ExpandEnv(environments.GetEnv(EnvKeyAutenticamiAgentAppData, "./")),
 		appPort:   environments.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
 	}
 	if !validations.IsValidPath(localConfig.appData) {

@@ -20,7 +20,7 @@ func TestAgentConfig(t *testing.T) {
 		agentType := ""
 		agent, err := NewAgentConfig(agentType)
 		assert.True(errors.Is(err, authzIntAgentErrors.ErrAgentInvalidType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAgentInvalidType", spew.Sdump(err))
-		assert.Nil(agent, "wrong result\nagent shold be nil and not")
+		assert.Nil(agent, "wrong result\nagent shold be nil and not %s", spew.Sdump(agent))
 	}
 	{
 		agentType := "PDP-AGENT"
@@ -67,7 +67,7 @@ func TestAgentConfig(t *testing.T) {
 	{
 		environment := "DEV"
 		os.Setenv(EnvKeyAutenticamiEnvironment, environment)
-		appData := "a b c d e f g h i l m n o p q r s t u v w x y z"
+		appData := " "
 		os.Setenv(EnvKeyAutenticamiAgentAppData, appData)
 		port := "9091"
 		os.Setenv(EnvKeyAutenticamiAgentPort, port)
