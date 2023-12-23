@@ -35,7 +35,7 @@ func (c *AgentConfig) GetAgentAppData() string {
 func NewAgentConfig(agentType string) (*AgentConfig, error) {
 	localConfig := &AgentConfig{
 		isLocal:   environments.GetEnv(EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
-		agentType: agentType,
+		agentType: environments.GetEnv(EnvKeyAutenticamiAgentType, agentType),
 		appData:   environments.GetEnv(EnvKeyAutenticamiAgentAppData, "./"),
 		appPort:   environments.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
 	}
