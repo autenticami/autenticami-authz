@@ -4,6 +4,7 @@
 package validations
 
 import (
+	"os"
 	"path/filepath"
 	"regexp"
 	"runtime"
@@ -11,6 +12,7 @@ import (
 )
 
 func IsValidPath(path string) bool {
+	path = os.ExpandEnv(path)
 	if path == "." || path == "./" {
 		return true
 	}
