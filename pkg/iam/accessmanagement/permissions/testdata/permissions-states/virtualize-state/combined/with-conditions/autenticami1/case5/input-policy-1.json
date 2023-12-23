@@ -1,0 +1,7 @@
+{
+  "Syntax": "autenticami1",
+  "Type": "ACL",
+  "Name": "person-base-reader",
+  "Permit": [],
+  "Forbid": []
+}
