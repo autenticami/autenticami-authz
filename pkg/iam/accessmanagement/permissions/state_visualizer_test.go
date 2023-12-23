@@ -47,6 +47,28 @@ func TestVirtualizeState(t *testing.T) {
 			"output-forbid.json",
 			"output-permit.json",
 		},
+		{
+			"VIRTUAL-STATE-UNCOMBINED-WITH-CONDITIONS",
+			policies.PolicyV1,
+			"./testdata/permissions-states/virtualize-state/uncombined/with-conditions",
+			false,
+			func() []string {
+				return []string{"input-policy-1.json", "input-policy-2.json"}
+			},
+			"output-forbid.json",
+			"output-permit.json",
+		},
+		{
+			"VIRTUAL-STATE-UNCOMBINED-WITHOUT-CONDITIONS",
+			policies.PolicyV1,
+			"./testdata/permissions-states/virtualize-state/uncombined/without-conditions",
+			false,
+			func() []string {
+				return []string{"input-policy-1.json", "input-policy-2.json"}
+			},
+			"output-forbid.json",
+			"output-permit.json",
+		},
 	}
 	for _, test := range tests {
 		version := string(test.Version)
@@ -79,7 +101,7 @@ func TestVirtualizeState(t *testing.T) {
 				var err error
 
 				virtualizer := newPermissionsStateVirtualizer(policies.PolicyVersionString(version), permState)
-				permState, err = virtualizer.virtualize(true)
+				permState, err = virtualizer.virtualize(test.Combined)
 				assert.Nil(err, "wrong result\nshould be nil")
 
 				forbidList, _ := permState.GetACLForbiddenPermissions()

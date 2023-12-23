@@ -1,7 +1,15 @@
 [
   {
     "Actions": [
-      "person:ListEmployee",
+      "person:ListEmployee"
+    ],
+    "Resources": [
+      "uur:581616507495:default:hr-app:organisation:person/mario.rossi"
+    ],
+    "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
+  },
+  {
+    "Actions": [
       "person:ReadEmployee"
     ],
     "Resources": [
@@ -11,7 +19,15 @@
   },
   {
     "Actions": [
-      "person:ListEmployee",
+      "person:ListEmployee"
+    ],
+    "Resources": [
+      "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+    ],
+    "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
+  },
+  {
+    "Actions": [
       "person:ReadEmployee"
     ],
     "Resources": [
@@ -21,7 +37,14 @@
   },
   {
     "Actions": [
-      "person:ReadEmployee",
+      "person:ReadEmployee"
+    ],
+    "Resources": [
+      "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+    ]
+  },
+  {
+    "Actions": [
       "person:WriteEmployee"
     ],
     "Resources": [

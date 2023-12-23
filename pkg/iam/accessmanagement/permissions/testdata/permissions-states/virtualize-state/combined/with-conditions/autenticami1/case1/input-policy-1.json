@@ -16,17 +16,26 @@
       "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
     },
     {
-      "Name": "permit-hr/person/reader/any",
+      "Name": "permit-hr/person/writer/any",
       "Actions": [
-        "person:ListEmployee",
-        "person:ReadEmployee"
+        "person:ReadEmployee",
+        "person:WriteEmployee"
       ],
       "Resources": [
-        "uur:581616507495:default:hr-app:organisation:person/mario.rossi",
         "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
-      ],
-      "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
+      ]
     }
   ],
-  "Forbid": []
+  "Forbid": [
+    {
+      "Name": "forbid-hr/person/writer/any",
+      "Actions": [
+        "person:ReadEmployee",
+        "person:WriteEmployee"
+      ],
+      "Resources": [
+        "uur:581616507495:default:hr-app:organisation:person/irene.banchi"
+      ]
+    }
+  ]
 }
