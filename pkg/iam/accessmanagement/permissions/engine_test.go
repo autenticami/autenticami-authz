@@ -275,7 +275,7 @@ func TestBuildPermissionsEngineOption(t *testing.T) {
 	{
 		expVirtualState := true
 		expVirtualStateCombined := true
-		_, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined), 	func(options *PermissionsEngineOptions) error {
+		_, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined), func(options *PermissionsEngineOptions) error {
 			return errors.New("Invalid Option")
 		})
 		assert.NotNil(err, "wrong result\nshould be not nil")

@@ -14,13 +14,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-
 func TestVirtualizeState(t *testing.T) {
 	tests := []struct {
 		Name             string
-		Version			 policies.PolicyVersionString
+		Version          policies.PolicyVersionString
 		Path             string
-		Combined		 bool
+		Combined         bool
 		InputFiles       func() []string
 		OutputFobidFile  string
 		OutputPermitFile string
@@ -115,4 +114,3 @@ func TestVirtualizeState(t *testing.T) {
 		}
 	}
 }
-
