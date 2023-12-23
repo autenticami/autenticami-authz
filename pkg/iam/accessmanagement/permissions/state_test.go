@@ -101,11 +101,23 @@ func TestCreatePermissionsState(t *testing.T) {
 	}
 }
 
-func TestMiscellaneousPermissionsLoader(t *testing.T) {
+func TestMiscellaneousPermissionsState(t *testing.T) {
 	assert := assert.New(t)
 	{
 		_, err := createACLPolicyStatementWrapper(nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrJSONSchemaValidation", spew.Sdump(err))
+	}
+	{
+		permState := newPermissionsState()
+		extPermsState := newExtendedPermissionsState(permState)
+		err := extPermsState.fobidACLPolicyStatements(nil)
+		assert.NotNil(err, "wrong result\ngot: %sshouldn't be not nil")
+	}
+	{
+		permState := newPermissionsState()
+		extPermsState := newExtendedPermissionsState(permState)
+		err := extPermsState.permitACLPolicyStatements(nil)
+		assert.NotNil(err, "wrong result\ngot: %sshouldn't be not nil")
 	}
 }

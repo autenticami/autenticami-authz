@@ -40,6 +40,9 @@ func createACLPolicyStatementWrapper(aclPolicyStatement *policies.ACLPolicyState
 }
 
 func createACLPolicyStatementWrappers(wrappers map[string]ACLPolicyStatementWrapper, aclPolicyStatements []policies.ACLPolicyStatement) error {
+	if aclPolicyStatements == nil {
+		return authzAMErrors.ErrAccessManagementInvalidDataType
+	}
 	for _, aclPolicyStatement := range aclPolicyStatements {
 		wrapper, err := createACLPolicyStatementWrapper(&aclPolicyStatement)
 		if err != nil {
