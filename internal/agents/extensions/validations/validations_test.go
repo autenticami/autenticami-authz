@@ -12,7 +12,7 @@ import (
 
 func TestIsValidPathForValidPath(t *testing.T) {
 	assert := assert.New(t)
-	paths := []string { "~/data", "/home/data", "$HOME" }
+	paths := []string { ".", "./", "~/data", "/home/data", "$HOME" }
 	for _, path := range paths {
 		isValid := IsValidPath(path)
 		assert.True(isValid, "wrong result\npath %s should be valid", spew.Sdump(path))
