@@ -37,7 +37,6 @@ func TestAgentConfig(t *testing.T) {
 	{
 		environment := "DEV"
 		os.Setenv(EnvKeyAutenticamiEnvironment, environment)
-		//appData := "~/."
 		appData := "~/appdata"
 		os.Setenv(EnvKeyAutenticamiAgentAppData, appData)
 		port := "9093"
@@ -52,5 +51,29 @@ func TestAgentConfig(t *testing.T) {
 		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nGetAgentAppData should be equal to%s", spew.Sdump(exp))
 		exp	= port
 		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nGetAgentPortshould be equal to%s", spew.Sdump(exp))
+	}
+	{
+		environment := "DEV"
+		os.Setenv(EnvKeyAutenticamiEnvironment, environment)
+		appData := "~/appdata"
+		os.Setenv(EnvKeyAutenticamiAgentAppData, appData)
+		port := "ABC"
+		os.Setenv(EnvKeyAutenticamiAgentPort, port)
+		agentType := "PDP-AGENT"
+ 		_, err := NewAgentConfig(agentType)
+		assert.NotNil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
+		assert.False(errors.Is(authzIntAgentErrors.ErrAgentInvalidPort, errors.New("Sample errore")), "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
+	}
+	{
+		environment := "DEV"
+		os.Setenv(EnvKeyAutenticamiEnvironment, environment)
+		appData := "a b c d e f g h i l m n o p q r s t u v w x y z"
+		os.Setenv(EnvKeyAutenticamiAgentAppData, appData)
+		port := "9091"
+		os.Setenv(EnvKeyAutenticamiAgentPort, port)
+		agentType := "PDP-AGENT"
+ 		_, err := NewAgentConfig(agentType)
+		assert.NotNil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
+		assert.False(errors.Is(authzIntAgentErrors.ErrAgentInvalidAppData, errors.New("Sample errore")), "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 	}
 }
