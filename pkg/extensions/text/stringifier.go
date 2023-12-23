@@ -43,7 +43,9 @@ func stringifyMap(obj any, exclude []string) string {
 				continue
 			}
 			value := (objMap)[key]
-			builder.WriteString(fmt.Sprintf("#%s#%s", key, stringifyMap(value, exclude)))
+			if value != nil {
+				builder.WriteString(fmt.Sprintf("#%s#%s", key, stringifyMap(value, exclude)))
+			}
 		}
 		return builder.String()
 	}

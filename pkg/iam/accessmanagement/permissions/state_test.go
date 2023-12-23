@@ -13,6 +13,8 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
+
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 func helperToCompareACLPolicyStatementWrappers(file string, inputList []ACLPolicyStatementWrapper) error {
@@ -96,5 +98,14 @@ func TestCreatePermissionsState(t *testing.T) {
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})
 		}
+	}
+}
+
+func TestMiscellaneousPermissionsLoader(t *testing.T) {
+	assert := assert.New(t)
+	{
+		_, err := createACLPolicyStatementWrapper(nil)
+		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrJSONSchemaValidation", spew.Sdump(err))
 	}
 }
