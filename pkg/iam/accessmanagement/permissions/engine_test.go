@@ -237,3 +237,47 @@ func TestBuildPermissionsState(t *testing.T) {
 		}
 	}
 }
+
+func TestBuildPermissionsEngineOption(t *testing.T) {
+	assert := assert.New(t)
+	{
+		expVirtualState := false
+		expVirtualStateCombined := false
+		options, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined))
+		assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+		assert.Equal(options.enableVirtualState, expVirtualState, "wrong result\nenableVirtualState should be%s", spew.Sdump(expVirtualState))
+		assert.Equal(options.virtualStateViewCombined, expVirtualStateCombined, "wrong result\nexpVirtualStateCombined should be%s", spew.Sdump(expVirtualStateCombined))
+	}
+	{
+		expVirtualState := true
+		expVirtualStateCombined := false
+		options, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined))
+		assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+		assert.Equal(options.enableVirtualState, expVirtualState, "wrong result\nenableVirtualState should be%s", spew.Sdump(expVirtualState))
+		assert.Equal(options.virtualStateViewCombined, expVirtualStateCombined, "wrong result\nexpVirtualStateCombined should be%s", spew.Sdump(expVirtualStateCombined))
+	}
+	{
+		expVirtualState := false
+		expVirtualStateCombined := true
+		options, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined))
+		assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+		assert.Equal(options.enableVirtualState, expVirtualState, "wrong result\nenableVirtualState should be%s", spew.Sdump(expVirtualState))
+		assert.Equal(options.virtualStateViewCombined, expVirtualStateCombined, "wrong result\nexpVirtualStateCombined should be%s", spew.Sdump(expVirtualStateCombined))
+	}
+	{
+		expVirtualState := true
+		expVirtualStateCombined := true
+		options, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined))
+		assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
+		assert.Equal(options.enableVirtualState, expVirtualState, "wrong result\nenableVirtualState should be%s", spew.Sdump(expVirtualState))
+		assert.Equal(options.virtualStateViewCombined, expVirtualStateCombined, "wrong result\nexpVirtualStateCombined should be%s", spew.Sdump(expVirtualStateCombined))
+	}
+	{
+		expVirtualState := true
+		expVirtualStateCombined := true
+		_, err := buildPermissionsEngineOptions(WithPermissionsEngineVirtualState(expVirtualState), WithPermissionsEngineVirtualStateViewCombined(expVirtualStateCombined), 	func(options *PermissionsEngineOptions) error {
+			return errors.New("Invalid Option")
+		})
+		assert.NotNil(err, "wrong result\nshould be not nil")
+	}
+}

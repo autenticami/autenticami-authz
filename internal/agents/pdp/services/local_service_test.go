@@ -22,11 +22,11 @@ import (
 
 func TestBuildPermissionsState(t *testing.T) {
 	type TestStruct struct {
-		Name                string
-		User                string
-		Combined			bool
-		LenOfForbid			int
-		LenOfPermit			int
+		Name        string
+		User        string
+		Combined    bool
+		LenOfForbid int
+		LenOfPermit int
 	}
 	tests := []TestStruct{
 		{
@@ -75,7 +75,6 @@ func TestBuildPermissionsState(t *testing.T) {
 		})
 	}
 }
-
 
 func TestBuildPermissionsStateInvalidPath(t *testing.T) {
 	assert := assert.New(t)

@@ -27,11 +27,11 @@ func TestAgentConfig(t *testing.T) {
 		agent, err := NewAgentConfig(agentType)
 		assert.Nil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 		assert.True(agent.IsLocalEnv(), "wrong result\nIsLocalEnv should be equal to%s", spew.Sdump(true))
-		exp	:= agentType
+		exp := agentType
 		assert.Equal(exp, agent.GetAgentType(), "wrong result\nGetAgentType should be equal to%s", spew.Sdump(exp))
-		exp	= "./"
+		exp = "./"
 		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nGetAgentAppData should be equal to%s", spew.Sdump(exp))
-		exp	= "9090"
+		exp = "9090"
 		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nGetAgentPortshould be equal to%s", spew.Sdump(exp))
 	}
 	{
@@ -42,14 +42,14 @@ func TestAgentConfig(t *testing.T) {
 		port := "9093"
 		os.Setenv(EnvKeyAutenticamiAgentPort, port)
 		agentType := "PDP-AGENT"
- 		agent, err := NewAgentConfig(agentType)
+		agent, err := NewAgentConfig(agentType)
 		assert.Nil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 		assert.False(agent.IsLocalEnv(), "wrong result\nnIsLocalEnv should be not true", spew.Sdump(true))
-		exp	:= agentType
+		exp := agentType
 		assert.Equal(exp, agent.GetAgentType(), "wrong result\nGetAgentType should be equal to%s", spew.Sdump(exp))
-		exp	= appData
+		exp = appData
 		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nGetAgentAppData should be equal to%s", spew.Sdump(exp))
-		exp	= port
+		exp = port
 		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nGetAgentPortshould be equal to%s", spew.Sdump(exp))
 	}
 	{
@@ -60,7 +60,7 @@ func TestAgentConfig(t *testing.T) {
 		port := "ABC"
 		os.Setenv(EnvKeyAutenticamiAgentPort, port)
 		agentType := "PDP-AGENT"
- 		_, err := NewAgentConfig(agentType)
+		_, err := NewAgentConfig(agentType)
 		assert.NotNil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 		assert.False(errors.Is(authzIntAgentErrors.ErrAgentInvalidPort, errors.New("Sample errore")), "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 	}
@@ -72,7 +72,7 @@ func TestAgentConfig(t *testing.T) {
 		port := "9091"
 		os.Setenv(EnvKeyAutenticamiAgentPort, port)
 		agentType := "PDP-AGENT"
- 		_, err := NewAgentConfig(agentType)
+		_, err := NewAgentConfig(agentType)
 		assert.NotNil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 		assert.False(errors.Is(authzIntAgentErrors.ErrAgentInvalidAppData, errors.New("Sample errore")), "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 	}

@@ -13,7 +13,6 @@ import (
 
 	"github.com/autenticami/autenticami-authz/internal/agents/configs"
 	authzIntAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/errors"
-
 )
 
 func TestPDPAgentConfig(t *testing.T) {

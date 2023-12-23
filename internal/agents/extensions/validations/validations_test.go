@@ -12,7 +12,7 @@ import (
 
 func TestIsValidPathForValidPath(t *testing.T) {
 	assert := assert.New(t)
-	paths := []string { ".", "./", "~/data", "/home/data", "../../", "$HOME" }
+	paths := []string{".", "./", "~/data", "/home/data", "../../", "$HOME"}
 	for _, path := range paths {
 		isValid := IsValidPath(path)
 		assert.True(isValid, "wrong result\npath %s should be valid", spew.Sdump(path))
@@ -21,7 +21,7 @@ func TestIsValidPathForValidPath(t *testing.T) {
 
 func TestIsValidPathForInvalidPath(t *testing.T) {
 	assert := assert.New(t)
-	paths := []string { "", " " }
+	paths := []string{"", " "}
 	for _, path := range paths {
 		isValid := IsValidPath(path)
 		assert.False(isValid, "wrong result\npath %s should be not valid", spew.Sdump(path))
@@ -30,7 +30,7 @@ func TestIsValidPathForInvalidPath(t *testing.T) {
 
 func TestIsValidPortForValidPort(t *testing.T) {
 	assert := assert.New(t)
-	ports := []string { "1", "2", "65535" }
+	ports := []string{"1", "2", "65535"}
 	for _, port := range ports {
 		isValid := IsValidPort(port)
 		assert.True(isValid, "wrong result\nport %s should be valid", spew.Sdump(port))
@@ -39,7 +39,7 @@ func TestIsValidPortForValidPort(t *testing.T) {
 
 func TestIsValidPortForInvalidPort(t *testing.T) {
 	assert := assert.New(t)
-	ports := []string { "", " ", "a b C", "-1", "0", "65536" }
+	ports := []string{"", " ", "a b C", "-1", "0", "65536"}
 	for _, port := range ports {
 		isValid := IsValidPort(port)
 		assert.False(isValid, "wrong result\nport %s should be not valid", spew.Sdump(port))

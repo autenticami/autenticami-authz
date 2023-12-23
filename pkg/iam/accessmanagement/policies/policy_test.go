@@ -492,9 +492,9 @@ func TestSanitizeACLPolicyStatement(t *testing.T) {
 	assert := assert.New(t)
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Sample",
-			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
-			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Sample",
+			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
+			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		err := SanitizeACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
@@ -513,9 +513,9 @@ func TestSanitizeACLPolicyStatementInvalid(t *testing.T) {
 	assert := assert.New(t)
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Sample",
-			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
-			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Sample",
+			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
+			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		err := SanitizeACLPolicyStatement("WRONG", &aclPolicyStatement)
@@ -527,9 +527,9 @@ func TestValidateACLPolicyStatementInvalid(t *testing.T) {
 	assert := assert.New(t)
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Sample",
-			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
-			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Sample",
+			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
+			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		_, err := ValidateACLPolicyStatement("WRONG", &aclPolicyStatement)
@@ -537,9 +537,9 @@ func TestValidateACLPolicyStatementInvalid(t *testing.T) {
 	}
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Not Valid",
-			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
-			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Not Valid",
+			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
+			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
@@ -547,9 +547,9 @@ func TestValidateACLPolicyStatementInvalid(t *testing.T) {
 	}
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Sample",
-			Actions: []ActionString { "not valid", "person:Read", "person:Delete" },
-			Resources: []UURString { "uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Sample",
+			Actions:   []ActionString{"not valid", "person:Read", "person:Delete"},
+			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
@@ -557,9 +557,9 @@ func TestValidateACLPolicyStatementInvalid(t *testing.T) {
 	}
 	{
 		aclPolicyStatement := ACLPolicyStatement{
-			Name: "Sample",
-			Actions: []ActionString { "person:Read", "person:Read", "person:Delete" },
-			Resources: []UURString { "not valid", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A" },
+			Name:      "Sample",
+			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
+			Resources: []UURString{"not valid", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
 		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
