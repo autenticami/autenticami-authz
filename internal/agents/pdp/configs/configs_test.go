@@ -28,4 +28,16 @@ func TestPDPAgentConfig(t *testing.T) {
 		assert.True(errors.Is(err, authzIntAgentErrors.ErrAgentInvalidType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAgentInvalidType", spew.Sdump(err))
 		assert.Nil(agent, "wrong result\nagent shold be nil and not")
 	}
+	{
+		os.Setenv(configs.EnvKeyAutenticamiAgentPort, "0 1 2 3 4 5 6")
+		agent, err := NewPDPAgentConfig()
+		assert.True(errors.Is(err, authzIntAgentErrors.ErrAgentInvalidPort), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAgentInvalidType", spew.Sdump(err))
+		assert.Nil(agent, "wrong result\nagent shold be nil and not")
+	}
+	{
+		os.Setenv(configs.EnvKeyAutenticamiAgentAppData, "0 1 2 3 4 5 6")
+		agent, err := NewPDPAgentConfig()
+		assert.True(errors.Is(err, authzIntAgentErrors.ErrAgentInvalidAppData), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAgentInvalidType", spew.Sdump(err))
+		assert.Nil(agent, "wrong result\nagent shold be nil and not")
+	}
 }
