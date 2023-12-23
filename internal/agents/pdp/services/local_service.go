@@ -69,11 +69,11 @@ func loadCacheFromDisk(cache *map[string]any, appFolder string, key string, targ
 func (s *PDPLocalService) Setup() error {
 	var err error
 	s.cache = make(map[string]any)
-	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/autenticami1/identities/", "user_uur", "policies", false)
+	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/identities/", "user_uur", "policies", false)
 	if err != nil {
 		return authzIntAgentErrors.ErrAgentInvalidAppData
 	}
-	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/autenticami1/policies/", "policy_uur", "policy_payload", true)
+	err = loadCacheFromDisk(&s.cache, s.config.GetAgentAppData()+"/policies/", "policy_uur", "policy_payload", true)
 	if err != nil {
 		return authzIntAgentErrors.ErrAgentInvalidAppData
 	}

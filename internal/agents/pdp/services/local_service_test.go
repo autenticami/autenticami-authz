@@ -51,7 +51,7 @@ func TestBuildPermissionsState(t *testing.T) {
 	for _, test := range tests {
 		t.Run(strings.ToUpper(test.Name), func(t *testing.T) {
 			assert := assert.New(t)
-			os.Setenv(authzIntAgentConfigs.EnvKeyAutenticamiAgentAppData, "./testdata/local-service")
+			os.Setenv(authzIntAgentConfigs.EnvKeyAutenticamiAgentAppData, "./testdata/local-service/autenticami1")
 			config, err := authzIntPdpAgentConfigs.NewPDPAgentConfig()
 			assert.Nil(err, "wrong result\nerr shold be nil and not % s", spew.Sdump(err))
 			service := NewPDPLocalService(config)

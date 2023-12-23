@@ -9,7 +9,7 @@
             "program": "./cmd/pdpagent/main.go",
             "env": {
                 "AUTENTICAMI-AGENT-TYPE": "PDP-LOCAL",
-                "AUTENTICAMI-AGENT-APPDATA": "../../testdata/pdp",
+                "AUTENTICAMI-AGENT-APPDATA": "../../testdata/pdp/autenticami1",
                 "AUTENTICAMI-AGENT-PORT": "9091",
             }
         }
