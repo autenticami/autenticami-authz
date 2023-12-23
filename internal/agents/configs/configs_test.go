@@ -26,31 +26,31 @@ func TestAgentConfig(t *testing.T) {
 		agentType := "PDP-AGENT"
 		agent, err := NewAgentConfig(agentType)
 		assert.Nil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
-		assert.True(agent.IsLocalEnv(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(true))
+		assert.True(agent.IsLocalEnv(), "wrong result\nIsLocalEnv should be equal to%s", spew.Sdump(true))
 		exp	:= agentType
-		assert.Equal(exp, agent.GetAgentType(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
-		exp	= "."
-		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
+		assert.Equal(exp, agent.GetAgentType(), "wrong result\nGetAgentType should be equal to%s", spew.Sdump(exp))
+		exp	= "./"
+		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nGetAgentAppData should be equal to%s", spew.Sdump(exp))
 		exp	= "9090"
-		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
+		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nGetAgentPortshould be equal to%s", spew.Sdump(exp))
 	}
 	{
 		environment := "DEV"
 		os.Setenv(EnvKeyAutenticamiEnvironment, environment)
 		//appData := "~/."
-		appData := "~/Downloads"
+		appData := "~/appdata"
 		os.Setenv(EnvKeyAutenticamiAgentAppData, appData)
 		port := "9093"
 		os.Setenv(EnvKeyAutenticamiAgentPort, port)
 		agentType := "PDP-AGENT"
-		agent, err := NewAgentConfig(agentType)
+ 		agent, err := NewAgentConfig(agentType)
 		assert.Nil(err, "wrong result\nerror shold be nil and not%s", spew.Sdump(err))
 		assert.False(agent.IsLocalEnv(), "wrong result\nnIsLocalEnv should be not true", spew.Sdump(true))
 		exp	:= agentType
-		assert.Equal(exp, agent.GetAgentType(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
+		assert.Equal(exp, agent.GetAgentType(), "wrong result\nGetAgentType should be equal to%s", spew.Sdump(exp))
 		exp	= appData
-		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
+		assert.Equal(exp, agent.GetAgentAppData(), "wrong result\nGetAgentAppData should be equal to%s", spew.Sdump(exp))
 		exp	= port
-		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nnIsLocalEnv should be equal to%s", spew.Sdump(exp))
+		assert.Equal(exp, agent.GetAgentPort(), "wrong result\nGetAgentPortshould be equal to%s", spew.Sdump(exp))
 	}
 }

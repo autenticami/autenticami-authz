@@ -36,7 +36,7 @@ func NewAgentConfig(agentType string) (*AgentConfig, error) {
 	localConfig := &AgentConfig{
 		isLocal:   environments.GetEnv(EnvKeyAutenticamiEnvironment, "LOCAL") == "LOCAL",
 		agentType: agentType,
-		appData:   environments.GetEnv(EnvKeyAutenticamiAgentAppData, "."),
+		appData:   environments.GetEnv(EnvKeyAutenticamiAgentAppData, "./"),
 		appPort:   environments.GetEnv(EnvKeyAutenticamiAgentPort, "9090"),
 	}
 	if !validations.IsValidPath(localConfig.appData) {
