@@ -10,8 +10,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
 )

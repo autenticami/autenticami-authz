@@ -10,8 +10,8 @@ import (
 	"path/filepath"
 
 	"github.com/autenticami/autenticami-authz/internal/agents/pdp/configs"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 
 	authzIntAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/errors"
 	authzIntPdpAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/pdp/errors"

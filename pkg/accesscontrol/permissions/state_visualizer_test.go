@@ -9,7 +9,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 )

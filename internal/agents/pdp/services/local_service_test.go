@@ -12,8 +12,8 @@ import (
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 
 	authzIntAgentConfigs "github.com/autenticami/autenticami-authz/internal/agents/configs"
 	authzIntAgentErrors "github.com/autenticami/autenticami-authz/internal/agents/errors"

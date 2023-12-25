@@ -14,13 +14,13 @@ import (
 func TestErrorCodes(t *testing.T) {
 	assert := assert.New(t)
 	{
-		err := errors.Join(errors.New("accessmanagement: invalid or unsupported uur syntax"), ErrBaseGeneric)
+		err := errors.Join(errors.New("accesscontrol: invalid or unsupported uur syntax"), ErrBaseGeneric)
 		assert.True(errors.Is(err, ErrBaseGeneric), "wrong result\nErrCodeGeneric shold be equal to error Codes creted with the same number")
 		assert.False(errors.Is(err, ErrBaseUnsupportedFeature), "wrong result\nErrCodeGeneric shold be equal to error Codes creted with the same number")
 		assert.Equal("core: [code 100] generic error", string(ErrBaseGeneric.Error()), "wrong result\nErrors should be equal")
 	}
 	{
-		err := errors.Join(errors.New("accessmanagement: invalid or unsupported uur syntax"), ErrBaseBadSyntax)
+		err := errors.Join(errors.New("accesscontrol: invalid or unsupported uur syntax"), ErrBaseBadSyntax)
 		assert.True(errors.Is(err, ErrBaseBadSyntax), "wrong result\nError Join should include type ErrCodeBadSyntax")
 
 		var errType *baseError

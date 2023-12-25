@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 )
 
 func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
@@ -128,7 +128,7 @@ func TestMiscellaneousPermissionsEngine(t *testing.T) {
 	{
 		permissionsEngine := NewPermissionsEngine()
 		_, err = permissionsEngine.RegisterPolicy([]byte("\\)[\\S ]+\\s((?:(?"))
-		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementInvalidDataType", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccesscontrolInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccesscontrolInvalidDataType", spew.Sdump(err))
 	}
 	{
 		permissionsEngine := NewPermissionsEngine()

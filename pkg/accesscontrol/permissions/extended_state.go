@@ -4,7 +4,7 @@
 package permissions
 
 import (
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 )
 
 type extendedPermissionsState struct {

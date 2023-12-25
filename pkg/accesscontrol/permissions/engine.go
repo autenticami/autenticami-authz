@@ -7,11 +7,11 @@ import (
 	"encoding/json"
 	"errors"
 
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 	"github.com/autenticami/autenticami-authz/pkg/extensions/files"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 	authzErrors "github.com/autenticami/autenticami-authz/pkg/errors"
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
 // Permission options
@@ -76,10 +76,10 @@ func (e *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	policy := policies.Policy{}
 	err = json.Unmarshal(bData, &policy)
 	if err != nil {
-		return false, errors.Join(authzAMErrors.ErrAccessManagementInvalidDataType, err)
+		return false, errors.Join(authzAMErrors.ErrAccesscontrolInvalidDataType, err)
 	}
 	if !policy.SyntaxVersion.IsValid() {
-		return false, errors.Join(authzAMErrors.ErrAccessManagementUnsupportedVersion, err)
+		return false, errors.Join(authzAMErrors.ErrAccesscontrolUnsupportedVersion, err)
 	}
 	switch policy.Type {
 	case policies.PolicyACType:
@@ -103,21 +103,21 @@ func (e *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 			return false, nil
 		}
 	default:
-		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedDataType
 	}
 	return true, nil
 }
 
 func (e *PermissionsEngine) registerACPolicy(policy *policies.ACPolicy) (bool, error) {
 	if policy == nil || policy.Type != policies.PolicyACType {
-		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedDataType
 	}
 	isValid, err := policies.ValidateACPolicy(policy)
 	if err != nil {
 		return false, err
 	}
 	if !isValid {
-		return false, authzAMErrors.ErrAccessManagementInvalidDataType
+		return false, authzAMErrors.ErrAccesscontrolInvalidDataType
 	}
 	extPermsState := newExtendedPermissionsState(e.permissionsState)
 	if len(policy.Permit) > 0 {

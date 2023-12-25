@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jinzhu/copier"
 
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 )
 
 type ACPolicyStatementWrapper struct {
@@ -24,7 +24,7 @@ type ACPolicyStatementWrapper struct {
 
 func createACPolicyStatementWrapper(acPolicyStatement *policies.ACPolicyStatement) (*ACPolicyStatementWrapper, error) {
 	if acPolicyStatement == nil {
-		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
+		return nil, authzAMErrors.ErrAccesscontrolInvalidDataType
 	}
 	acPolicyStatementString, err := text.Stringify(acPolicyStatement, []string{"Name"})
 	if err != nil {
@@ -41,7 +41,7 @@ func createACPolicyStatementWrapper(acPolicyStatement *policies.ACPolicyStatemen
 
 func createACPolicyStatementWrappers(wrappers map[string]ACPolicyStatementWrapper, acPolicyStatements []policies.ACPolicyStatement) error {
 	if acPolicyStatements == nil {
-		return authzAMErrors.ErrAccessManagementInvalidDataType
+		return authzAMErrors.ErrAccesscontrolInvalidDataType
 	}
 	for _, acPolicyStatement := range acPolicyStatements {
 		wrapper, err := createACPolicyStatementWrapper(&acPolicyStatement)

@@ -8,8 +8,8 @@ import (
 	"errors"
 	"log"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 )
 
 type PDPService interface {

@@ -4,8 +4,8 @@
 package v1
 
 import (
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/permissions"
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/permissions"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 )
 
 func mapToACPolicyStatement(acPolicyStatement *policies.ACPolicyStatement) (*ACPolicyStatement, error) {

@@ -10,7 +10,7 @@ import (
 
 	"github.com/autenticami/autenticami-authz/pkg/extensions/text"
 
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 )
 
 // A resource is uniquely identified with an UURString (Applicative Resource Name) which looks like uur:581616507495:default:hr-app:time-management:person/*.
@@ -132,7 +132,7 @@ func (a UURString) getRegex(version PolicyVersionString) (string, error) {
 		regex := fmt.Sprintf("^uur:(?P<account>(%s)?):(?P<tenant>(%s)?):(?P<project>(%s)?):(?P<domain>(%s)?):(%s)?$", cNumber, cHyphenName, cHyphenName, cSlashHyphenName, cResourceFilterSlashHyphenName)
 		return regex, nil
 	default:
-		return "", authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return "", authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -148,7 +148,7 @@ func (a UURString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(a))
 	default:
-		return false, authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -158,7 +158,7 @@ func (a UURString) Parse(version PolicyVersionString) (*UUR, error) {
 		return nil, err
 	}
 	if !isValied {
-		return nil, authzAMErrors.ErrAccessManagementInvalidUUR
+		return nil, authzAMErrors.ErrAccesscontrolInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -182,7 +182,7 @@ func (a ActionString) getRegex(version PolicyVersionString) (string, error) {
 		regex := fmt.Sprintf("^(?P<resource>(%s)?):(?P<action>(%s)?)$", cHyphenName, cHyphenName)
 		return regex, nil
 	default:
-		return "", authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return "", authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -198,7 +198,7 @@ func (a ActionString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(a))
 	default:
-		return false, authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -208,7 +208,7 @@ func (a ActionString) Parse(version PolicyVersionString) (*Action, error) {
 		return nil, err
 	}
 	if !isValied {
-		return nil, authzAMErrors.ErrAccessManagementInvalidUUR
+		return nil, authzAMErrors.ErrAccesscontrolInvalidUUR
 	}
 	pattern, err := a.getRegex(version)
 	if err != nil {
@@ -233,7 +233,7 @@ func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 	case PolicyV1:
 		return p == PolicyACType || p == PolicyTrustIdentityType, nil
 	default:
-		return false, authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -245,7 +245,7 @@ func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error)
 		regex := fmt.Sprintf("^((%s)?)$", cSlashHyphenName)
 		return regex, nil
 	default:
-		return "", authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return "", authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }
 
@@ -261,6 +261,6 @@ func (p PolicyLabelString) IsValid(version PolicyVersionString) (bool, error) {
 		}
 		return isValidPattern(pattern, string(p))
 	default:
-		return false, authzAMErrors.ErrAccessManagementUnsupportedVersion
+		return false, authzAMErrors.ErrAccesscontrolUnsupportedVersion
 	}
 }

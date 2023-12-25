@@ -10,11 +10,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
+	"github.com/autenticami/autenticami-authz/pkg/accesscontrol/policies"
 	"github.com/davecgh/go-spew/spew"
 	"github.com/stretchr/testify/assert"
 
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 )
 
 func helperToCompareACPolicyStatementWrappers(file string, inputList []ACPolicyStatementWrapper) error {
@@ -106,7 +106,7 @@ func TestMiscellaneousPermissionsState(t *testing.T) {
 	{
 		_, err := createACPolicyStatementWrapper(nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
-		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrJSONSchemaValidation", spew.Sdump(err))
+		assert.True(errors.Is(err, authzAMErrors.ErrAccesscontrolInvalidDataType), "wrong result\ngot: %sshould be of type ErrJSONSchemaValidation", spew.Sdump(err))
 	}
 	{
 		permState := newPermissionsState()

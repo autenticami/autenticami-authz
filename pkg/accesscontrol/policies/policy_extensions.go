@@ -7,7 +7,7 @@ import (
 	"sort"
 	"strings"
 
-	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
+	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/accesscontrol/errors"
 )
 
 func sanitizeSlice[K ~string](source []K) []K {
@@ -32,7 +32,7 @@ func sanitizeSlice[K ~string](source []K) []K {
 
 func SanitizeACPolicyStatement(version PolicyVersionString, acPolicyStatement *ACPolicyStatement) error {
 	if !version.IsValid() || acPolicyStatement == nil {
-		return authzAMErrors.ErrAccessManagementInvalidDataType
+		return authzAMErrors.ErrAccesscontrolInvalidDataType
 	}
 	acPolicyStatement.Resources = sanitizeSlice(acPolicyStatement.Resources)
 	acPolicyStatement.Actions = sanitizeSlice(acPolicyStatement.Actions)
@@ -42,7 +42,7 @@ func SanitizeACPolicyStatement(version PolicyVersionString, acPolicyStatement *A
 
 func ValidateACPolicyStatement(version PolicyVersionString, acPolicyStatement *ACPolicyStatement) (bool, error) {
 	if !version.IsValid() || acPolicyStatement == nil {
-		return false, authzAMErrors.ErrAccessManagementInvalidDataType
+		return false, authzAMErrors.ErrAccesscontrolInvalidDataType
 	}
 	var isValid bool
 	var err error
