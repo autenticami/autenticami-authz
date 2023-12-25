@@ -85,14 +85,14 @@ func TestVirtualizeState(t *testing.T) {
 				totPermitted, totFobidden := 0, 0
 				for _, input := range test.InputFiles() {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
-					data := policies.ACLPolicy{}
+					data := policies.ACPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 					var err error
 					extPermsState := newExtendedPermissionsState(permState)
-					err = extPermsState.fobidACLPolicyStatements(data.Forbid)
+					err = extPermsState.fobidACPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totPermitted += len(data.Permit)
-					err = extPermsState.permitACLPolicyStatements(data.Permit)
+					err = extPermsState.permitACPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totFobidden += len(data.Forbid)
 				}
@@ -103,12 +103,12 @@ func TestVirtualizeState(t *testing.T) {
 				permState, err = virtualizer.virtualize(test.Combined)
 				assert.Nil(err, "wrong result\nshould be nil")
 
-				forbidList, _ := permState.GetACLForbiddenPermissions()
-				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+				forbidList, _ := permState.GetACForbiddenPermissions()
+				err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList, _ := permState.GetACLPermittedPermissions()
-				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
+				permitList, _ := permState.GetACPermittedPermissions()
+				err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})
 		}

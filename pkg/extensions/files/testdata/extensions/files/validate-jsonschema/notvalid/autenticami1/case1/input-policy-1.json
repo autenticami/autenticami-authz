@@ -1,6 +1,6 @@
 {
     "Name": "person-base-reader",
-    "Type": "ACL",
+    "Type": "AC",
     "Permit": [
         {
             "Name": "permit-hr/person/reader/any",

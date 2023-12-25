@@ -30,30 +30,30 @@ func sanitizeSlice[K ~string](source []K) []K {
 	return items
 }
 
-func SanitizeACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) error {
-	if !version.IsValid() || aclPolicyStatement == nil {
+func SanitizeACPolicyStatement(version PolicyVersionString, acPolicyStatement *ACPolicyStatement) error {
+	if !version.IsValid() || acPolicyStatement == nil {
 		return authzAMErrors.ErrAccessManagementInvalidDataType
 	}
-	aclPolicyStatement.Resources = sanitizeSlice(aclPolicyStatement.Resources)
-	aclPolicyStatement.Actions = sanitizeSlice(aclPolicyStatement.Actions)
-	aclPolicyStatement.Condition = strings.TrimSpace(aclPolicyStatement.Condition)
+	acPolicyStatement.Resources = sanitizeSlice(acPolicyStatement.Resources)
+	acPolicyStatement.Actions = sanitizeSlice(acPolicyStatement.Actions)
+	acPolicyStatement.Condition = strings.TrimSpace(acPolicyStatement.Condition)
 	return nil
 }
 
-func ValidateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement *ACLPolicyStatement) (bool, error) {
-	if !version.IsValid() || aclPolicyStatement == nil {
+func ValidateACPolicyStatement(version PolicyVersionString, acPolicyStatement *ACPolicyStatement) (bool, error) {
+	if !version.IsValid() || acPolicyStatement == nil {
 		return false, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
 	var isValid bool
 	var err error
-	isValid, err = aclPolicyStatement.Name.IsValid(version)
+	isValid, err = acPolicyStatement.Name.IsValid(version)
 	if err != nil {
 		return false, err
 	}
 	if !isValid {
 		return false, nil
 	}
-	for _, action := range aclPolicyStatement.Actions {
+	for _, action := range acPolicyStatement.Actions {
 		isValid, err = action.IsValid(version)
 		if err != nil {
 			return false, err
@@ -62,7 +62,7 @@ func ValidateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement 
 			return false, nil
 		}
 	}
-	for _, resource := range aclPolicyStatement.Resources {
+	for _, resource := range acPolicyStatement.Resources {
 		isValid, err = resource.IsValid(version)
 		if err != nil {
 			return false, err
@@ -74,8 +74,8 @@ func ValidateACLPolicyStatement(version PolicyVersionString, aclPolicyStatement 
 	return true, nil
 }
 
-func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
-	if policy == nil || !policy.SyntaxVersion.IsValid() || policy.Type != PolicyACLType {
+func ValidateACPolicy(policy *ACPolicy) (bool, error) {
+	if policy == nil || !policy.SyntaxVersion.IsValid() || policy.Type != PolicyACType {
 		return false, nil
 	}
 	var isValid bool
@@ -87,10 +87,10 @@ func ValidateACLPolicy(policy *ACLPolicy) (bool, error) {
 	if !isValid {
 		return false, nil
 	}
-	lists := [][]ACLPolicyStatement{policy.Permit, policy.Forbid}
+	lists := [][]ACPolicyStatement{policy.Permit, policy.Forbid}
 	for _, list := range lists {
-		for _, aclPolicyStatement := range list {
-			isValid, err = ValidateACLPolicyStatement(policy.SyntaxVersion, &aclPolicyStatement)
+		for _, acPolicyStatement := range list {
+			isValid, err = ValidateACPolicyStatement(policy.SyntaxVersion, &acPolicyStatement)
 			if err != nil {
 				return false, err
 			}

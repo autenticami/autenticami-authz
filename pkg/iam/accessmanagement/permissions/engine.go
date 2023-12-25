@@ -82,20 +82,20 @@ func (e *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 		return false, errors.Join(authzAMErrors.ErrAccessManagementUnsupportedVersion, err)
 	}
 	switch policy.Type {
-	case policies.PolicyACLType:
-		isValid, err = files.IsValidJSON(policies.ACLPolicySchema, bData)
+	case policies.PolicyACType:
+		isValid, err = files.IsValidJSON(policies.ACPolicySchema, bData)
 		if err != nil {
 			return false, err
 		}
 		if !isValid {
 			return false, authzErrors.ErrJSONSchemaValidation
 		}
-		aclPolicy := policies.ACLPolicy{}
-		err = json.Unmarshal(bData, &aclPolicy)
+		acPolicy := policies.ACPolicy{}
+		err = json.Unmarshal(bData, &acPolicy)
 		if err != nil {
 			return false, errors.Join(authzErrors.ErrJSONDataMarshaling, err)
 		}
-		isValid, err = e.registerACLPolicy(&aclPolicy)
+		isValid, err = e.registerACPolicy(&acPolicy)
 		if err != nil {
 			return false, err
 		}
@@ -108,11 +108,11 @@ func (e *PermissionsEngine) RegisterPolicy(bData []byte) (bool, error) {
 	return true, nil
 }
 
-func (e *PermissionsEngine) registerACLPolicy(policy *policies.ACLPolicy) (bool, error) {
-	if policy == nil || policy.Type != policies.PolicyACLType {
+func (e *PermissionsEngine) registerACPolicy(policy *policies.ACPolicy) (bool, error) {
+	if policy == nil || policy.Type != policies.PolicyACType {
 		return false, authzAMErrors.ErrAccessManagementUnsupportedDataType
 	}
-	isValid, err := policies.ValidateACLPolicy(policy)
+	isValid, err := policies.ValidateACPolicy(policy)
 	if err != nil {
 		return false, err
 	}
@@ -121,13 +121,13 @@ func (e *PermissionsEngine) registerACLPolicy(policy *policies.ACLPolicy) (bool,
 	}
 	extPermsState := newExtendedPermissionsState(e.permissionsState)
 	if len(policy.Permit) > 0 {
-		err := extPermsState.permitACLPolicyStatements(policy.Permit)
+		err := extPermsState.permitACPolicyStatements(policy.Permit)
 		if err != nil {
 			return false, err
 		}
 	}
 	if len(policy.Forbid) > 0 {
-		err := extPermsState.fobidACLPolicyStatements(policy.Forbid)
+		err := extPermsState.fobidACPolicyStatements(policy.Forbid)
 		if err != nil {
 			return false, err
 		}

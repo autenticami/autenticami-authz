@@ -55,7 +55,7 @@ const (
 	PolicyV1     PolicyVersionString = "autenticami1"
 	PolicyLatest PolicyVersionString = PolicyV1
 
-	PolicyACLType PolicyTypeString = "ACL"
+	PolicyACType PolicyTypeString = "AC"
 
 	PolicyTrustIdentityType PolicyTypeString = "PTI"
 )
@@ -68,23 +68,23 @@ type Policy struct {
 	Type          PolicyTypeString    `json:"Type"`
 }
 
-// An Access Control List Policy (ACL) lists the actions that can/cannot be performed and the resourcers those actions can affect.
-// REF: https://docs.autenticami.com/access-management/policies/#access-control-list-policy
+// An Access Control Policy (AC) lists the actions that can/cannot be performed and the resourcers those actions can affect.
+// REF: https://docs.autenticami.com/access-management/policies/#access-control-policy
 
-type ACLPolicy struct {
+type ACPolicy struct {
 	Policy
-	Name   PolicyLabelString    `json:"Name,omitempty"`
-	Permit []ACLPolicyStatement `json:"Permit,omitempty"`
-	Forbid []ACLPolicyStatement `json:"Forbid,omitempty"`
+	Name   PolicyLabelString   `json:"Name,omitempty"`
+	Permit []ACPolicyStatement `json:"Permit,omitempty"`
+	Forbid []ACPolicyStatement `json:"Forbid,omitempty"`
 }
 
-//go:embed data/acl-policy-schema.json
-var ACLPolicySchema []byte
+//go:embed data/ac-policy-schema.json
+var ACPolicySchema []byte
 
 // A policy statement list actions associated to resources.
 // REF: https://docs.autenticami.com/access-management/policies/#policy-statement
 
-type ACLPolicyStatement struct {
+type ACPolicyStatement struct {
 	Name      PolicyLabelString `json:"Name,omitempty"`
 	Actions   []ActionString    `json:"Actions"`
 	Resources []UURString       `json:"Resources"`
@@ -231,7 +231,7 @@ func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 	}
 	switch version {
 	case PolicyV1:
-		return p == PolicyACLType || p == PolicyTrustIdentityType, nil
+		return p == PolicyACType || p == PolicyTrustIdentityType, nil
 	default:
 		return false, authzAMErrors.ErrAccessManagementUnsupportedVersion
 	}

@@ -5,7 +5,7 @@
       "policy_payload": {
         "Syntax": "autenticami1",
         "Name": "person-reader",
-        "Type": "ACL",
+        "Type": "AC",
         "Permit": [],
         "Forbid": [
           {

@@ -15,16 +15,16 @@ func newExtendedPermissionsState(permsState *PermissionsState) *extendedPermissi
 	return &extendedPermissionsState{permsState}
 }
 
-func (b *extendedPermissionsState) fobidACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
-	err := createACLPolicyStatementWrappers(b.permissions.forbid, aclPolicyStatements)
+func (b *extendedPermissionsState) fobidACPolicyStatements(acPolicyStatements []policies.ACPolicyStatement) error {
+	err := createACPolicyStatementWrappers(b.permissions.forbid, acPolicyStatements)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (b *extendedPermissionsState) permitACLPolicyStatements(aclPolicyStatements []policies.ACLPolicyStatement) error {
-	err := createACLPolicyStatementWrappers(b.permissions.permit, aclPolicyStatements)
+func (b *extendedPermissionsState) permitACPolicyStatements(acPolicyStatements []policies.ACPolicyStatement) error {
+	err := createACPolicyStatementWrappers(b.permissions.permit, acPolicyStatements)
 	if err != nil {
 		return err
 	}

@@ -5,7 +5,7 @@
       "policy_payload": {
         "Syntax": "autenticami1",
         "Name": "person-manager",
-        "Type": "ACL",
+        "Type": "AC",
         "Permit": [
           {
             "Name": "permit-hr/person/reader/any",

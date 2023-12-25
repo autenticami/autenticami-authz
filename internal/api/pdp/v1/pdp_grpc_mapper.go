@@ -8,43 +8,43 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
-func mapToACLPolicyStatement(aclPolicyStatement *policies.ACLPolicyStatement) (*ACLPolicyStatement, error) {
-	result := &ACLPolicyStatement{
-		Name:      string(aclPolicyStatement.Name),
-		Actions:   make([]string, len(aclPolicyStatement.Actions)),
-		Resources: make([]string, len(aclPolicyStatement.Resources)),
-		Condition: aclPolicyStatement.Condition,
+func mapToACPolicyStatement(acPolicyStatement *policies.ACPolicyStatement) (*ACPolicyStatement, error) {
+	result := &ACPolicyStatement{
+		Name:      string(acPolicyStatement.Name),
+		Actions:   make([]string, len(acPolicyStatement.Actions)),
+		Resources: make([]string, len(acPolicyStatement.Resources)),
+		Condition: acPolicyStatement.Condition,
 	}
-	for i, action := range aclPolicyStatement.Actions {
+	for i, action := range acPolicyStatement.Actions {
 		result.Actions[i] = string(action)
 	}
-	for i, resource := range aclPolicyStatement.Resources {
+	for i, resource := range acPolicyStatement.Resources {
 		result.Resources[i] = string(resource)
 	}
 	return result, nil
 }
 
-func mapToACLPolicyStatementWrapper(aclPolicyStatementWrapper *permissions.ACLPolicyStatementWrapper) (*ACLPolicyStatementWrapper, error) {
-	aclPolicyStatement, err := mapToACLPolicyStatement(&aclPolicyStatementWrapper.Statement)
+func mapToACPolicyStatementWrapper(acPolicyStatementWrapper *permissions.ACPolicyStatementWrapper) (*ACPolicyStatementWrapper, error) {
+	acPolicyStatement, err := mapToACPolicyStatement(&acPolicyStatementWrapper.Statement)
 	if err != nil {
 		return nil, err
 	}
-	result := &ACLPolicyStatementWrapper{
-		Statement:      aclPolicyStatement,
-		StatmentHashed: aclPolicyStatementWrapper.StatmentHashed,
+	result := &ACPolicyStatementWrapper{
+		Statement:      acPolicyStatement,
+		StatmentHashed: acPolicyStatementWrapper.StatmentHashed,
 	}
 	return result, nil
 }
 
 func mapToPermissionsStateResponse(identityUUR string, permState *permissions.PermissionsState) (*PermissionsStateResponse, error) {
 	var err error
-	var forbidList []permissions.ACLPolicyStatementWrapper
-	forbidList, err = permState.GetACLForbiddenPermissions()
+	var forbidList []permissions.ACPolicyStatementWrapper
+	forbidList, err = permState.GetACForbiddenPermissions()
 	if err != nil {
 		return nil, err
 	}
-	var permitList []permissions.ACLPolicyStatementWrapper
-	permitList, err = permState.GetACLPermittedPermissions()
+	var permitList []permissions.ACPolicyStatementWrapper
+	permitList, err = permState.GetACPermittedPermissions()
 	if err != nil {
 		return nil, err
 	}
@@ -53,25 +53,25 @@ func mapToPermissionsStateResponse(identityUUR string, permState *permissions.Pe
 			Uur: identityUUR,
 		},
 		PermissionsState: &PermissionsState{
-			Permissions: &ACLPermissions{
-				Forbid: make([]*ACLPolicyStatementWrapper, len(forbidList)),
-				Permit: make([]*ACLPolicyStatementWrapper, len(permitList)),
+			Permissions: &ACPermissions{
+				Forbid: make([]*ACPolicyStatementWrapper, len(forbidList)),
+				Permit: make([]*ACPolicyStatementWrapper, len(permitList)),
 			},
 		},
 	}
 	for i, wrapper := range forbidList {
-		aclPolicyStatementWrapper, err := mapToACLPolicyStatementWrapper(&wrapper)
+		acPolicyStatementWrapper, err := mapToACPolicyStatementWrapper(&wrapper)
 		if err != nil {
 			return nil, err
 		}
-		result.PermissionsState.Permissions.Forbid[i] = aclPolicyStatementWrapper
+		result.PermissionsState.Permissions.Forbid[i] = acPolicyStatementWrapper
 	}
 	for i, wrapper := range permitList {
-		aclPolicyStatementWrapper, err := mapToACLPolicyStatementWrapper(&wrapper)
+		acPolicyStatementWrapper, err := mapToACPolicyStatementWrapper(&wrapper)
 		if err != nil {
 			return nil, err
 		}
-		result.PermissionsState.Permissions.Permit[i] = aclPolicyStatementWrapper
+		result.PermissionsState.Permissions.Permit[i] = acPolicyStatementWrapper
 	}
 	return result, nil
 }

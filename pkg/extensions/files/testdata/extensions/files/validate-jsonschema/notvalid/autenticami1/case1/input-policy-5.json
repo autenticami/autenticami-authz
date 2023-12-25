@@ -1,7 +1,7 @@
 {
     "Syntax": "autenticami1",
     "Name": "person-base-reader",
-    "Type": "ACL",
+    "Type": "AC",
     "Permit": "Not a valid type",
     "Forbid": []
 }

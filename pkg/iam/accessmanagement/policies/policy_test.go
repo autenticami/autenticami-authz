@@ -21,14 +21,14 @@ func TestJSONUnmarshaling(t *testing.T) {
 	tests := map[string]struct {
 		Path       string
 		InputFiles func() []string
-		Validate   func(policy *ACLPolicy) bool
+		Validate   func(policy *ACPolicy) bool
 	}{
 		string(PolicyV1): {
 			"./testdata/policies/marshaling",
 			func() []string {
 				return []string{"input-policy-1.json"}
 			},
-			func(policy *ACLPolicy) bool {
+			func(policy *ACPolicy) bool {
 				return policy.SyntaxVersion == PolicyV1
 			},
 		},
@@ -49,7 +49,7 @@ func TestJSONUnmarshaling(t *testing.T) {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
 					assert.True(json.Valid(bArray), "wrong result\nJSON must be valid")
 
-					data := ACLPolicy{}
+					data := ACPolicy{}
 					err := json.Unmarshal(bArray, &data)
 					assert.Nil(err, "wrong result\nshould be nil")
 
@@ -384,44 +384,44 @@ func TestPolicyNotValid(t *testing.T) {
 	var isValid bool
 	var err error
 	{
-		isValid, err = ValidateACLPolicy(nil)
+		isValid, err = ValidateACPolicy(nil)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policy := ACLPolicy{}
+		policy := ACPolicy{}
 		policy.SyntaxVersion = PolicyV1
 		policy.Type = PolicyTypeString("X")
-		isValid, err = ValidateACLPolicy(&policy)
+		isValid, err = ValidateACPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 
-		policy.Type = PolicyACLType
+		policy.Type = PolicyACType
 		policy.Name = "This is not valid as there are spaces"
-		isValid, err = ValidateACLPolicy(&policy)
+		isValid, err = ValidateACPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policy := ACLPolicy{}
+		policy := ACPolicy{}
 		policy.SyntaxVersion = PolicyV1
-		policy.Type = PolicyACLType
+		policy.Type = PolicyACType
 		policy.Name = "person-base-reader"
-		policy.Permit = []ACLPolicyStatement{
+		policy.Permit = []ACPolicyStatement{
 			{
 				Name: "person Base Reader",
 			},
 		}
-		isValid, err = ValidateACLPolicy(&policy)
+		isValid, err = ValidateACPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		policy := ACLPolicy{}
+		policy := ACPolicy{}
 		policy.SyntaxVersion = PolicyV1
-		policy.Type = PolicyACLType
+		policy.Type = PolicyACType
 		policy.Name = "person-base-reader"
-		policy.Permit = []ACLPolicyStatement{
+		policy.Permit = []ACPolicyStatement{
 			{
 				Name: "person-base-reader",
 				Actions: []ActionString{
@@ -433,17 +433,17 @@ func TestPolicyNotValid(t *testing.T) {
 				},
 			},
 		}
-		isValid, err = ValidateACLPolicy(&policy)
+		isValid, err = ValidateACPolicy(&policy)
 		assert.Nil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.True(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(isValid))
 	}
 	{
-		isValid, err = ValidateACLPolicyStatement(PolicyVersionString("0000-00-00"), nil)
+		isValid, err = ValidateACPolicyStatement(PolicyVersionString("0000-00-00"), nil)
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"person:ListEmployee",
@@ -453,12 +453,12 @@ func TestPolicyNotValid(t *testing.T) {
 				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
-		isValid, err = ValidateACLPolicyStatement(PolicyVersionString("0000-00-00"), &aclPolicyStatement)
+		isValid, err = ValidateACPolicyStatement(PolicyVersionString("0000-00-00"), &acPolicyStatement)
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"not a valid action",
@@ -467,12 +467,12 @@ func TestPolicyNotValid(t *testing.T) {
 				"uur:581616507495:default:hr-app:organisation:person/*",
 			},
 		}
-		isValid, err = ValidateACLPolicyStatement(PolicyV1, &aclPolicyStatement)
+		isValid, err = ValidateACPolicyStatement(PolicyV1, &acPolicyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name: "person-base-reader",
 			Actions: []ActionString{
 				"person:ListEmployee",
@@ -482,87 +482,87 @@ func TestPolicyNotValid(t *testing.T) {
 				"not a valid uur",
 			},
 		}
-		isValid, err = ValidateACLPolicyStatement(PolicyV1, &aclPolicyStatement)
+		isValid, err = ValidateACPolicyStatement(PolicyV1, &acPolicyStatement)
 		assert.Nil(err, "wrong result\nshould be nil")
 		assert.False(isValid, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 	}
 }
 
-func TestSanitizeACLPolicyStatement(t *testing.T) {
+func TestSanitizeACPolicyStatement(t *testing.T) {
 	assert := assert.New(t)
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Sample",
 			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
 			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		err := SanitizeACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
+		err := SanitizeACPolicyStatement(PolicyLatest, &acPolicyStatement)
 		assert.Nil(err, "wrong result\nerr should be nil and not %s", spew.Sdump(err))
-		assert.Equal(2, len(aclPolicyStatement.Actions), "wrong result\npolicy actions len should be equale to 2")
-		assert.Equal(ActionString("person:Delete"), aclPolicyStatement.Actions[0], "wrong result\npolicy action value")
-		assert.Equal(ActionString("person:Read"), aclPolicyStatement.Actions[1], "wrong result\npolicy action value")
-		assert.Equal(2, len(aclPolicyStatement.Resources), "wrong result\npolicy resources len should be equale to 2")
-		assert.Equal(UURString("uur:581616507495:default:hr-app:organisation:person/A"), aclPolicyStatement.Resources[0], "wrong result\npolicy resource value")
-		assert.Equal(UURString("uur:581616507495:default:hr-app:organisation:person/B"), aclPolicyStatement.Resources[1], "wrong result\npolicy resource value")
-		assert.Equal("DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')", aclPolicyStatement.Condition, "wrong result\npolicy condition value")
+		assert.Equal(2, len(acPolicyStatement.Actions), "wrong result\npolicy actions len should be equale to 2")
+		assert.Equal(ActionString("person:Delete"), acPolicyStatement.Actions[0], "wrong result\npolicy action value")
+		assert.Equal(ActionString("person:Read"), acPolicyStatement.Actions[1], "wrong result\npolicy action value")
+		assert.Equal(2, len(acPolicyStatement.Resources), "wrong result\npolicy resources len should be equale to 2")
+		assert.Equal(UURString("uur:581616507495:default:hr-app:organisation:person/A"), acPolicyStatement.Resources[0], "wrong result\npolicy resource value")
+		assert.Equal(UURString("uur:581616507495:default:hr-app:organisation:person/B"), acPolicyStatement.Resources[1], "wrong result\npolicy resource value")
+		assert.Equal("DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')", acPolicyStatement.Condition, "wrong result\npolicy condition value")
 	}
 }
 
-func TestSanitizeACLPolicyStatementInvalid(t *testing.T) {
+func TestSanitizeACPolicyStatementInvalid(t *testing.T) {
 	assert := assert.New(t)
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Sample",
 			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
 			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		err := SanitizeACLPolicyStatement("WRONG", &aclPolicyStatement)
+		err := SanitizeACPolicyStatement("WRONG", &acPolicyStatement)
 		assert.NotNil(err, "wrong result\nerr should be not nil")
 	}
 }
 
-func TestValidateACLPolicyStatementInvalid(t *testing.T) {
+func TestValidateACPolicyStatementInvalid(t *testing.T) {
 	assert := assert.New(t)
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Sample",
 			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
 			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		_, err := ValidateACLPolicyStatement("WRONG", &aclPolicyStatement)
+		_, err := ValidateACPolicyStatement("WRONG", &acPolicyStatement)
 		assert.NotNil(err, "wrong result\nerr should be not nil")
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Not Valid",
 			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
 			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
+		isValid, _ := ValidateACPolicyStatement(PolicyLatest, &acPolicyStatement)
 		assert.False(isValid, "wrong result\nisValid should be false")
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Sample",
 			Actions:   []ActionString{"not valid", "person:Read", "person:Delete"},
 			Resources: []UURString{"uur:581616507495:default:hr-app:organisation:person/B", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
+		isValid, _ := ValidateACPolicyStatement(PolicyLatest, &acPolicyStatement)
 		assert.False(isValid, "wrong result\nisValid should be false")
 	}
 	{
-		aclPolicyStatement := ACLPolicyStatement{
+		acPolicyStatement := ACPolicyStatement{
 			Name:      "Sample",
 			Actions:   []ActionString{"person:Read", "person:Read", "person:Delete"},
 			Resources: []UURString{"not valid", "uur:581616507495:default:hr-app:organisation:person/A", "uur:581616507495:default:hr-app:organisation:person/A"},
 			Condition: " DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z') ",
 		}
-		isValid, _ := ValidateACLPolicyStatement(PolicyLatest, &aclPolicyStatement)
+		isValid, _ := ValidateACPolicyStatement(PolicyLatest, &acPolicyStatement)
 		assert.False(isValid, "wrong result\nisValid should be false")
 	}
 }
@@ -593,12 +593,12 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}
 	{
-		policyType := PolicyACLType
+		policyType := PolicyACType
 		isValid, _ := policyType.IsValid(PolicyV1)
 		assert.True(isValid, "wrong result\ngot: %should be a valid uur", spew.Sdump(isValid))
 	}
 	{
-		policyType := PolicyACLType
+		policyType := PolicyACType
 		_, err = policyType.IsValid(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccessManagementUnsupportedVersion", spew.Sdump(err))
 	}

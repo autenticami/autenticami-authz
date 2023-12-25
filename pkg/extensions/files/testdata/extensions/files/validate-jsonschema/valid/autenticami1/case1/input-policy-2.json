@@ -1,6 +1,6 @@
 {
     "Syntax": "autenticami1",
-    "Type": "ACL",
+    "Type": "AC",
     "Permit": [
         {
             "Name": "permit-hr/person/reader/any",

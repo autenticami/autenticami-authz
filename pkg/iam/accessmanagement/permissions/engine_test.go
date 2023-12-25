@@ -30,7 +30,7 @@ func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
 	}
 	{
 		engine := NewPermissionsEngine()
-		jsonStr := `{"Syntax":"2022-08-08", "Type":"ACL"}`
+		jsonStr := `{"Syntax":"2022-08-08", "Type":"AC"}`
 		_, err := engine.RegisterPolicy([]byte(jsonStr))
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
@@ -42,7 +42,7 @@ func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
 	}
 	{
 		engine := NewPermissionsEngine()
-		jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "12 3465 "}`
+		jsonStr := `{"Syntax":"autenticami1", "Type":"AC", "Name": "12 3465 "}`
 		_, err := engine.RegisterPolicy([]byte(jsonStr))
 		assert.NotNil(t, err, "Err shouldn't be nil")
 	}
@@ -50,7 +50,7 @@ func TestPermissionsEngineBuildInvalidPermissions(t *testing.T) {
 
 func TestPermissionsEngineRegisterPolicy(t *testing.T) {
 	engine := NewPermissionsEngine()
-	jsonStr := `{"Syntax":"autenticami1", "Type":"ACL", "Name": "person-base-reader"}`
+	jsonStr := `{"Syntax":"autenticami1", "Type":"AC", "Name": "person-base-reader"}`
 	_, _ = engine.RegisterPolicy([]byte(jsonStr))
 	permState, err := engine.BuildPermissions(WithPermissionsEngineVirtualState(false))
 	assert.Nil(t, err, "Err should be nil")
@@ -132,21 +132,21 @@ func TestMiscellaneousPermissionsEngine(t *testing.T) {
 	}
 	{
 		permissionsEngine := NewPermissionsEngine()
-		_, err = permissionsEngine.registerACLPolicy(nil)
+		_, err = permissionsEngine.registerACPolicy(nil)
 		assert.NotNil(err, "wrong result\nshould be not nil")
 	}
 	{
 		permissionsEngine := NewPermissionsEngine()
-		aclPolicy := &policies.ACLPolicy{}
-		_, err = permissionsEngine.registerACLPolicy(aclPolicy)
+		acPolicy := &policies.ACPolicy{}
+		_, err = permissionsEngine.registerACPolicy(acPolicy)
 		assert.NotNil(err, "wrong result\nshould be not nil")
 	}
 	{
 		permissionsEngine := NewPermissionsEngine()
-		aclPolicy := &policies.ACLPolicy{}
-		aclPolicy.SyntaxVersion = policies.PolicyV1
-		aclPolicy.Type = policies.PolicyACLType
-		_, err = permissionsEngine.registerACLPolicy(aclPolicy)
+		acPolicy := &policies.ACPolicy{}
+		acPolicy.SyntaxVersion = policies.PolicyV1
+		acPolicy.Type = policies.PolicyACType
+		_, err = permissionsEngine.registerACPolicy(acPolicy)
 		assert.NotNil(err, "wrong result\nshould be not nil")
 	}
 }
@@ -210,11 +210,11 @@ func TestBuildPermissionsState(t *testing.T) {
 					totPermitted, totFobidden := 0, 0
 					for _, input := range test.InputFiles() {
 						bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
-						data := policies.ACLPolicy{}
+						data := policies.ACPolicy{}
 						_ = json.Unmarshal(bArray, &data)
 						var registered bool
 						var err error
-						registered, err = permissionsEngine.registerACLPolicy(&data)
+						registered, err = permissionsEngine.registerACPolicy(&data)
 						assert.True(registered, "wrong result\nshould be true")
 						assert.Nil(err, "wrong result\nshould be nil")
 						totPermitted += len(data.Permit)
@@ -225,12 +225,12 @@ func TestBuildPermissionsState(t *testing.T) {
 
 					permState, _ := permissionsEngine.BuildPermissions(WithPermissionsEngineVirtualState(test.VirtualStateEnabled))
 
-					forbidList, _ := permState.GetACLForbiddenPermissions()
-					err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+					forbidList, _ := permState.GetACForbiddenPermissions()
+					err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-					permitList, _ := permState.GetACLPermittedPermissions()
-					err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
+					permitList, _ := permState.GetACPermittedPermissions()
+					err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 					assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 				})
 			}

@@ -1,7 +1,7 @@
 {
   "Syntax": "autenticami1",
   "Name": "person-base-reader",
-  "Type": "ACLX",
+  "Type": "ACX",
   "Permit": [
       {
           "Name": "Invalid name",

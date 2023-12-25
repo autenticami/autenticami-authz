@@ -34,25 +34,25 @@ message PermissionsStateRequest {
 	Identity identity = 2;
 }
 
-message ACLPolicyStatement {
+message ACPolicyStatement {
   string name = 1;
   repeated string actions = 2;
   repeated string resources = 3;
 	string condition = 4;
 }
 
-message ACLPolicyStatementWrapper {
-  ACLPolicyStatement statement = 1;
+message ACPolicyStatementWrapper {
+  ACPolicyStatement statement = 1;
   string statmentHashed = 2;
 }
 
-message ACLPermissions {
-  repeated ACLPolicyStatementWrapper forbid = 1;
-  repeated ACLPolicyStatementWrapper permit = 2;
+message ACPermissions {
+  repeated ACPolicyStatementWrapper forbid = 1;
+  repeated ACPolicyStatementWrapper permit = 2;
 }
 
 message PermissionsState {
-  ACLPermissions permissions = 1;
+  ACPermissions permissions = 1;
 }
 
 message PermissionsStateResponse {

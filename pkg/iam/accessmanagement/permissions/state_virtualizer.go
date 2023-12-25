@@ -28,9 +28,9 @@ func newPermissionsStateVirtualizer(syntaxVersion policies.PolicyVersionString, 
 	}
 }
 
-func (v *permissionsStateVirtualizer) splitWrapperByResource(output map[string]ACLPolicyStatementWrapper, wrapper *ACLPolicyStatementWrapper) error {
+func (v *permissionsStateVirtualizer) splitWrapperByResource(output map[string]ACPolicyStatementWrapper, wrapper *ACPolicyStatementWrapper) error {
 	for _, resource := range wrapper.Statement.Resources {
-		dest := policies.ACLPolicyStatement{}
+		dest := policies.ACPolicyStatement{}
 		err := copier.Copy(&dest, &wrapper.Statement)
 		if err != nil {
 			return err
@@ -39,7 +39,7 @@ func (v *permissionsStateVirtualizer) splitWrapperByResource(output map[string]A
 		if len(dest.Resources) > 1 {
 			dest.Resources = []policies.UURString{resource}
 		}
-		wrapper, err := createACLPolicyStatementWrapper(&dest)
+		wrapper, err := createACPolicyStatementWrapper(&dest)
 		if err != nil {
 			return err
 		}
@@ -51,8 +51,8 @@ func (v *permissionsStateVirtualizer) splitWrapperByResource(output map[string]A
 	return nil
 }
 
-func (v *permissionsStateVirtualizer) splitWrappersByResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
-	output := map[string]ACLPolicyStatementWrapper{}
+func (v *permissionsStateVirtualizer) splitWrappersByResource(wrappers map[string]ACPolicyStatementWrapper) (map[string]ACPolicyStatementWrapper, error) {
+	output := map[string]ACPolicyStatementWrapper{}
 	for _, wrapper := range wrappers {
 		if len(wrapper.Statement.Resources) == 0 {
 			continue
@@ -65,14 +65,14 @@ func (v *permissionsStateVirtualizer) splitWrappersByResource(wrappers map[strin
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
-	cache := map[string]*policies.ACLPolicyStatement{}
+func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wrappers map[string]ACPolicyStatementWrapper) (map[string]ACPolicyStatementWrapper, error) {
+	cache := map[string]*policies.ACPolicyStatement{}
 	for _, wrapper := range wrappers {
 		statement := wrapper.Statement
 		if len(statement.Resources) > 1 {
 			return nil, authzErrors.ErrGeneric
 		}
-		err := policies.SanitizeACLPolicyStatement(v.syntaxVersion, &statement)
+		err := policies.SanitizeACPolicyStatement(v.syntaxVersion, &statement)
 		if err != nil {
 			return nil, err
 		}
@@ -83,14 +83,14 @@ func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wr
 		}
 		cachedStatement := cache[resourceKey]
 		cachedStatement.Actions = append(cachedStatement.Actions, statement.Actions...)
-		err = policies.SanitizeACLPolicyStatement(v.syntaxVersion, cachedStatement)
+		err = policies.SanitizeACPolicyStatement(v.syntaxVersion, cachedStatement)
 		if err != nil {
 			return nil, err
 		}
 	}
-	output := map[string]ACLPolicyStatementWrapper{}
+	output := map[string]ACPolicyStatementWrapper{}
 	for _, statement := range cache {
-		wrapper, err := createACLPolicyStatementWrapper(statement)
+		wrapper, err := createACPolicyStatementWrapper(statement)
 		if err != nil {
 			return nil, err
 		}
@@ -99,22 +99,22 @@ func (v *permissionsStateVirtualizer) groupWrappersByConditionalUniqeResource(wr
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) organiseWrappersByViewType(wrappers map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
-	output := map[string]ACLPolicyStatementWrapper{}
+func (v *permissionsStateVirtualizer) organiseWrappersByViewType(wrappers map[string]ACPolicyStatementWrapper) (map[string]ACPolicyStatementWrapper, error) {
+	output := map[string]ACPolicyStatementWrapper{}
 	for key := range wrappers {
 		wrapper := wrappers[key]
 		if len(wrapper.Statement.Resources) > 1 {
 			return nil, authzErrors.ErrGeneric
 		}
 		for _, action := range wrapper.Statement.Actions {
-			dest := policies.ACLPolicyStatement{}
+			dest := policies.ACPolicyStatement{}
 			err := copier.Copy(&dest, &wrapper.Statement)
 			if err != nil {
 				return nil, err
 			}
 			dest.Name = policies.PolicyLabelString((strings.Replace(uuid.NewString(), "-", "", -1)))
 			dest.Actions = []policies.ActionString{action}
-			wrapper, err := createACLPolicyStatementWrapper(&dest)
+			wrapper, err := createACPolicyStatementWrapper(&dest)
 			if err != nil {
 				return nil, err
 			}
@@ -127,9 +127,9 @@ func (v *permissionsStateVirtualizer) organiseWrappersByViewType(wrappers map[st
 	return output, nil
 }
 
-func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[string]ACLPolicyStatementWrapper, isCombined bool) ([]ACLPolicyStatementWrapper, error) {
+func (v *permissionsStateVirtualizer) virualizeACPolicyStatements(wrappers map[string]ACPolicyStatementWrapper, isCombined bool) ([]ACPolicyStatementWrapper, error) {
 	var err error
-	var outputMap map[string]ACLPolicyStatementWrapper
+	var outputMap map[string]ACPolicyStatementWrapper
 	outputMap, err = v.splitWrappersByResource(wrappers)
 	if err != nil {
 		return nil, err
@@ -144,7 +144,7 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[
 			return nil, err
 		}
 	}
-	output := make([]ACLPolicyStatementWrapper, len(outputMap))
+	output := make([]ACPolicyStatementWrapper, len(outputMap))
 	counter := 0
 	for key := range outputMap {
 		output[counter] = outputMap[key]
@@ -156,25 +156,25 @@ func (v *permissionsStateVirtualizer) virualizeACLPolicyStatements(wrappers map[
 func (v *permissionsStateVirtualizer) virtualize(isCombined bool) (*PermissionsState, error) {
 	newPermState := newPermissionsState()
 	var err error
-	var fobidItems []ACLPolicyStatementWrapper
-	fobidItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.forbid, isCombined)
+	var fobidItems []ACPolicyStatementWrapper
+	fobidItems, err = v.virualizeACPolicyStatements(v.permissionState.permissions.forbid, isCombined)
 	if err != nil {
 		return nil, err
 	}
 	extPermsState := newExtendedPermissionsState(newPermState)
 	for _, fobidItem := range fobidItems {
-		err := extPermsState.fobidACLPolicyStatements([]policies.ACLPolicyStatement{fobidItem.Statement})
+		err := extPermsState.fobidACPolicyStatements([]policies.ACPolicyStatement{fobidItem.Statement})
 		if err != nil {
 			return nil, err
 		}
 	}
-	var permitItems []ACLPolicyStatementWrapper
-	permitItems, err = v.virualizeACLPolicyStatements(v.permissionState.permissions.permit, isCombined)
+	var permitItems []ACPolicyStatementWrapper
+	permitItems, err = v.virualizeACPolicyStatements(v.permissionState.permissions.permit, isCombined)
 	if err != nil {
 		return nil, err
 	}
 	for _, permitItem := range permitItems {
-		err := extPermsState.permitACLPolicyStatements([]policies.ACLPolicyStatement{permitItem.Statement})
+		err := extPermsState.permitACPolicyStatements([]policies.ACPolicyStatement{permitItem.Statement})
 		if err != nil {
 			return nil, err
 		}

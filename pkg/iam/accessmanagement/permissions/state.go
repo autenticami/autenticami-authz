@@ -15,36 +15,36 @@ import (
 	"github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/policies"
 )
 
-type ACLPolicyStatementWrapper struct {
+type ACPolicyStatementWrapper struct {
 	ID                  uuid.UUID
-	Statement           policies.ACLPolicyStatement
+	Statement           policies.ACPolicyStatement
 	StatmentStringified string
 	StatmentHashed      string
 }
 
-func createACLPolicyStatementWrapper(aclPolicyStatement *policies.ACLPolicyStatement) (*ACLPolicyStatementWrapper, error) {
-	if aclPolicyStatement == nil {
+func createACPolicyStatementWrapper(acPolicyStatement *policies.ACPolicyStatement) (*ACPolicyStatementWrapper, error) {
+	if acPolicyStatement == nil {
 		return nil, authzAMErrors.ErrAccessManagementInvalidDataType
 	}
-	aclPolicyStatementString, err := text.Stringify(aclPolicyStatement, []string{"Name"})
+	acPolicyStatementString, err := text.Stringify(acPolicyStatement, []string{"Name"})
 	if err != nil {
 		return nil, err
 	}
-	aclPolicyStatementHash := text.CreateStringHash(aclPolicyStatementString)
-	return &ACLPolicyStatementWrapper{
+	acPolicyStatementHash := text.CreateStringHash(acPolicyStatementString)
+	return &ACPolicyStatementWrapper{
 		ID:                  uuid.New(),
-		Statement:           *aclPolicyStatement,
-		StatmentStringified: aclPolicyStatementString,
-		StatmentHashed:      aclPolicyStatementHash,
+		Statement:           *acPolicyStatement,
+		StatmentStringified: acPolicyStatementString,
+		StatmentHashed:      acPolicyStatementHash,
 	}, nil
 }
 
-func createACLPolicyStatementWrappers(wrappers map[string]ACLPolicyStatementWrapper, aclPolicyStatements []policies.ACLPolicyStatement) error {
-	if aclPolicyStatements == nil {
+func createACPolicyStatementWrappers(wrappers map[string]ACPolicyStatementWrapper, acPolicyStatements []policies.ACPolicyStatement) error {
+	if acPolicyStatements == nil {
 		return authzAMErrors.ErrAccessManagementInvalidDataType
 	}
-	for _, aclPolicyStatement := range aclPolicyStatements {
-		wrapper, err := createACLPolicyStatementWrapper(&aclPolicyStatement)
+	for _, acPolicyStatement := range acPolicyStatements {
+		wrapper, err := createACPolicyStatementWrapper(&acPolicyStatement)
 		if err != nil {
 			return err
 		}
@@ -57,43 +57,43 @@ func createACLPolicyStatementWrappers(wrappers map[string]ACLPolicyStatementWrap
 	return nil
 }
 
-type ACLPermissions struct {
-	forbid map[string]ACLPolicyStatementWrapper
-	permit map[string]ACLPolicyStatementWrapper
+type ACPermissions struct {
+	forbid map[string]ACPolicyStatementWrapper
+	permit map[string]ACPolicyStatementWrapper
 }
 
 type PermissionsState struct {
-	permissions ACLPermissions
+	permissions ACPermissions
 }
 
 func newPermissionsState() *PermissionsState {
 	return &PermissionsState{
-		permissions: ACLPermissions{
-			forbid: map[string]ACLPolicyStatementWrapper{},
-			permit: map[string]ACLPolicyStatementWrapper{},
+		permissions: ACPermissions{
+			forbid: map[string]ACPolicyStatementWrapper{},
+			permit: map[string]ACPolicyStatementWrapper{},
 		},
 	}
 }
 
-func (b *PermissionsState) convertACLPolicyStatementsMapToArray(source map[string]ACLPolicyStatementWrapper) []ACLPolicyStatementWrapper {
+func (b *PermissionsState) convertACPolicyStatementsMapToArray(source map[string]ACPolicyStatementWrapper) []ACPolicyStatementWrapper {
 	if source == nil {
-		return []ACLPolicyStatementWrapper{}
+		return []ACPolicyStatementWrapper{}
 	}
 	keys := make([]string, 0)
 	for k := range source {
 		keys = append(keys, k)
 	}
 	sort.Strings(keys)
-	items := make([]ACLPolicyStatementWrapper, len(source))
+	items := make([]ACPolicyStatementWrapper, len(source))
 	for i, key := range keys {
 		items[i] = source[key]
 	}
 	return items
 }
 
-func (b *PermissionsState) cloneACLPolicyStatements(aclPolicyStatements map[string]ACLPolicyStatementWrapper) (map[string]ACLPolicyStatementWrapper, error) {
-	dest := map[string]ACLPolicyStatementWrapper{}
-	err := copier.Copy(&dest, aclPolicyStatements)
+func (b *PermissionsState) cloneACPolicyStatements(acPolicyStatements map[string]ACPolicyStatementWrapper) (map[string]ACPolicyStatementWrapper, error) {
+	dest := map[string]ACPolicyStatementWrapper{}
+	err := copier.Copy(&dest, acPolicyStatements)
 	if err != nil {
 		return nil, err
 	}
@@ -109,18 +109,18 @@ func (b *PermissionsState) clone() (*PermissionsState, error) {
 	return &dest, nil
 }
 
-func (b *PermissionsState) GetACLForbiddenPermissions() ([]ACLPolicyStatementWrapper, error) {
-	wrappers, err := b.cloneACLPolicyStatements(b.permissions.forbid)
+func (b *PermissionsState) GetACForbiddenPermissions() ([]ACPolicyStatementWrapper, error) {
+	wrappers, err := b.cloneACPolicyStatements(b.permissions.forbid)
 	if err != nil {
 		return nil, err
 	}
-	return b.convertACLPolicyStatementsMapToArray(wrappers), nil
+	return b.convertACPolicyStatementsMapToArray(wrappers), nil
 }
 
-func (b *PermissionsState) GetACLPermittedPermissions() ([]ACLPolicyStatementWrapper, error) {
-	wrappers, err := b.cloneACLPolicyStatements(b.permissions.permit)
+func (b *PermissionsState) GetACPermittedPermissions() ([]ACPolicyStatementWrapper, error) {
+	wrappers, err := b.cloneACPolicyStatements(b.permissions.permit)
 	if err != nil {
 		return nil, err
 	}
-	return b.convertACLPolicyStatementsMapToArray(wrappers), nil
+	return b.convertACPolicyStatementsMapToArray(wrappers), nil
 }

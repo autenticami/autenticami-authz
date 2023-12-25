@@ -333,7 +333,7 @@ func (x *PermissionsStateRequest) GetIdentity() *Identity {
 	return nil
 }
 
-type ACLPolicyStatement struct {
+type ACPolicyStatement struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
@@ -344,8 +344,8 @@ type ACLPolicyStatement struct {
 	Condition string   `protobuf:"bytes,4,opt,name=condition,proto3" json:"condition,omitempty"`
 }
 
-func (x *ACLPolicyStatement) Reset() {
-	*x = ACLPolicyStatement{}
+func (x *ACPolicyStatement) Reset() {
+	*x = ACPolicyStatement{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[5]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -353,13 +353,13 @@ func (x *ACLPolicyStatement) Reset() {
 	}
 }
 
-func (x *ACLPolicyStatement) String() string {
+func (x *ACPolicyStatement) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ACLPolicyStatement) ProtoMessage() {}
+func (*ACPolicyStatement) ProtoMessage() {}
 
-func (x *ACLPolicyStatement) ProtoReflect() protoreflect.Message {
+func (x *ACPolicyStatement) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[5]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -371,50 +371,50 @@ func (x *ACLPolicyStatement) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ACLPolicyStatement.ProtoReflect.Descriptor instead.
-func (*ACLPolicyStatement) Descriptor() ([]byte, []int) {
+// Deprecated: Use ACPolicyStatement.ProtoReflect.Descriptor instead.
+func (*ACPolicyStatement) Descriptor() ([]byte, []int) {
 	return file_internal_api_pdp_v1_pdp_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *ACLPolicyStatement) GetName() string {
+func (x *ACPolicyStatement) GetName() string {
 	if x != nil {
 		return x.Name
 	}
 	return ""
 }
 
-func (x *ACLPolicyStatement) GetActions() []string {
+func (x *ACPolicyStatement) GetActions() []string {
 	if x != nil {
 		return x.Actions
 	}
 	return nil
 }
 
-func (x *ACLPolicyStatement) GetResources() []string {
+func (x *ACPolicyStatement) GetResources() []string {
 	if x != nil {
 		return x.Resources
 	}
 	return nil
 }
 
-func (x *ACLPolicyStatement) GetCondition() string {
+func (x *ACPolicyStatement) GetCondition() string {
 	if x != nil {
 		return x.Condition
 	}
 	return ""
 }
 
-type ACLPolicyStatementWrapper struct {
+type ACPolicyStatementWrapper struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Statement      *ACLPolicyStatement `protobuf:"bytes,1,opt,name=statement,proto3" json:"statement,omitempty"`
+	Statement      *ACPolicyStatement `protobuf:"bytes,1,opt,name=statement,proto3" json:"statement,omitempty"`
 	StatmentHashed string              `protobuf:"bytes,2,opt,name=statmentHashed,proto3" json:"statmentHashed,omitempty"`
 }
 
-func (x *ACLPolicyStatementWrapper) Reset() {
-	*x = ACLPolicyStatementWrapper{}
+func (x *ACPolicyStatementWrapper) Reset() {
+	*x = ACPolicyStatementWrapper{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[6]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -422,13 +422,13 @@ func (x *ACLPolicyStatementWrapper) Reset() {
 	}
 }
 
-func (x *ACLPolicyStatementWrapper) String() string {
+func (x *ACPolicyStatementWrapper) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ACLPolicyStatementWrapper) ProtoMessage() {}
+func (*ACPolicyStatementWrapper) ProtoMessage() {}
 
-func (x *ACLPolicyStatementWrapper) ProtoReflect() protoreflect.Message {
+func (x *ACPolicyStatementWrapper) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[6]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -440,36 +440,36 @@ func (x *ACLPolicyStatementWrapper) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ACLPolicyStatementWrapper.ProtoReflect.Descriptor instead.
-func (*ACLPolicyStatementWrapper) Descriptor() ([]byte, []int) {
+// Deprecated: Use ACPolicyStatementWrapper.ProtoReflect.Descriptor instead.
+func (*ACPolicyStatementWrapper) Descriptor() ([]byte, []int) {
 	return file_internal_api_pdp_v1_pdp_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *ACLPolicyStatementWrapper) GetStatement() *ACLPolicyStatement {
+func (x *ACPolicyStatementWrapper) GetStatement() *ACPolicyStatement {
 	if x != nil {
 		return x.Statement
 	}
 	return nil
 }
 
-func (x *ACLPolicyStatementWrapper) GetStatmentHashed() string {
+func (x *ACPolicyStatementWrapper) GetStatmentHashed() string {
 	if x != nil {
 		return x.StatmentHashed
 	}
 	return ""
 }
 
-type ACLPermissions struct {
+type ACPermissions struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Forbid []*ACLPolicyStatementWrapper `protobuf:"bytes,1,rep,name=forbid,proto3" json:"forbid,omitempty"`
-	Permit []*ACLPolicyStatementWrapper `protobuf:"bytes,2,rep,name=permit,proto3" json:"permit,omitempty"`
+	Forbid []*ACPolicyStatementWrapper `protobuf:"bytes,1,rep,name=forbid,proto3" json:"forbid,omitempty"`
+	Permit []*ACPolicyStatementWrapper `protobuf:"bytes,2,rep,name=permit,proto3" json:"permit,omitempty"`
 }
 
-func (x *ACLPermissions) Reset() {
-	*x = ACLPermissions{}
+func (x *ACPermissions) Reset() {
+	*x = ACPermissions{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[7]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -477,13 +477,13 @@ func (x *ACLPermissions) Reset() {
 	}
 }
 
-func (x *ACLPermissions) String() string {
+func (x *ACPermissions) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ACLPermissions) ProtoMessage() {}
+func (*ACPermissions) ProtoMessage() {}
 
-func (x *ACLPermissions) ProtoReflect() protoreflect.Message {
+func (x *ACPermissions) ProtoReflect() protoreflect.Message {
 	mi := &file_internal_api_pdp_v1_pdp_proto_msgTypes[7]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -495,19 +495,19 @@ func (x *ACLPermissions) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ACLPermissions.ProtoReflect.Descriptor instead.
-func (*ACLPermissions) Descriptor() ([]byte, []int) {
+// Deprecated: Use ACPermissions.ProtoReflect.Descriptor instead.
+func (*ACPermissions) Descriptor() ([]byte, []int) {
 	return file_internal_api_pdp_v1_pdp_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *ACLPermissions) GetForbid() []*ACLPolicyStatementWrapper {
+func (x *ACPermissions) GetForbid() []*ACPolicyStatementWrapper {
 	if x != nil {
 		return x.Forbid
 	}
 	return nil
 }
 
-func (x *ACLPermissions) GetPermit() []*ACLPolicyStatementWrapper {
+func (x *ACPermissions) GetPermit() []*ACPolicyStatementWrapper {
 	if x != nil {
 		return x.Permit
 	}
@@ -519,7 +519,7 @@ type PermissionsState struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Permissions *ACLPermissions `protobuf:"bytes,1,opt,name=permissions,proto3" json:"permissions,omitempty"`
+	Permissions *ACPermissions `protobuf:"bytes,1,opt,name=permissions,proto3" json:"permissions,omitempty"`
 }
 
 func (x *PermissionsState) Reset() {
@@ -554,7 +554,7 @@ func (*PermissionsState) Descriptor() ([]byte, []int) {
 	return file_internal_api_pdp_v1_pdp_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *PermissionsState) GetPermissions() *ACLPermissions {
+func (x *PermissionsState) GetPermissions() *ACPermissions {
 	if x != nil {
 		return x.Permissions
 	}
@@ -1129,9 +1129,9 @@ var file_internal_api_pdp_v1_pdp_proto_goTypes = []interface{}{
 	(*VirtualState)(nil),                            // 3: policydecisionpoint.VirtualState
 	(*PermissionsEngine)(nil),                       // 4: policydecisionpoint.PermissionsEngine
 	(*PermissionsStateRequest)(nil),                 // 5: policydecisionpoint.PermissionsStateRequest
-	(*ACLPolicyStatement)(nil),                      // 6: policydecisionpoint.ACLPolicyStatement
-	(*ACLPolicyStatementWrapper)(nil),               // 7: policydecisionpoint.ACLPolicyStatementWrapper
-	(*ACLPermissions)(nil),                          // 8: policydecisionpoint.ACLPermissions
+	(*ACPolicyStatement)(nil),                      // 6: policydecisionpoint.ACPolicyStatement
+	(*ACPolicyStatementWrapper)(nil),               // 7: policydecisionpoint.ACPolicyStatementWrapper
+	(*ACPermissions)(nil),                          // 8: policydecisionpoint.ACPermissions
 	(*PermissionsState)(nil),                        // 9: policydecisionpoint.PermissionsState
 	(*PermissionsStateResponse)(nil),                // 10: policydecisionpoint.PermissionsStateResponse
 	(*PermissionsEvaluation)(nil),                   // 11: policydecisionpoint.PermissionsEvaluation
@@ -1146,10 +1146,10 @@ var file_internal_api_pdp_v1_pdp_proto_depIdxs = []int32{
 	3,  // 2: policydecisionpoint.PermissionsEngine.virtualState:type_name -> policydecisionpoint.VirtualState
 	4,  // 3: policydecisionpoint.PermissionsStateRequest.permissionsEngine:type_name -> policydecisionpoint.PermissionsEngine
 	2,  // 4: policydecisionpoint.PermissionsStateRequest.identity:type_name -> policydecisionpoint.Identity
-	6,  // 5: policydecisionpoint.ACLPolicyStatementWrapper.statement:type_name -> policydecisionpoint.ACLPolicyStatement
-	7,  // 6: policydecisionpoint.ACLPermissions.forbid:type_name -> policydecisionpoint.ACLPolicyStatementWrapper
-	7,  // 7: policydecisionpoint.ACLPermissions.permit:type_name -> policydecisionpoint.ACLPolicyStatementWrapper
-	8,  // 8: policydecisionpoint.PermissionsState.permissions:type_name -> policydecisionpoint.ACLPermissions
+	6,  // 5: policydecisionpoint.ACPolicyStatementWrapper.statement:type_name -> policydecisionpoint.ACPolicyStatement
+	7,  // 6: policydecisionpoint.ACPermissions.forbid:type_name -> policydecisionpoint.ACPolicyStatementWrapper
+	7,  // 7: policydecisionpoint.ACPermissions.permit:type_name -> policydecisionpoint.ACPolicyStatementWrapper
+	8,  // 8: policydecisionpoint.PermissionsState.permissions:type_name -> policydecisionpoint.ACPermissions
 	2,  // 9: policydecisionpoint.PermissionsStateResponse.identity:type_name -> policydecisionpoint.Identity
 	9,  // 10: policydecisionpoint.PermissionsStateResponse.permissionsState:type_name -> policydecisionpoint.PermissionsState
 	2,  // 11: policydecisionpoint.PermissionsEvaluationRequest.identity:type_name -> policydecisionpoint.Identity
@@ -1236,7 +1236,7 @@ func file_internal_api_pdp_v1_pdp_proto_init() {
 			}
 		}
 		file_internal_api_pdp_v1_pdp_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ACLPolicyStatement); i {
+			switch v := v.(*ACPolicyStatement); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1248,7 +1248,7 @@ func file_internal_api_pdp_v1_pdp_proto_init() {
 			}
 		}
 		file_internal_api_pdp_v1_pdp_proto_msgTypes[6].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ACLPolicyStatementWrapper); i {
+			switch v := v.(*ACPolicyStatementWrapper); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -1260,7 +1260,7 @@ func file_internal_api_pdp_v1_pdp_proto_init() {
 			}
 		}
 		file_internal_api_pdp_v1_pdp_proto_msgTypes[7].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ACLPermissions); i {
+			switch v := v.(*ACPermissions); i {
 			case 0:
 				return &v.state
 			case 1:

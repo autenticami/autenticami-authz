@@ -67,10 +67,10 @@ func TestBuildPermissionsState(t *testing.T) {
 			assert.Nil(err, "wrong result\nerr shold be nil and not %s", spew.Sdump(err))
 			assert.NotNil(permState, "wrong result\npermState shold be not nil")
 
-			forbidden, _ := permState.GetACLForbiddenPermissions()
+			forbidden, _ := permState.GetACForbiddenPermissions()
 			assert.Equal(test.LenOfForbid, len(forbidden), "wrong result\nforbidden shold be equale to 0")
 
-			permit, _ := permState.GetACLPermittedPermissions()
+			permit, _ := permState.GetACPermittedPermissions()
 			assert.Equal(test.LenOfPermit, len(permit), "wrong result\nforbidden shold be equale to 0")
 		})
 	}

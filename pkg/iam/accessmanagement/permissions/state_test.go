@@ -17,7 +17,7 @@ import (
 	authzAMErrors "github.com/autenticami/autenticami-authz/pkg/iam/accessmanagement/errors"
 )
 
-func helperToCompareACLPolicyStatementWrappers(file string, inputList []ACLPolicyStatementWrapper) error {
+func helperToCompareACPolicyStatementWrappers(file string, inputList []ACPolicyStatementWrapper) error {
 	uniqueFobid := make(map[string]bool)
 	for _, forbid := range inputList {
 		key := forbid.StatmentHashed
@@ -27,13 +27,13 @@ func helperToCompareACLPolicyStatementWrappers(file string, inputList []ACLPolic
 		uniqueFobid[key] = true
 	}
 	bArray, _ := os.ReadFile(file)
-	data := []policies.ACLPolicyStatement{}
+	data := []policies.ACPolicyStatement{}
 	_ = json.Unmarshal(bArray, &data)
 	if len(data) != len(inputList) {
 		return errors.New("missing key as size does not match")
 	}
 	for _, forbid := range data {
-		fobidWrapper, _ := createACLPolicyStatementWrapper(&forbid)
+		fobidWrapper, _ := createACPolicyStatementWrapper(&forbid)
 		key := fobidWrapper.StatmentHashed
 		if !uniqueFobid[key] {
 			return errors.New("missing key: " + spew.Sdump(key))
@@ -75,26 +75,26 @@ func TestCreatePermissionsState(t *testing.T) {
 				totPermitted, totFobidden := 0, 0
 				for _, input := range test.InputFiles() {
 					bArray, _ := os.ReadFile(testDataCasePath + "/" + input)
-					data := policies.ACLPolicy{}
+					data := policies.ACPolicy{}
 					_ = json.Unmarshal(bArray, &data)
 					var err error
 					extPermsState := newExtendedPermissionsState(permState)
-					err = extPermsState.fobidACLPolicyStatements(data.Forbid)
+					err = extPermsState.fobidACPolicyStatements(data.Forbid)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totPermitted += len(data.Permit)
-					err = extPermsState.permitACLPolicyStatements(data.Permit)
+					err = extPermsState.permitACPolicyStatements(data.Permit)
 					assert.Nil(err, "wrong result\nshould be nil")
 					totFobidden += len(data.Forbid)
 				}
 
 				var err error
 
-				forbidList, _ := permState.GetACLForbiddenPermissions()
-				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
+				forbidList, _ := permState.GetACForbiddenPermissions()
+				err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputFobidFile, forbidList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 
-				permitList, _ := permState.GetACLPermittedPermissions()
-				err = helperToCompareACLPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
+				permitList, _ := permState.GetACPermittedPermissions()
+				err = helperToCompareACPolicyStatementWrappers(testDataCasePath+"/"+test.OutputPermitFile, permitList)
 				assert.Nil(err, "wrong result\nshould be nil and not%s", spew.Sdump(err))
 			})
 		}
@@ -104,20 +104,20 @@ func TestCreatePermissionsState(t *testing.T) {
 func TestMiscellaneousPermissionsState(t *testing.T) {
 	assert := assert.New(t)
 	{
-		_, err := createACLPolicyStatementWrapper(nil)
+		_, err := createACPolicyStatementWrapper(nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be nil", spew.Sdump(err))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccessManagementInvalidDataType), "wrong result\ngot: %sshould be of type ErrJSONSchemaValidation", spew.Sdump(err))
 	}
 	{
 		permState := newPermissionsState()
 		extPermsState := newExtendedPermissionsState(permState)
-		err := extPermsState.fobidACLPolicyStatements(nil)
+		err := extPermsState.fobidACPolicyStatements(nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be not nil")
 	}
 	{
 		permState := newPermissionsState()
 		extPermsState := newExtendedPermissionsState(permState)
-		err := extPermsState.permitACLPolicyStatements(nil)
+		err := extPermsState.permitACPolicyStatements(nil)
 		assert.NotNil(err, "wrong result\ngot: %sshouldn't be not nil")
 	}
 }
