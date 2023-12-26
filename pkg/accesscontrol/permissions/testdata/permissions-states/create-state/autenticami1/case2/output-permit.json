@@ -1,6 +1,6 @@
 [
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:ListEmployee",
       "person:ReadEmployee"

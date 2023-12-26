@@ -603,7 +603,7 @@ func TestMiscellaneousPolicies(t *testing.T) {
 		assert.True(errors.Is(err, authzAMErrors.ErrAccesscontrolUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccesscontrolUnsupportedVersion", spew.Sdump(err))
 	}
 	{
-		policyLabel := PolicyLabelString("permit-hr/person/reader/any")
+		policyLabel := PolicyLabelString("permit-hr:person:reader:any")
 		_, err = policyLabel.getRegex(PolicyVersionString("0000-00-00"))
 		assert.True(errors.Is(err, authzAMErrors.ErrAccesscontrolUnsupportedVersion), "wrong result\ngot: %sshould be of type authzAMErrors. ErrAccesscontrolUnsupportedVersion", spew.Sdump(err))
 		_, err = policyLabel.IsValid(PolicyVersionString("0000-00-00"))

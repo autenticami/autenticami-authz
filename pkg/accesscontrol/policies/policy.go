@@ -240,7 +240,7 @@ func (p PolicyTypeString) IsValid(version PolicyVersionString) (bool, error) {
 func (p PolicyLabelString) getRegex(version PolicyVersionString) (string, error) {
 	switch version {
 	case PolicyV1:
-		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9\*]+)*)`
+		cHyphenName := `([a-zA-Z0-9\*]+(-[a-zA-Z0-9:*]+)*)`
 		cSlashHyphenName := fmt.Sprintf(`%s+(\/%s)*`, cHyphenName, cHyphenName)
 		regex := fmt.Sprintf("^((%s)?)$", cSlashHyphenName)
 		return regex, nil

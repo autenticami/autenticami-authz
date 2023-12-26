@@ -3,7 +3,7 @@
     "Name": "person-base-reader",
     "Permit": [
         {
-            "Name": "permit-hr/person/reader/any",
+            "Name": "permit-hr:person:reader:any",
             "Actions": [
                 "person:ListEmployee",
                 "person:ReadEmployee"
@@ -13,7 +13,7 @@
             ]
         },
         {
-            "Name": "permit-hr/timesheet/writer/any",
+            "Name": "permit-hr:timesheet:writer:any",
             "Actions": [
                 "person:ReadTimesheet",
                 "person:CreateTimesheet",

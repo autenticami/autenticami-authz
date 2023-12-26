@@ -5,7 +5,7 @@
   "Permit": [],
   "Forbid": [
       {
-          "Name": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+          "Name": "forbid-write-hr:timesheet:writer:bc182146-1598-4fde-99aa-b2d4d08bc1e2",
           "Actions": [
               "person:CreateTimesheet",
               "person:UpdateTimesheet",

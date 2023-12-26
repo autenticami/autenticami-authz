@@ -4,7 +4,7 @@
   "Name": "personBaseForbidSpecificDataEntry",
   "Permit": [
     {
-      "Name": "permit-hr/person/reader/any",
+      "Name": "permit-hr:person:reader:any",
       "Actions": [
         "person:ListEmployee",
         "person:ReadEmployee"
@@ -16,7 +16,7 @@
   ],
   "Forbid": [
     {
-      "Name": "forbid-write-hr/timesheet/writer/bc182146-1598-4fde-99aa-b2d4d08bc1e2",
+      "Name": "forbid-write-hr:timesheet:writer:bc182146-1598-4fde-99aa-b2d4d08bc1e2",
       "Actions": [
         "person:CreateTimesheet",
         "person:UpdateTimesheet",

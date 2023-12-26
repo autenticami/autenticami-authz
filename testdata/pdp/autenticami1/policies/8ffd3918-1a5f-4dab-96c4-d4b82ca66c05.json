@@ -8,7 +8,7 @@
         "Type": "AC",
         "Permit": [
           {
-            "Name": "permit-hr/person/reader/any",
+            "Name": "permit-hr:person:reader:any",
             "Actions": [
               "person:ListEmployee",
               "person:ReadEmployee"
@@ -30,7 +30,7 @@
             "Condition": "DateGreaterThan({{.Autenticami.TokenIssueTime}})' && DateLessThan('{{.Autenticami.CurrentTime}}': '2023-12-31T23:59:59Z')"
           },
           {
-            "Name": "permit-hr/timesheet/writer/any",
+            "Name": "permit-hr:timesheet:writer:any",
             "Actions": [
               "person:ReadTimesheet",
               "person:CreateTimesheet",

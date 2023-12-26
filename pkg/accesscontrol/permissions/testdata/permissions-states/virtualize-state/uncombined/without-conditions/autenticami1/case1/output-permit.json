@@ -1,6 +1,6 @@
 [
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:ListEmployee"
     ],
@@ -9,7 +9,7 @@
     ]
   },
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:ReadEmployee"
     ],
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:ListEmployee"
     ],
@@ -27,7 +27,7 @@
     ]
   },
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:ReadEmployee"
     ],
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "Name": "permit-hr/person/reader/any",
+    "Name": "permit-hr:person:reader:any",
     "Actions": [
       "person:WriteEmployee"
     ],
